@@ -46,11 +46,9 @@ eval "$(zoxide init --cmd cd zsh)"
 # =========================================================
 # Fuzzy finder
 # =========================================================
-#
-if [[ -f /usr/share/fzf/key-bindings.zsh ]]; then
-  source /usr/share/fzf/shell/key-bindings.zsh
-  source /usr/share/fzf/shell/completion.zsh
-fi
+
+source $ZDOTDIR/key-bindings.zsh
+source $ZDOTDIR/completion.zsh
 
 # =========================================================
 # Modular Config Files
