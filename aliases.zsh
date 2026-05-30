@@ -242,3 +242,8 @@ crd(){
     fi
 }
 alias copy='xclip -selection clipboard'
+fcd() {
+  local selected_dir
+  selected_dir=$(fd -t d --hidden . | fzf +m --preview 'tree -C {} | head -200')
+  [[ -n "$selected_dir" ]] && cd "$selected_dir"
+}

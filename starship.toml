@@ -19,7 +19,7 @@ repo_root_format = "[$before_root_path]($style)[$repo_root]($repo_root_style)[$p
 
 [os]
 disabled = false
-format = "[$symbol](#blue) "
+format = "[$symbol](#7aa2f7) "
 
 [os.symbols]
 Fedora  = " "
