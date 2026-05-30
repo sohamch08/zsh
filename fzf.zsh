@@ -43,3 +43,9 @@ _fzf_comprun() {
     *)            fzf "$@" ;;
   esac
 }
+
+list_env() {
+  var=$(printenv | cut -d= -f1 | fzf) \
+    && echo "$var=$(printenv "$var")" \
+    && unset var
+}

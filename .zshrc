@@ -42,7 +42,7 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'  # lowercase input matche
 
 # Initialize zoxide
 eval "$(zoxide init --cmd cd zsh)"
-
+eval "$(fzf --zsh)"
 # =========================================================
 # Fuzzy finder
 # =========================================================
@@ -68,3 +68,5 @@ source "$ZDOTDIR/bindings.zsh"
 
 # Prompt/theme
 source "$ZDOTDIR/prompt.zsh"
+
+source "$ZDOTDIR/fzf-git.sh"
