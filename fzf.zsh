@@ -31,13 +31,15 @@ _fzf_file_no_hidden() {
 zle -N _fzf_file_no_hidden
 
 
-_fzf_cd_to_dir() {
-  local selected_dir
-  zle -I
-  selected_dir=$(fd -t d --hidden . | fzf +m --preview 'tree -C {} | head -200')
-  if [[ -n "$selected_dir" ]]; then
-    cd "$selected_dir"
-    zle reset-prompt
-  fi
+export FZF_ALT_C_COMMAND='fd --type d --hidden'
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf "$@" --preview 'tree -C {} | head -200' ;;
+    *)            fzf "$@" ;;
+  esac
 }
-zle -N _fzf_cd_to_dir
