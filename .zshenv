@@ -31,7 +31,7 @@ if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
     PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
 export PATH
-export PATH="/usr/local/texlive/2026/bin/x86_64-linux:$PATH"
+export PATH="$HOME/.elan/bin:/usr/local/texlive/2026/bin/x86_64-linux:$PATH"
 
 
 export EZA_CONFIG_DIR=$HOME/.config/eza
