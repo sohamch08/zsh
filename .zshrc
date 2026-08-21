@@ -1,4 +1,6 @@
-HISTFILE="$XDG_STATE_HOME/zsh/history"
+# Quoted "~" is not expanded by zsh, so use $HOME/XDG vars instead
+HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
+[[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
 HISTSIZE=100000
 SAVEHIST=100000
 
@@ -26,7 +28,11 @@ setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
 autoload -Uz compinit
 
 # Initialize completion with cached metadata file
-compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
+() {
+  local zcd="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+  [[ -d "${zcd:h}" ]] || mkdir -p "${zcd:h}"
+  compinit -d "$zcd"
+}
 
 # Enable interactive completion menu selection
 zstyle ':completion:*' menu select
@@ -70,3 +76,25 @@ source "$ZDOTDIR/bindings.zsh"
 source "$ZDOTDIR/prompt.zsh"
 
 source "$ZDOTDIR/fzf-git.sh"
+
+# =========================================================
+# chruby (macOS: Homebrew, Linux: system prefix)
+# =========================================================
+
+() {
+  local -a prefixes
+  if (( IS_MAC )); then
+    prefixes=( /opt/homebrew/opt/chruby/share/chruby /usr/local/opt/chruby/share/chruby )
+  else
+    prefixes=( /usr/share/chruby /usr/local/share/chruby )
+  fi
+
+  local dir
+  for dir in $prefixes; do
+    [[ -r "$dir/chruby.sh" ]] || continue
+    source "$dir/chruby.sh"
+    [[ -r "$dir/auto.sh" ]] && source "$dir/auto.sh"
+    chruby ruby-3.4.1 2>/dev/null
+    break
+  done
+}

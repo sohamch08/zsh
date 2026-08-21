@@ -22,12 +22,12 @@ disabled = false
 format = "[$symbol](#a8c8ff) "
 
 [os.symbols]
+Macos   = ""
 Fedora  = " "
 Ubuntu  = "󰕈"
 Artix   = "󰣇"
 Arch    = "󰣇"
 CachyOS = "󰣇"
-Macos   = ""
 
 # [directory]
 # format            = "[$path](cyan) "

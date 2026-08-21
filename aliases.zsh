@@ -4,10 +4,9 @@ alias aliasedit="nvim $ZDOTDIR/aliases.zsh"
 
 # eza aliases
 alias eza='eza --icons=always'
-alias ls='eza -aG --color=always --group-directories-first --sort=type'
+alias ls='eza -ag --color=always --group-directories-first --sort=type'
 alias sl='ls'
-alias ll='eza -lghH --color=always --group-directories-first --sort=type --git'
-alias lla='eza -alghH --color=always --group-directories-first --sort=type --git'
+alias ll='eza -alghH --color=always --group-directories-first --sort=type --git'
 alias lt='eza -aT --color=always --group-directories-first'
 alias lt2='eza -aT --level=2 --color=always --group-directories-first'
 alias lS='eza -alghH --color=always --group-directories-first --sort=size'
