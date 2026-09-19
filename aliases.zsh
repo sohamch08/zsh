@@ -244,3 +244,11 @@ alias copy='xclip -selection clipboard'
 fcd() { zle fzf-cd-widget 2>/dev/null || { local d; d=$(fd --type d --hidden | fzf +m --preview 'tree -C {} | head -200') && cd "$d"; } }
 alias env="list_env"
 alias glolf="git log --oneline --all --color=always | fzf -m --no-sort --ansi --preview='git show --color=always {1}' | awk '{print $1}'"
+
+flatpak() {
+    if [[ "$1" == "list" && $# -eq 1 ]]; then
+        command flatpak list --runtime --columns=name,application,branch,size
+    else
+        command flatpak "$@"
+    fi
+}
