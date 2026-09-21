@@ -100,4 +100,7 @@ source "$ZDOTDIR/fzf-git.sh"
 }
 # Install Ruby Gems to ~/gems
 export GEM_HOME="$HOME/gems"
-export PATH="$HOME/gems/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$HOME/gems/bin:$PATH"
+export SOULSEEK_USERNAME="sohamc"
+export SOULSEEK_PASSWORD="19158113"
+export SOULSEEK_PASSWORD_CMD="19158113"
