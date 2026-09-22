@@ -104,3 +104,5 @@ export PATH="$HOME/.cargo/bin:$HOME/gems/bin:$PATH"
 export SOULSEEK_USERNAME="sohamc"
 export SOULSEEK_PASSWORD="19158113"
 export SOULSEEK_PASSWORD_CMD="19158113"
+
+fastfetch
