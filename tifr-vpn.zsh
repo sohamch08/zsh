@@ -1,7 +1,29 @@
+function _tifr_ensure_daemon() {
+  [[ -S /run/strongswan/charon.vici ]] && return 0
+
+  print -P "%F{yellow}⋯%f tifr VPN: starting strongswan service"
+  sudo systemctl start strongswan || {
+    print -P "%F{red}✗%f tifr VPN: failed to start strongswan service"
+    return 1
+  }
+
+  local i
+  for i in {1..20}; do
+    [[ -r /run/strongswan/charon.vici ]] && return 0
+    sleep 0.25
+  done
+
+  print -P "%F{red}✗%f tifr VPN: strongswan service did not come up in time"
+  return 1
+}
+
 function tifr-on() {
+  _tifr_ensure_daemon || return 1
+
   local out
   if out=$(swanctl --initiate --child tifr-net 2>&1); then
     _tifr_connect_info "$out"
+    notify-send -a tifrvpn "tifr VPN" "Connected" 2>/dev/null
   else
     print -P "%F{red}✗%f tifr VPN: failed to connect"
     grep -E 'failed|error' -i <<< "$out" | tail -3
@@ -41,6 +63,7 @@ function tifr-off() {
   if out=$(swanctl --terminate --ike tifr 2>&1); then
     print -P "%F{yellow}○%f tifr VPN: %B%F{yellow}Disconnected%b%f"
     [[ -n "$summary" ]] && print -P "  %F{cyan}Session%f ${summary}"
+    notify-send -a tifrvpn "tifr VPN" "Disconnected" 2>/dev/null
   else
     print -P "%F{red}✗%f tifr VPN: failed to disconnect"
     grep -E 'failed|error' -i <<< "$out" | tail -3
@@ -108,10 +131,11 @@ function tifr-status() {
 }
 
 function tifrvpn() {
-  if [[ "$1" == "-s" ]]; then
-    tifr-status
-    return
-  fi
+  case "$1" in
+    -s) tifr-status; return ;;
+    -c) tifr-on; return ;;
+    -d) tifr-off; return ;;
+  esac
   if swanctl --list-sas --ike tifr 2>/dev/null | grep -q .; then
     tifr-off
   else
