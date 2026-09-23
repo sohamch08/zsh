@@ -66,6 +66,9 @@ source "$ZDOTDIR/fzf.zsh"
 # Aliases
 source "$ZDOTDIR/aliases.zsh"
 
+# tifr VPN helper
+source "$ZDOTDIR/tifr-vpn.zsh"
+
 # Plugins and plugin manager
 source "$ZDOTDIR/plugins.zsh"
 

@@ -257,6 +257,3 @@ function md() {
   pandoc $1 > /tmp/$1.html
   xdg-open /tmp/$1.html
 }
-alias tifr-on='swanctl --initiate --child tifr-net'
-alias tifr-off='swanctl --terminate --ike tifr'
-alias tifr-status='swanctl --list-sas --ike tifr'
