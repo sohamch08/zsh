@@ -257,3 +257,13 @@ function md() {
   pandoc $1 > /tmp/$1.html
   xdg-open /tmp/$1.html
 }
+
+alias lsbc="lsblk | bat -l conf -p"
+alias freee="free -h | bat -l conf -p"
+alias bathelp='bat --plain --language=help'
+help() {
+    "$@" --help 2>&1 | bathelp
+}
+alias man="batman"
+alias sensors="sensors | bat -l cpuinfo -p"
+alias rm="rm -Iv"
