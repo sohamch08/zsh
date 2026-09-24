@@ -28,6 +28,11 @@ setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
 # Load completion system
 autoload -Uz compinit
 
+# Keep the completion cache consistent between fresh shells and reloads.
+typeset -U fpath
+[[ -d "$ZDOTDIR/plugins/fast-syntax-highlighting" ]] &&
+  fpath+=( "$ZDOTDIR/plugins/fast-syntax-highlighting" )
+
 # Initialize completion with cached metadata file
 () {
   local zcd="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"

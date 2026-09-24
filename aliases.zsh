@@ -257,7 +257,9 @@ function md() {
   pandoc $1 > /tmp/$1.html
   xdg-open /tmp/$1.html
 }
-
+has() {
+    command -v "$1" >/dev/null 2>&1
+}
 alias lsbc="lsblk | bat -l conf -p"
 alias freee="free -h | bat -l conf -p"
 alias bathelp='bat --plain --language=help'
@@ -267,3 +269,162 @@ help() {
 alias man="batman"
 alias sensors="sensors | bat -l cpuinfo -p"
 alias rm="rm -Iv"
+alias mv="mv -iv"
+alias now='date "+%Y-%m-%d %H:%M:%S"'
+alias week='date "+%V"'
+alias path='print -rl -- "${path[@]}"'
+case "$(uname -s)" in
+    Darwin)
+        export AWESOME_ALIAS_OS="macos"
+        ;;
+    Linux)
+        export AWESOME_ALIAS_OS="linux"
+        ;;
+    *)
+        export AWESOME_ALIAS_OS="other"
+        ;;
+esac
+_sc() {
+    emulate -L zsh
+    setopt pipefail
+
+    command systemctl --no-pager "$@" |
+        perl -pe '
+            BEGIN { %c = (active=>36, running=>32, exited=>31, failed=>31) }
+            s/\b(active|running|exited|failed)\b/\e[$c{$1}m$1\e[0m/g;
+            s/^(\s*(?:\S+\s+)?)(\S+\.service)(?=\s)/$1\e[34m$2\e[0m/;
+        ' |
+        bat -pp -l txt --strip-ansi=never
+}
+
+_jc() {
+    emulate -L zsh
+    setopt pipefail
+
+    SYSTEMD_COLORS=0 SYSTEMD_URLIFY=0 \
+        command journalctl --no-pager --output=short "$@" |
+        bat -pp -l syslog --strip-ansi=always
+}
+
+if [ "$AWESOME_ALIAS_OS" = "linux" ]; then
+    alias services='systemctl --no-pager --full --type=service | bat -p -l properties --wrap=never'
+    alias sc='_sc'
+    alias scu='_sc --user'
+    alias jc='_jc'
+    alias jcf='_jc --follow'
+    alias jcb='_jc --boot'
+    alias jcxe='_jc --catalog --lines=1000'
+    alias cpuinfo='lscpu | bat -p -l cpuinfo'
+    alias blockdevices='lsblk -f | bat -p -l fstab --wrap=never'
+    alias pci='lspci | bat -p -l properties'
+    alias usb='lsusb | bat -p -l fstab'
+    alias mounts='findmnt | bat -p -l fstab --wrap=never'
+    alias journalerrors='journalctl --no-pager -p err -b | bat -p -l syslog --wrap=never'
+    alias failedservices='systemctl --no-pager --full --failed | bat -p -l properties --wrap=never'
+fi
+portcheck() {
+    if [ "$#" -ne 1 ]; then
+        printf 'Usage: portcheck <port>\n' >&2
+        return 2
+    fi
+
+    lsof -nP -iTCP:"$1" -sTCP:LISTEN
+}
+
+killport() {
+    if [ "$#" -ne 1 ]; then
+        printf 'Usage: killport <port>\n' >&2
+        return 2
+    fi
+
+    local pids
+    pids="$(lsof -tiTCP:"$1" -sTCP:LISTEN)"
+
+    if [ -z "$pids" ]; then
+        printf 'Nothing is listening on port %s.\n' "$1"
+        return 0
+    fi
+
+    printf 'Processes listening on port %s:\n%s\n' "$1" "$pids"
+    printf 'Terminate these processes? [y/N] '
+
+    local answer
+    read -r answer
+
+    case "$answer" in
+        y|Y|yes|YES)
+            # Split newline-separated PIDs explicitly for zsh.
+            kill ${(f)pids}
+            ;;
+        *)
+            printf 'Cancelled.\n'
+            ;;
+    esac
+}
+
+localip() {
+    if [ "$AWESOME_ALIAS_OS" = "macos" ]; then
+        ipconfig getifaddr en0 2>/dev/null ||
+            ipconfig getifaddr en1 2>/dev/null
+    elif has hostname; then
+        hostname -I 2>/dev/null | awk '{print $1}'
+    else
+        printf 'Unable to determine local IP address.\n' >&2
+        return 1
+    fi
+}
+
+publicip() {
+    if has curl; then
+        curl --fail --silent --show-error https://api.ipify.org
+        printf '\n'
+    elif has wget; then
+        wget -qO- https://api.ipify.org
+        printf '\n'
+    else
+        printf 'curl or wget is required.\n' >&2
+        return 1
+    fi
+}
+# Cyan: IPv4 addresses; yellow: ports; green: success; red: errors.
+_netview() {
+    emulate -L zsh
+    setopt pipefail
+
+    # Keep redirected output plain.
+    if [[ ! -t 1 ]]; then
+        "$@"
+        return
+    fi
+
+    "$@" 2>&1 | perl -pe '
+        BEGIN { $| = 1 }
+
+        s/\b(?:\d{1,3}\.){3}\d{1,3}\b/\e[36m$&\e[0m/g;
+        s/:(\d+)(?=\s|->|$)/:\e[33m$1\e[0m/g;
+
+        s/\b(LISTEN|ESTABLISHED|bytes from)\b/\e[32m$1\e[0m/g;
+        s/\b(unreachable|timed out|timeout|refused|failure|failed|error)\b/\e[31m$1\e[0m/gi;
+
+        s/(\d+(?:\.\d+)?)(% packet loss)/
+            ($1 == 0 ? "\e[32m" : "\e[31m") . "$1$2\e[0m"
+        /ge;
+
+        s/^(\s*COMMAND\b.*)$/\e[34m$1\e[0m/;
+    '
+}
+
+_routeinfo() {
+    command ip -color=auto route "$@" 2>/dev/null ||
+        _netview netstat -rn "$@"
+}
+
+alias ping5='ping -c 5'
+alias pingdns='_netview ping -c 5 1.1.1.1'
+alias routeinfo='ip -color=auto route'
+
+alias dnsinfo="sed '/^[[:space:]]*[#;]/d; /^[[:space:]]*$/d' /etc/resolv.conf | bat -pp -l resolv"
+alias hostsfile='bat -pp -l hosts /etc/hosts'
+
+alias listeners='_netview lsof -nP -iTCP -sTCP:LISTEN'
+alias connections='_netview lsof -nP -i'
