@@ -72,6 +72,7 @@ source "$ZDOTDIR/fzf.zsh"
 
 # Aliases
 source "$ZDOTDIR/aliases.zsh"
+source "$ZDOTDIR/rc-aliases.zsh"
 
 # tifr VPN helper
 source "$ZDOTDIR/tifr-vpn.zsh"
@@ -108,11 +109,5 @@ source "$ZDOTDIR/fzf-git.sh"
     break
   done
 }
-# Install Ruby Gems to ~/gems
-export GEM_HOME="$HOME/gems"
-export PATH="$HOME/.cargo/bin:$HOME/gems/bin:$PATH"
-export SOULSEEK_USERNAME="sohamc"
-export SOULSEEK_PASSWORD="19158113"
-export SOULSEEK_PASSWORD_CMD="19158113"
 
 fastfetch

@@ -1,12 +1,18 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+# Google Material Symbols, using the installed Starship Material Outlined font.
+# This is a baseline-adjusted copy of Material Terminal Outlined for Iosevka.
+# Codes come from ~/.local/share/fonts/MaterialTerminal/mapping.json.
+# The terminal must have this font available as a fallback (configured in fontconfig).
+# OS brand logos below still use Nerd Fonts.
+
+
 add_newline = false
 
-format = "$directory$os$git_branch$git_status$nodejs$rust$golang$php$character"
+format = "$os$directory$git_branch$git_status$nodejs$rust$golang$php$character"
 
 [line_break]
 disabled = true
-
 
 [directory]
 style = "bold cyan"
@@ -14,60 +20,55 @@ truncate_to_repo = false
 truncation_length = 0
 repo_root_style = "purple"
 use_logical_path = false
-format = "[$path]($style) "
-repo_root_format = "[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($repo_root_style)"
+format = "[\U00100200  $path]($style) "
+repo_root_format = "[\U00100200  $before_root_path]($style)[$repo_root]($repo_root_style)[$path]($repo_root_style) "
 
 [os]
 disabled = false
-format = "[$symbol](#a8c8ff) "
+format = "[$symbol](#89b4fa) "
 
 [os.symbols]
 Macos = ""
-Fedora = "  "
+Fedora = ""
 Ubuntu = "󰕈"
 Artix = "󰣇"
 Arch = "󰣇"
 CachyOS = "󰣇"
 
-# [directory]
-# format            = "[$path](cyan) "
-# truncation_length = 4
-# truncate_to_repo  = true
-
 [git_branch]
-symbol = " "
-format = "on [$symbol$branch(:$remote_branch)]($style) "
+symbol = "\U00100625 "
+format = "on [$symbol $branch(:$remote_branch)]($style) "
 style = "bold dimmed green"
 
 [git_status]
 style = "bold red"
 format = "($ahead_behind$staged$modified$untracked$deleted$conflicted)"
-ahead = "[⇡ $count ](bold cyan)"
-behind = "[⇣ $count ](bold cyan)"
-diverged = "[⇡ $ahead_count⇣$behind_count ](bold cyan)"
-staged = "[+$count ](bold green)"
-modified = "[● $count ](bold yellow)"
-untracked = "[?$count ](bold white)"
-deleted = "[✘ $count ](bold red)"
-conflicted = "[⚡ $count ](bold red)"
+ahead = "[\U0010039E $count](bold cyan)"
+behind = "[\U001003A1 $count](bold cyan)"
+diverged = "[\U0010039E $ahead_count \U001003A1 $behind_count](bold cyan)"
+staged = "[\U001000EF $count](bold green)"
+modified = "[\U001000FA $count](bold yellow)"
+untracked = "[\U001007D5 $count](bold white)"
+deleted = "[\U00100520 $count](bold red)"
+conflicted = "[\U00100002 $count](bold red)"
 
 [nodejs]
-symbol = ""
+symbol = "\U0000E718"
 format = "[$symbol $version](green) "
 
 [rust]
-symbol = ""
+symbol = "\U000F1617"
 format = "[$symbol $version](red) "
 
 [golang]
-symbol = ""
+symbol = "\U0000E7EF"
 format = "[$symbol $version](cyan) "
 
 [php]
-symbol = ""
+symbol = "\U0000ED6D"
 format = "[$symbol $version](purple) "
 
 [character]
-success_symbol = "[❯](green)"
-error_symbol = "[❯](red)"
-vimcmd_symbol = "[❮](blue)"
+success_symbol = "[\U001002B2](green)"
+error_symbol = "[\U001002B2](red)"
+vimcmd_symbol = "[\U001002B1](blue)"

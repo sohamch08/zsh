@@ -33,6 +33,7 @@ export GPG_TTY=$(tty)
 
 # ---------- Starship ----------
 export STARSHIP_CONFIG="$ZDOTDIR/starship.toml"
+export STARSHIP_CONFIG="$XDG_CACHE_HOME/starship.toml"
 
 # ---------- PATH ----------
 # Personal binaries/scripts
@@ -65,3 +66,10 @@ fi
 
 export EZA_CONFIG_DIR=$HOME/.config/eza
 export EZA_ICON_SPACING=2
+
+# Install Ruby Gems to ~/gems
+export GEM_HOME="$HOME/.gems"
+export PATH="$HOME/.cargo/bin:$HOME/gems/bin:$PATH"
+export SOULSEEK_USERNAME="sohamc"
+export SOULSEEK_PASSWORD="19158113"
+export SOULSEEK_PASSWORD_CMD="19158113"
