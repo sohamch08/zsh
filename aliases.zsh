@@ -82,6 +82,7 @@ alias c="clear"
 alias e="nvim"
 alias l="ll"
 alias la="lla"
+alias m="neomutt"
 alias su="sudo su"
 alias reboot='sudo /sbin/reboot'
 alias poweroff='sudo /sbin/poweroff'
@@ -91,6 +92,27 @@ alias y="yazi"
 mkcd () {
   mkdir -p -- "$1" && cd -- "$1"
 }
+
+# Rename files in the current directory: rename_series 5cmPerSec
+rename_series() {
+  if (( $# != 1 )); then
+    print -u2 'Usage: rename_series PREFIX'
+    return 1
+  fi
+
+  local file ext new_name
+  local -i i=1
+
+  for file in *.*(N.); do
+    ext="${file##*.}"
+    printf -v new_name '%s%02d.%s' "$1" "$i" "$ext"
+    if [[ "$file" != "$new_name" ]]; then
+      mv -i -- "$file" "$new_name" || return
+    fi
+    (( i++ ))
+  done
+}
+
 extract () {
   [[ -f "$1" ]] || { echo "File not found"; return 1; }
 
@@ -311,4 +333,3 @@ alias hostsfile='bat -pp -l hosts /etc/hosts'
 
 alias listeners='_netview lsof -nP -iTCP -sTCP:LISTEN'
 alias connections='_netview lsof -nP -i'
-alias batchRename='i=1; for file in *.*; do ext="${file##*.}"; printf -v new_name "atla%02d.%s" "$i" "$ext"; mv -- "$file" "$new_name"; ((i++)); done'
