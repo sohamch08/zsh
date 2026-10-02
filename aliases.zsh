@@ -333,3 +333,4 @@ alias hostsfile='bat -pp -l hosts /etc/hosts'
 
 alias listeners='_netview lsof -nP -iTCP -sTCP:LISTEN'
 alias connections='_netview lsof -nP -i'
+alias gpg-fingerprint="gpg --with-colons --fingerprint | awk -F: '\$1==\"pub\"{p=1} \$1==\"fpr\" && p{print \$10; p=0}'"
