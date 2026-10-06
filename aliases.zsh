@@ -83,6 +83,14 @@ alias e="nvim"
 alias l="ll"
 alias la="lla"
 alias m="neomutt"
+alias i="sudo dnf install -y"
+alias u="sudo dnf upgrade --refresh -y"
+alias autoremove="sudo dnf autoremove -y"
+alias lock="sudo dnf versionlock add"
+alias unlock="sudo dnf versionlock delete"
+alias uninstall="sudo dnf remove -y"
+alias locks="dnf versionlock list"
+alias o="xdg-open"
 alias su="sudo su"
 alias reboot='sudo /sbin/reboot'
 alias poweroff='sudo /sbin/poweroff'
@@ -334,3 +342,16 @@ alias hostsfile='bat -pp -l hosts /etc/hosts'
 alias listeners='_netview lsof -nP -iTCP -sTCP:LISTEN'
 alias connections='_netview lsof -nP -i'
 alias gpg-fingerprint="gpg --with-colons --fingerprint | awk -F: '\$1==\"pub\"{p=1} \$1==\"fpr\" && p{print \$10; p=0}'"
+# alias md2pdf='f() { local input="$1"; pandoc "$input" -f markdown+gfm_auto_identifiers --shift-heading-level-by=-1 -o "${input%.md}.pdf" --pdf-engine=xelatex -V geometry:margin=1in -V fontsize=11pt --toc --toc-depth=2; unset -f f; }; f'
+alias md2pdf='f() {
+  local input="$1"
+  pandoc "$input" \
+    -f markdown+gfm_auto_identifiers \
+    --shift-heading-level-by=-1 \
+    --pdf-engine=xelatex \
+    -V geometry:margin=1in \
+    -V fontsize=11pt \
+    --toc --toc-depth=2 \
+    -o "${input%.md}.pdf"
+  unset -f f
+}; f'
