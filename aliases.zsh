@@ -14,68 +14,6 @@ alias lS='eza -alghH --color=always --group-directories-first --sort=size'
 alias lm='eza -alghH --color=always --group-directories-first --sort=modified'
 
 
-# ─── RCLONE GENERAL ALIASES ───────────────────────────────────────────────────
-
-# List all configured remotes
-alias rcremotes='rclone listremotes'
-
-# Show rclone config
-alias rcconfig='sed "s/token = .*/token = ██████████████████████████████/" ~/.config/rclone/rclone.conf | bat --language=ini'
-# alias rcconfig='bat ~/.config/rclone/rclone.conf'
-
-# Edit rclone config
-alias rcedit='nvim ~/.config/rclone/rclone.conf'
-
-# Show rclone log
-alias rclog='tail -f ~/.config/rclone/rclone.log'
-
-# Clear rclone log
-alias rclog-clear='> ~/.config/rclone/rclone.log'
-
-# Show all rclone aliases and usage
-rchelp() {
-    bat --language=bash --style=plain <<'EOF'
-# ── GENERAL ──────────────────────────────────────────────
-rchelp                                  # Show this help
-rcremotes                               # List all configured remotes
-rcconfig                                # Show rclone config
-rcedit                                  # Edit config in nvim
-rclog                                   # Live tail of log
-rclog-clear                             # Clear log
-
-# ── LISTING ──────────────────────────────────────────────
-rcls visa:                              # List files on remote
-rctree gdrive:                          # Tree view via eza
-
-# ── MOUNT ────────────────────────────────────────────────
-rcmount visa:                           # Mount remote
-rcumount visa:                          # Unmount remote
-# Mounts to: ~/.rclone-mounts/<remotename>
-
-# ── TRANSFER ─────────────────────────────────────────────
-rcpull "visa:Visa Application" ~/local  # Download remote → local
-rcpush ~/local "visa:Visa Application"  # Upload local → remote
-
-# ── SYNC (DESTRUCTIVE) ───────────────────────────────────
-rcsync-down "visa:Visa Application" ~/local  # Mirror remote → local
-rcsync-up ~/local "visa:Visa Application"    # Mirror local → remote
-# ⚠ Always dry run first!
-
-# ── DRY RUN (SAFE PREVIEW) ───────────────────────────────
-rcdry-down "visa:Visa Application" ~/local   # Preview download
-rcdry-up ~/local "visa:Visa Application"     # Preview upload
-
-# ── STATUS (GIT-LIKE) ────────────────────────────────────
-rcgit "visa:Visa Application" ~/local        # Full git-like summary
-rcstatus "visa:Visa Application" ~/local     # Diff with symbols
-rcremote-only "visa:Visa Application" ~/local  # Remote ahead
-rclocal-only "visa:Visa Application" ~/local   # Local ahead
-rcdiff "visa:Visa Application" ~/local         # Files that differ
-
-# Symbols:  = identical  < local ahead  > remote ahead  * different
-EOF
-}
-
 # ─── Extra FUNCTIONS  ──────────────────────────────────────────────────────
 alias b="bat"
 alias c="clear"
@@ -97,6 +35,8 @@ alias poweroff='sudo /sbin/poweroff'
 alias ve='python3 -m venv ./venv'
 alias va='source ./venv/bin/activate'
 alias y="yazi"
+alias del='shred -uzn3'
+alias rmdir='rm -rf'
 mkcd () {
   mkdir -p -- "$1" && cd -- "$1"
 }
