@@ -36,6 +36,7 @@ alias ve='python3 -m venv ./venv'
 alias va='source ./venv/bin/activate'
 alias y="yazi"
 alias del='shred -uzn3'
+alias rm="rm -Iv"
 alias rmdir='rm -rf'
 mkcd () {
   mkdir -p -- "$1" && cd -- "$1"
@@ -121,7 +122,6 @@ help() {
 }
 alias man="batman"
 alias sensors="sensors | bat -l cpuinfo -p"
-alias rm="rm -Iv"
 alias mv="mv -iv"
 alias now='date "+%Y-%m-%d %H:%M:%S"'
 alias week='date "+%V"'
