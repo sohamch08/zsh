@@ -1,7 +1,9 @@
+alias sudo="sudo "
 alias cat="bat"
 alias reload="source $ZDOTDIR/.zshrc"
 alias zshedit="nvim $ZDOTDIR/.zshrc"
 alias aliasedit="nvim $ZDOTDIR/aliases.zsh"
+alias nvimb="nvim -c 'set backup backupdir=. backupext=~ backupskip='"
 
 # eza aliases
 alias eza='eza --icons=always'
