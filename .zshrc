@@ -111,3 +111,5 @@ source "$ZDOTDIR/fzf-git.sh"
 }
 
 fastfetch
+
+. "$HOME/.local/share/../bin/env"

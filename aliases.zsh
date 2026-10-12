@@ -32,6 +32,7 @@ alias uninstall="sudo dnf remove -y"
 alias locks="dnf versionlock list"
 alias o="xdg-open"
 alias su="sudo su"
+alias sudo="sudo "
 alias reboot='sudo /sbin/reboot'
 alias poweroff='sudo /sbin/poweroff'
 alias ve='python3 -m venv ./venv'
