@@ -56,7 +56,6 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'  # lowercase input matche
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(fzf --zsh)"
 # eval "$(atuin init zsh)"
-eval "$(direnv hook bash)"
 # =========================================================
 # Fuzzy finder
 # =========================================================
@@ -114,3 +113,18 @@ source "$ZDOTDIR/fzf-git.sh"
 fastfetch
 
 . "$HOME/.local/share/../bin/env"
+
+# Load project environments with the hook for this shell.
+if (( $+commands[direnv] )); then
+  eval "$(direnv hook zsh)"
+  # Let just prepare missing .envrc files before direnv loads the environment.
+  _uv_direnv_hook() {
+    (( $+commands[just] )) && command just --global-justfile --quiet autoenv
+    _direnv_hook
+  }
+  autoload -Uz add-zsh-hook
+  add-zsh-hook -d chpwd _direnv_hook
+  add-zsh-hook -d precmd _direnv_hook
+  add-zsh-hook chpwd _uv_direnv_hook
+  add-zsh-hook precmd _uv_direnv_hook
+fi
