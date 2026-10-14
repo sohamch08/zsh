@@ -1,11 +1,22 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+add_newline = true
+palette = 'nord'
+continuation_prompt = "[▸▹ ](dimmed white)"
+
 format = """
 $os$directory\
 $git_branch\
 $git_status\
-$fill\
+$line_break\
+$character"""
+
+right_format = """
+$c
+$cpp
+$cmake
 $python\
+$php
 $lua\
 $nodejs\
 $golang\
@@ -16,12 +27,8 @@ $package\
 $aws\
 $docker_context\
 $jobs\
-$cmd_duration\
-$line_break\
-$character"""
+$cmd_duration"""
 
-add_newline = true
-palette = 'nord'
 
 [directory]
 style = 'bold fg:dark_blue'
@@ -201,9 +208,12 @@ style = 'fg:gray'
 format = '[$duration]($style)'
 
 [character]
-success_symbol = "[❯](green)"
-error_symbol = "[❯](red)"
-vimcmd_symbol = "[❮](blue)"
+# success_symbol = "[ ❯](green)"
+# error_symbol = "[ ❯](red)"
+# vimcmd_symbol = "[ ❮](blue)"
+success_symbol = "[](green)"
+error_symbol = "[](red)"
+vimcmd_symbol = "[](blue)"
 
 [palettes.nord]
 dark_blue = '#5E81AC'
