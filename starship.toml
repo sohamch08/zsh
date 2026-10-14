@@ -9,7 +9,7 @@
 
 add_newline = false
 
-format = "$os$directory$git_branch$git_status$nodejs$rust$golang$php$character"
+format = "$os$directory$git_branch$git_status$nodejs$rust$golang$php$python$character"
 
 [line_break]
 disabled = true
@@ -72,3 +72,8 @@ format = "[$symbol $version](purple) "
 success_symbol = "[\U001002B2](green)"
 error_symbol = "[\U001002B2](red)"
 vimcmd_symbol = "[\U001002B1](blue)"
+
+[python]
+format = 'via [${symbol}(${version} )(\($virtualenv\) )]($style)'
+symbol = " "
+style = "bold #f3e10b"

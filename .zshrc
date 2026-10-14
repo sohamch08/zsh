@@ -55,7 +55,8 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'  # lowercase input matche
 # Initialize zoxide
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(fzf --zsh)"
-eval "$(atuin init zsh)"
+# eval "$(atuin init zsh)"
+eval "$(direnv hook bash)"
 # =========================================================
 # Fuzzy finder
 # =========================================================
