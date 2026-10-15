@@ -21,6 +21,7 @@ $golang\
 $haskell\
 $rust\
 $ruby\
+${custom.latex}\
 $package\
 $aws\
 $docker_context\
@@ -185,6 +186,18 @@ shell = ['sh']
 symbol = '✓ '
 style = 'green'
 format = '[$symbol]($style)'
+
+[custom.latex]
+description = "LaTeX project and pdfLaTeX engine version"
+detect_extensions = ['tex', 'ltx', 'bib', 'sty', 'cls']
+detect_files = ['.latexmkrc', 'latexmkrc', 'Tectonic.toml']
+command = '''
+pdflatex --version 2>/dev/null | awk '/^pdfTeX / { n = split($2, version, "-"); if (n >= 3) printf "v%s", version[n]; exit }'
+'''
+shell = ['sh']
+symbol = ' '
+style = 'bold teal'
+format = '[$symbol]($style)([$output](teal) )'
 
 [lua]
 style = 'blue'
