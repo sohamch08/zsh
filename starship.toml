@@ -13,7 +13,7 @@ $c\
 $cpp\
 $cmake\
 $python\
-$php
+$php\
 $lua\
 $nodejs\
 $golang\
@@ -23,7 +23,7 @@ $ruby\
 $package\
 $aws\
 $docker_context\
-$jobs\
+$line_break\
 $character"""
 
 
@@ -115,10 +115,12 @@ ignore_timeout = true
 [c]
 style = 'dark_blue'
 symbol = " "
+format = "[$symbol($version)]($style)"
 
 [cpp]
 style = 'dark_blue'
 symbol = " "
+format = "[$symbol($version)]($style)"
 
 [cmake]
 symbol = " "
@@ -133,34 +135,42 @@ pyenv_prefix = ''
 [lua]
 style = 'blue'
 symbol = ' '
+format = "[$symbol($version)]($style)"
 
 [nodejs]
 style = 'green'
 symbol = ' '
+format = "[$symbol($version)]($style)"
 
 [golang]
 style = 'teal'
 symbol = ' '
+format = "[$symbol($version)]($style)"
 
 [haskell]
 style = 'purple'
 symbol = ' '
+format = "[$symbol($version)]($style)"
 
 [rust]
-style = 'orange'
+style = 'peach'
 symbol = ' '
+format = "[$symbol($version)]($style)"
 
 [ruby]
 style = 'red'
 symbol = ' '
+format = "[$symbol($version)]($style)"
 
 [package]
 symbol = '📦 '
-style = 'orange'
+style = 'peach'
+format = "[$symbol($version)]($style)"
 
 [php]
 style = 'purple'
 symbol = ' '
+format = "[$symbol($version)]($style)"
 
 [aws]
 symbol = ' '
