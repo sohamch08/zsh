@@ -5,7 +5,7 @@ palette = 'custom1'
 
 format = """
 $os$directory\
-${custom.giturl}${custom.gitlab}${custom.gitea}${custom.codeberg}\
+${custom.giturl}${custom.gitlab}${custom.gitea}${custom.codeberg}${custom.bitbucket}${custom.git}\
 $git_branch\
 $git_status\
 $fill\
@@ -13,6 +13,7 @@ $c\
 $cpp\
 $cmake\
 $python\
+${custom.venv}\
 $php\
 $lua\
 $nodejs\
@@ -92,13 +93,13 @@ if [[ "$GIT_REMOTE" =~ "github" ]]; then
 elif [[ "$GIT_REMOTE" =~ "gitlab" ]]; then
     GIT_REMOTE_SYMBOL=""
 elif [[ "$GIT_REMOTE" =~ "bitbucket" ]]; then
-    GIT_REMOTE_SYMBOL=" "
+    GIT_REMOTE_SYMBOL=""
 elif [[ "$GIT_REMOTE" =~ "codeberg" ]]; then
     GIT_REMOTE_SYMBOL=""
 elif [[ "$GIT_REMOTE" =~ "gitea" ]]; then
     GIT_REMOTE_SYMBOL=""
 elif [[ "$GIT_REMOTE" =~ "git" ]]; then
-    GIT_REMOTE_SYMBOL=" "
+    GIT_REMOTE_SYMBOL=""
 else
     GIT_REMOTE_SYMBOL=" "
 fi
@@ -137,6 +138,24 @@ style = 'blue'
 format = '[$symbol]($style)'
 require_repo = true
 
+[custom.bitbucket]
+description = "Bitbucket remote icon"
+when = 'case "$(command git ls-remote --get-url 2>/dev/null)" in *github*|*gitlab*) false;; *bitbucket*) true;; *) false;; esac'
+shell = ['sh']
+symbol = ''
+style = 'blue'
+format = '[$symbol]($style)'
+require_repo = true
+
+[custom.git]
+description = "Generic Git remote icon"
+when = 'case "$(command git ls-remote --get-url 2>/dev/null)" in *github*|*gitlab*|*bitbucket*|*codeberg*|*gitea*) false;; *git*) true;; *) false;; esac'
+shell = ['sh']
+symbol = ''
+style = 'red'
+format = '[$symbol]($style)'
+require_repo = true
+
 # [fill]
 # symbol = ' '
 
@@ -156,9 +175,16 @@ symbol = " "
 [python]
 style = 'teal'
 symbol = ' '
-format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
-pyenv_version_name = true
+format = '[${symbol}${pyenv_prefix}(${version} )]($style)'
+pyenv_version_name = false
 pyenv_prefix = ''
+
+[custom.venv]
+when = 'test -n "$VIRTUAL_ENV"'
+shell = ['sh']
+symbol = '✓ '
+style = 'green'
+format = '[$symbol]($style)'
 
 [lua]
 style = 'blue'
