@@ -128,3 +128,4 @@ if (( $+commands[direnv] )); then
   add-zsh-hook chpwd _uv_direnv_hook
   add-zsh-hook precmd _uv_direnv_hook
 fi
+eval "$(~/.local/bin/mise activate zsh)"
