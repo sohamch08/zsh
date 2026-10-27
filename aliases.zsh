@@ -17,6 +17,7 @@ alias lm='eza -alghH --color=always --group-directories-first --sort=modified'
 
 
 # ─── Extra FUNCTIONS  ──────────────────────────────────────────────────────
+alias lg="lazygit"
 alias b="bat"
 alias c="clear"
 alias e="nvim"
