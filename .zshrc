@@ -1,13 +1,19 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# =========================================================
+# Powerlevel10k instant prompt — keep at the top
+# =========================================================
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Quoted "~" is not expanded by zsh, so use $HOME/XDG vars instead
+
+# =========================================================
+# History
+# =========================================================
+
 HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
 [[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
+
 HISTSIZE=1000000
 SAVEHIST=1000000
 
@@ -18,38 +24,87 @@ setopt HIST_IGNORE_SPACE
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_FIND_NO_DUPS
 setopt HIST_REDUCE_BLANKS
-setopt CORRECT
+
 
 # =========================================================
 # Shell behaviour
 # =========================================================
 
-setopt AUTOCD
-setopt NOBEEP
-setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
-
+setopt AUTOCD             # Enter directories by typing their path
+setopt NOBEEP             # Disable terminal bell
+setopt NUMERIC_GLOB_SORT  # Sort file2 before file10
+setopt CORRECT            # Suggest corrections for command names
 
 
 # =========================================================
-# Modular Config Files
+# Aliases, functions and settings — refreshed on reload
 # =========================================================
+
 source "$ZDOTDIR/aliases.zsh"
 source "$ZDOTDIR/rcaliases.zsh"
 source "$ZDOTDIR/fzf.zsh"
-source "$ZDOTDIR/plugins.zsh"
-source "$ZDOTDIR/binds.zsh"
 source "$ZDOTDIR/tifr-vpn.zsh"
 
+
 # =========================================================
-# Initialize apps
+# Initialization — runs once per shell
 # =========================================================
 
-eval "$(zoxide init --cmd cd zsh)"
-eval "$(fzf --zsh)"
-# eval "$(atuin init zsh)"
+if [[ -z ${_my_zsh_initialized-} ]]; then
 
-. "$HOME/.local/share/../bin/env"
+  # -------------------------------------------------------
+  # Plugins and prompt
+  # plugins.zsh also loads .p10k.zsh on initial startup.
+  # -------------------------------------------------------
 
-eval "$(~/.local/bin/mise activate zsh)"
-source "$ZDOTDIR/autoenv.zsh"
+  source "$ZDOTDIR/plugins.zsh"
 
+  # -------------------------------------------------------
+  # Zoxide — directory navigation
+  # -------------------------------------------------------
+
+  eval "$(zoxide init --cmd cd zsh)"
+
+  # -------------------------------------------------------
+  # Fzf — completion and default keybindings
+  # -------------------------------------------------------
+
+  eval "$(fzf --zsh)"
+
+  # -------------------------------------------------------
+  # Local binaries
+  # -------------------------------------------------------
+
+  source "$HOME/.local/bin/env"
+
+  # -------------------------------------------------------
+  # Mise — development tool environments
+  # -------------------------------------------------------
+
+  eval "$(~/.local/bin/mise activate zsh)"
+
+  # -------------------------------------------------------
+  # Direnv — project environment activation
+  # -------------------------------------------------------
+
+  source "$ZDOTDIR/autoenv.zsh"
+
+  # Keep this variable unexported so new shells initialize.
+  typeset -g _my_zsh_initialized=1
+
+else
+
+  # -------------------------------------------------------
+  # Reload prompt settings without reinitializing plugins
+  # -------------------------------------------------------
+
+  source "$ZDOTDIR/.p10k.zsh"
+
+fi
+
+
+# =========================================================
+# Custom keybindings — refreshed on reload
+# =========================================================
+
+source "$ZDOTDIR/binds.zsh"
