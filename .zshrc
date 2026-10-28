@@ -40,6 +40,7 @@ source "$ZDOTDIR/rcaliases.zsh"
 source "$ZDOTDIR/fzf.zsh"
 source "$ZDOTDIR/plugins.zsh"
 source "$ZDOTDIR/binds.zsh"
+source "$ZDOTDIR/tifr-vpn.zsh"
 
 # =========================================================
 # Initialize apps
