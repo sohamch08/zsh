@@ -29,10 +29,6 @@ autoload -Uz _zinit
 ###########################################################
 #### DEJA #################################################
 ###########################################################
-# Load Deja immediately so initialization errors are visible.
-
-zinit ice depth=1 pick"deja.plugin.zsh"
-zinit light Giammarco-Ferranti/deja
 
 # Deja overrides
 export DEJA_HIGHLIGHT_STYLE='fg=cyan'
@@ -41,6 +37,14 @@ export DEJA_CYCLE_KEY='^N'
 export DEJA_CYCLE_FUZZY_KEY=
 export DEJA_CYCLE_FUZZY_BACK_KEY=
 export DEJA_TOGGLE_EMPTY_KEY=
+
+# Initialize Deja once per shell. Reloading it after Powerlevel10k can
+# make their saved line-editor hooks call each other recursively.
+if (( ! ${+functions[_deja_fetch]} )); then
+    zinit ice depth=1 pick"deja.plugin.zsh"
+    zinit light Giammarco-Ferranti/deja
+fi
+
 
 
 ###########################################################
@@ -55,4 +59,4 @@ zinit light zsh-users/zsh-syntax-highlighting
 ###########################################################
 
 zinit ice depth=1; zinit light romkatv/powerlevel10k
-[[ ! -f ~/.config/zsh/.p10k/zsh ]] || source ~/.config/zsh/.p10k.zsh
+[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
