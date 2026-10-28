@@ -49,6 +49,7 @@
     status                  # exit code of the last command
     # command_execution_time  # duration of the last command
     background_jobs         # presence of background jobs
+    code                    # project languages, versions, packages and development contexts
     direnv                  # direnv status (https://direnv.net/)
     asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
     virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)
@@ -79,7 +80,7 @@
     kubecontext             # current kubernetes context (https://kubernetes.io/)
     terraform               # terraform workspace (https://www.terraform.io)
     # terraform_version     # terraform version (https://www.terraform.io)
-    aws                     # aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html)
+    # AWS is included in the code segment.
     aws_eb_env              # aws elastic beanstalk environment (https://aws.amazon.com/elasticbeanstalk/)
     azure                   # azure account name (https://docs.microsoft.com/en-us/cli/azure)
     gcloud                  # google cloud cli account and project (https://cloud.google.com/)
@@ -1751,6 +1752,8 @@
   # can slow down prompt by 1-2 milliseconds, so it's better to keep it turned off unless you
   # really need it.
   typeset -g POWERLEVEL9K_DISABLE_HOT_RELOAD=true
+
+  source "${${(%):-%x}:A:h}/prompt-code.zsh"
 
   # If p10k is already loaded, reload configuration.
   # This works even with POWERLEVEL9K_DISABLE_HOT_RELOAD=true.
