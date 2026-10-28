@@ -57,7 +57,7 @@ if [[ -z ${_my_zsh_initialized-} ]]; then
   # plugins.zsh also loads .p10k.zsh on initial startup.
   # -------------------------------------------------------
 
-  source "$ZDOTDIR/plugins.zsh"
+  source "$ZDOTDIR/plugins-woZinit.zsh"
 
   # -------------------------------------------------------
   # Zoxide — directory navigation
