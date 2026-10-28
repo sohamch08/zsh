@@ -63,6 +63,7 @@ symbol = " "
 format = "latex|$symbol($output)\n"
 
 [package]
+disabled = true
 symbol = "📦 "
 format = "package|$symbol($version)\n"
 
