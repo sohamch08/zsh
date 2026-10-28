@@ -25,7 +25,7 @@
     status
     background_jobs
     code
-    direnv
+    # direnv
     asdf
     virtualenv
     anaconda
@@ -125,45 +125,96 @@
 
   # dir
   typeset -g POWERLEVEL9K_DIR_FOREGROUND='#b4befe'
-  typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
-  typeset -g POWERLEVEL9K_SHORTEN_DELIMITER=
   typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND='#bac2de'
   typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND='#b4befe'
   typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
-  local anchor_files=(
-    .bzr
-    .citc
-    .git
-    .hg
-    .node-version
-    .python-version
-    .go-version
-    .ruby-version
-    .lua-version
-    .java-version
-    .perl-version
-    .php-version
-    .tool-versions
-    .mise.toml
-    .shorten_folder_marker
-    .svn
-    .terraform
-    CVS
-    Cargo.toml
-    composer.json
-    go.mod
-    package.json
-    stack.yaml
-  )
-  typeset -g POWERLEVEL9K_SHORTEN_FOLDER_MARKER="(${(j:|:)anchor_files})"
-  typeset -g POWERLEVEL9K_DIR_TRUNCATE_BEFORE_MARKER=false
-  typeset -g POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
-  typeset -g POWERLEVEL9K_DIR_MAX_LENGTH=80
-  typeset -g POWERLEVEL9K_DIR_MIN_COMMAND_COLUMNS=40
-  typeset -g POWERLEVEL9K_DIR_MIN_COMMAND_COLUMNS_PCT=50
-  typeset -g POWERLEVEL9K_DIR_HYPERLINK=false
+  typeset -g POWERLEVEL9K_DIR_MAX_LENGTH=40
+  typeset -g POWERLEVEL9K_DIR_COMPACT_LEFT_WHITESPACE=
+  typeset -g POWERLEVEL9K_DIR_COMPACT_RIGHT_WHITESPACE=
 
-  typeset -g POWERLEVEL9K_DIR_SHOW_WRITABLE=v3
+  # Keep short paths in full; shorten past 40 characters or when the right prompt needs room.
+  # Keep the nearest Git root and current directory in full; collapse ancestors as needed.
+  # This also renders the instant prompt, without launching external commands.
+  function prompt_dir() {
+    emulate -L zsh -o extended_glob
+    local base=/ relative=${PWD#/} prefix=/ icon=FOLDER_ICON
+    if [[ $PWD == "$HOME" || $PWD == "$HOME"/* ]]; then
+      base=$HOME
+      relative=${PWD#$HOME}
+      relative=${relative#/}
+      prefix='~/'
+      icon=HOME_SUB_ICON
+    fi
+
+    local -a parts labels
+    parts=("${(@s:/:)relative}")
+    local -i i repo=0 count=$#parts budget=$POWERLEVEL9K_DIR_MAX_LENGTH
+    local -i available=$(( COLUMNS - 26 )) shorten=0 collapse=0 omitted=0 tight
+    local cursor=$base name text="$prefix" plain="$prefix"
+
+    # Powerlevel10k builds the upper right prompt before calling this segment.
+    if [[ -n ${right-} ]] && (( $+functions[_p9k_prompt_length] )); then
+      _p9k_prompt_length "${(e)right}"
+      (( available -= _p9k__ret ))
+    fi
+    (( ${#VCS_STATUS_LOCAL_BRANCH} > 4 )) &&
+      (( available -= ${#VCS_STATUS_LOCAL_BRANCH} - 4 ))
+    (( available < budget )) && budget=$available
+    (( budget < 1 )) && budget=1
+    (( ${#prefix} + ${#relative} > budget )) && shorten=1
+
+    for (( i=1; i<=count; ++i )); do
+      cursor="${cursor%/}/$parts[i]"
+      [[ -e "$cursor/.git" ]] && repo=$i
+      labels[i]=$parts[i]
+    done
+    for (( i=1; shorten && i<count; ++i )); do
+      (( i == repo )) && continue
+      name=$parts[i]
+      labels[i]=${name[1]}
+      [[ $name == .* ]] && labels[i]=${name[1,2]}
+    done
+    plain+="${(j:/:)labels}"
+    (( shorten && ${#plain} > budget )) && collapse=1
+
+    for tight in 0 1; do
+      text=$prefix
+      plain=$prefix
+      (( tight && collapse )) && { text=''; plain=''; }
+      omitted=0
+      for (( i=1; i<=count; ++i )); do
+        if (( collapse && i != repo && i < count && (tight || (i > 1 && i < count-1)) )); then
+          if (( ! omitted )); then
+            text+="%F{$POWERLEVEL9K_DIR_SHORTENED_FOREGROUND}…/"
+            plain+='…/'
+          fi
+          omitted=1
+          continue
+        fi
+        omitted=0
+        plain+=$labels[i]
+        name=${(V)labels[i]}
+        name=${name//\%/%%}
+        if (( i == repo || i == count )); then
+          text+="%F{$POWERLEVEL9K_DIR_ANCHOR_FOREGROUND}%B${name}%b"
+        else
+          text+="%F{$POWERLEVEL9K_DIR_SHORTENED_FOREGROUND}${name}"
+        fi
+        (( i < count )) && { text+='/'; plain+='/'; }
+      done
+      (( ${#plain} <= budget )) && break
+    done
+
+    [[ $PWD == "$HOME" ]] && { text='~'; icon=HOME_ICON; }
+    [[ -w $PWD ]] || icon=LOCK_ICON
+    text+="%F{$POWERLEVEL9K_DIR_FOREGROUND}"
+    if (( shorten && available < POWERLEVEL9K_DIR_MAX_LENGTH )); then
+      # Drop directory padding/icon when space is needed for the code versions.
+      p10k segment -s COMPACT -f "$POWERLEVEL9K_DIR_FOREGROUND" -t "$text"
+    else
+      p10k segment -r -i "$icon" -f "$POWERLEVEL9K_DIR_FOREGROUND" -t "$text"
+    fi
+  }
 
   # vcs
   typeset -g POWERLEVEL9K_VCS_BRANCH_ICON='\uF126 '
