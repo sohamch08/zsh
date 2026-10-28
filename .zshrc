@@ -75,7 +75,7 @@ source "$ZDOTDIR/aliases.zsh"
 source "$ZDOTDIR/rc-aliases.zsh"
 
 # tifr VPN helper
-source "$ZDOTDIR/tifr-vpn.zsh"
+source "$ZDOTDIR/tifr-vpn-new.zsh"
 
 # Plugins and plugin manager
 source "$ZDOTDIR/plugins.zsh"
