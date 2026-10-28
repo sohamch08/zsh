@@ -17,6 +17,7 @@ setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_FIND_NO_DUPS
+setopt HIST_REDUCE_BLANKS
 setopt CORRECT
 
 # =========================================================
@@ -50,6 +51,3 @@ fastfetch
 . "$HOME/.local/share/../bin/env"
 
 eval "$(~/.local/bin/mise activate zsh)"
-
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
