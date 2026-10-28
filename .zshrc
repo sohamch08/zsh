@@ -37,9 +37,9 @@ setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
 # =========================================================
 source "$ZDOTDIR/aliases.zsh"
 source "$ZDOTDIR/rcaliases.zsh"
+source "$ZDOTDIR/fzf.zsh"
 source "$ZDOTDIR/plugins.zsh"
 source "$ZDOTDIR/binds.zsh"
-
 
 # =========================================================
 # Initialize apps
