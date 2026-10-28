@@ -8,8 +8,8 @@ fi
 # Quoted "~" is not expanded by zsh, so use $HOME/XDG vars instead
 HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
 [[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
-HISTSIZE=100000
-SAVEHIST=100000
+HISTSIZE=1000000
+SAVEHIST=1000000
 
 setopt APPEND_HISTORY
 setopt SHARE_HISTORY
@@ -37,11 +37,9 @@ source "$ZDOTDIR/plugins.zsh"
 
 
 # =========================================================
-# Smart directory navigation & Yazi
+# Initialize apps
 # =========================================================
 
-
-# Initialize zoxide
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(fzf --zsh)"
 # eval "$(atuin init zsh)"
