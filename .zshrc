@@ -22,32 +22,6 @@ setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
 
 
 # =========================================================
-# Completion
-# =========================================================
-
-# Load completion system
-autoload -Uz compinit
-
-# Keep the completion cache consistent between fresh shells and reloads.
-typeset -U fpath
-[[ -d "$ZDOTDIR/plugins/fast-syntax-highlighting" ]] &&
-  fpath+=( "$ZDOTDIR/plugins/fast-syntax-highlighting" )
-
-# Initialize completion with cached metadata file
-() {
-  local zcd="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
-  [[ -d "${zcd:h}" ]] || mkdir -p "${zcd:h}"
-  compinit -d "$zcd"
-}
-
-# Enable interactive completion menu selection
-zstyle ':completion:*' menu select
-
-# Make completion case-insensitive
-# Example: "doc" can complete to "Documents"
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'  # lowercase input matches upper and lower
-
-# =========================================================
 # Smart directory navigation & Yazi
 # =========================================================
 
@@ -56,76 +30,9 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'  # lowercase input matche
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(fzf --zsh)"
 # eval "$(atuin init zsh)"
-# =========================================================
-# Fuzzy finder
-# =========================================================
-
-source $ZDOTDIR/key-bindings.zsh
-source $ZDOTDIR/completion.zsh
-
-# =========================================================
-# Modular Config Files
-# =========================================================
-
-# fzf configuration
-source "$ZDOTDIR/fzf.zsh"
-
-# Aliases
-source "$ZDOTDIR/aliases.zsh"
-source "$ZDOTDIR/rc-aliases.zsh"
-
-# tifr VPN helper
-source "$ZDOTDIR/tifr-vpn.zsh"
-
-# Plugins and plugin manager
-source "$ZDOTDIR/plugins.zsh"
-
-# Custom keybindings
-source "$ZDOTDIR/bindings.zsh"
-
-# Prompt/theme
-source "$ZDOTDIR/prompt.zsh"
-
-source "$ZDOTDIR/fzf-git.sh"
-
-# =========================================================
-# chruby (macOS: Homebrew, Linux: system prefix)
-# =========================================================
-
-() {
-  local -a prefixes
-  if (( IS_MAC )); then
-    prefixes=( /opt/homebrew/opt/chruby/share/chruby /usr/local/opt/chruby/share/chruby )
-  else
-    prefixes=( /usr/share/chruby /usr/local/share/chruby )
-  fi
-
-  local dir
-  for dir in $prefixes; do
-    [[ -r "$dir/chruby.sh" ]] || continue
-    source "$dir/chruby.sh"
-    [[ -r "$dir/auto.sh" ]] && source "$dir/auto.sh"
-    chruby ruby-3.4.1 2>/dev/null
-    break
-  done
-}
 
 fastfetch
 
 . "$HOME/.local/share/../bin/env"
 
-# Load project environments with the hook for this shell.
-if (( $+commands[direnv] )); then
-  eval "$(direnv hook zsh)"
-  # Let just prepare missing .envrc files before direnv loads the environment.
-  _uv_direnv_hook() {
-    (( $+commands[just] )) && command just --global-justfile --quiet autoenv
-    _direnv_hook
-  }
-  autoload -Uz add-zsh-hook
-  add-zsh-hook -d chpwd _direnv_hook
-  add-zsh-hook -d precmd _direnv_hook
-  add-zsh-hook chpwd _uv_direnv_hook
-  add-zsh-hook precmd _uv_direnv_hook
-fi
 eval "$(~/.local/bin/mise activate zsh)"

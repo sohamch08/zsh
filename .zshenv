@@ -31,9 +31,9 @@ fi
 # ---------- GPG ----------
 export GPG_TTY=$(tty)
 
-# ---------- Starship ----------
-export STARSHIP_CONFIG="$ZDOTDIR/starship.toml"
-export STARSHIP_CONFIG="$XDG_CACHE_HOME/starship.toml"
+# # ---------- Starship ----------
+# export STARSHIP_CONFIG="$ZDOTDIR/starship.toml"
+# export STARSHIP_CONFIG="$XDG_CACHE_HOME/starship.toml"
 
 # ---------- PATH ----------
 # Personal binaries/scripts
@@ -56,12 +56,6 @@ fi
   texbin=( /usr/local/texlive/*/bin/*(N/) )
   (( $#texbin )) && export PATH="${texbin[-1]}:$PATH"
 }
-
-# ---------- Ruby ----------
-# macOS: Homebrew's keg-only ruby@3.4 (system ruby is too old for jekyll-theme-chirpy)
-if (( IS_MAC )) && [[ -d /opt/homebrew/opt/ruby@3.4/bin ]]; then
-  export PATH="/opt/homebrew/opt/ruby@3.4/bin:$PATH"
-fi
 
 
 export EZA_CONFIG_DIR=$HOME/.config/eza
