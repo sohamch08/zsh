@@ -157,8 +157,8 @@ style = 'red'
 format = '[$symbol]($style)'
 require_repo = true
 
-# [fill]
-# symbol = ' '
+[fill]
+symbol = ' '
 
 [c]
 style = 'dark_blue'
