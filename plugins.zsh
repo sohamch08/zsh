@@ -60,3 +60,11 @@ zinit light zdharma-continuum/fast-syntax-highlighting
 
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+
+###########################################################
+#### ZSH VI Mode ##########################################
+###########################################################
+
+zinit ice depth=1
+zinit light jeffreytse/zsh-vi-mode
