@@ -49,3 +49,10 @@ export DEJA_TOGGLE_EMPTY_KEY=
 
 zinit light zsh-users/zsh-syntax-highlighting
 
+
+###########################################################
+#### Powerlevel 10k Prompt ################################
+###########################################################
+
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+[[ ! -f ~/.config/zsh/.p10k/zsh ]] || source ~/.config/zsh/.p10k.zsh
