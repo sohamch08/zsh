@@ -43,7 +43,6 @@ alias su="sudo su"
 alias y="yazi"
 alias del='shred -uzn3'
 alias rm="rm -Iv"
-alias rmdir='rm -rf'
 
 # Rename files in the current directory: rename_series 5cmPerSec
 rename_series() {
