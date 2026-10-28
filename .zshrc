@@ -36,12 +36,19 @@ fi
 source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 
 # Store the completion cache outside the config directory.
+mkdir -p "$HOME/.cache/zsh"
 ZINIT[ZCOMPDUMP_PATH]="$HOME/.cache/zsh/.zcompdump"
 autoload -Uz compinit
 compinit -d "${ZINIT[ZCOMPDUMP_PATH]}"
 
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
+
+# =========================================================
+# Modular Config Files
+# =========================================================
+source "$ZDOTDIR/plugins.zsh"
+
 
 # =========================================================
 # Smart directory navigation & Yazi
