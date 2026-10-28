@@ -41,3 +41,11 @@ export DEJA_CYCLE_KEY='^N'
 export DEJA_CYCLE_FUZZY_KEY=
 export DEJA_CYCLE_FUZZY_BACK_KEY=
 export DEJA_TOGGLE_EMPTY_KEY=
+
+
+###########################################################
+#### Syntax Highlight #####################################
+###########################################################
+
+zinit light zsh-users/zsh-syntax-highlighting
+
