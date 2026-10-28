@@ -31,10 +31,6 @@ fi
 # ---------- GPG ----------
 export GPG_TTY=$(tty)
 
-# # ---------- Starship ----------
-# export STARSHIP_CONFIG="$ZDOTDIR/starship.toml"
-# export STARSHIP_CONFIG="$XDG_CACHE_HOME/starship.toml"
-
 # ---------- PATH ----------
 # Personal binaries/scripts
 if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
