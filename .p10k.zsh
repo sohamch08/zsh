@@ -47,7 +47,7 @@
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
     status                  # exit code of the last command
-    command_execution_time  # duration of the last command
+    # command_execution_time  # duration of the last command
     background_jobs         # presence of background jobs
     direnv                  # direnv status (https://direnv.net/)
     asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
@@ -503,6 +503,23 @@
   # Icon color.
   typeset -g POWERLEVEL9K_VCS_VISUAL_IDENTIFIER_COLOR='#cba6f7'
   typeset -g POWERLEVEL9K_VCS_LOADING_VISUAL_IDENTIFIER_COLOR='#cba6f7'
+  typeset -g POWERLEVEL9K_VCS_GIT_GITEA_ICON=' '
+  typeset -g POWERLEVEL9K_VCS_GIT_GITLAB_ICON=' '
+  typeset -g POWERLEVEL9K_VCS_GIT_CODEBERG_ICON=' '
+  typeset -g POWERLEVEL9K_VCS_GIT_BITBUCKET_ICON=' '
+  typeset -g POWERLEVEL9K_VCS_GIT_ICON=' '
+
+  typeset -ga POWERLEVEL9K_VCS_GIT_REMOTE_ICONS=(
+    '*github.com*'             VCS_GIT_GITHUB_ICON
+    '*gitea.tcs.tifr.res.in*'   VCS_GIT_GITEA_ICON
+    '*gitea.com*'              VCS_GIT_GITEA_ICON
+    '*gitea.io*'               VCS_GIT_GITEA_ICON
+    '*gitlab.com*'             VCS_GIT_GITLAB_ICON
+    '*codeberg.org*'           VCS_GIT_CODEBERG_ICON
+    '*bitbucket.org*'          VCS_GIT_BITBUCKET_ICON
+    '*'                       VCS_GIT_ICON
+  )
+
   # Custom icon.
   # typeset -g POWERLEVEL9K_VCS_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # Custom prefix.
@@ -523,6 +540,8 @@
   # Enable OK_PIPE, ERROR_PIPE and ERROR_SIGNAL status states to allow us to enable, disable and
   # style them independently from the regular OK and ERROR state.
   typeset -g POWERLEVEL9K_STATUS_EXTENDED_STATES=true
+  # Show only status icons, without signal names or exit codes.
+  typeset -g POWERLEVEL9K_STATUS_CONTENT_EXPANSION=''
 
   # Status on success. No content, just an icon. No need to show it if prompt_char is enabled as
   # it will signify success by turning green.
@@ -808,7 +827,7 @@
 
   ###########[ vi_mode: vi mode (you don't need this if you've enabled prompt_char) ]###########
   # Text and color for normal (a.k.a. command) vi mode.
-  typeset -g POWERLEVEL9K_VI_COMMAND_MODE_STRING=NORMAL
+  typeset -g POWERLEVEL9K_VI_COMMAND_MODE_STRING=N
   typeset -g POWERLEVEL9K_VI_MODE_NORMAL_FOREGROUND='#94e2d5'
   # Text and color for visual vi mode.
   typeset -g POWERLEVEL9K_VI_VISUAL_MODE_STRING=VISUAL
