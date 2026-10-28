@@ -41,7 +41,6 @@ source "$ZDOTDIR/fzf.zsh"
 source "$ZDOTDIR/plugins.zsh"
 source "$ZDOTDIR/binds.zsh"
 source "$ZDOTDIR/tifr-vpn.zsh"
-source "$ZDOTDIR/autoenv.zsh"
 
 # =========================================================
 # Initialize apps
@@ -54,3 +53,5 @@ eval "$(fzf --zsh)"
 . "$HOME/.local/share/../bin/env"
 
 eval "$(~/.local/bin/mise activate zsh)"
+source "$ZDOTDIR/autoenv.zsh"
+
