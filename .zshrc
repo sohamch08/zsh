@@ -35,6 +35,8 @@ setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
 # =========================================================
 # Modular Config Files
 # =========================================================
+source "$ZDOTDIR/aliases.zsh"
+source "$ZDOTDIR/rcaliases.zsh"
 source "$ZDOTDIR/plugins.zsh"
 source "$ZDOTDIR/binds.zsh"
 
