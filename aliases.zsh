@@ -45,6 +45,7 @@ alias su="sudo su"
 alias y="yazi"
 alias del='shred -uzn3'
 alias rm="rm -Iv"
+alias cls="clear"
 
 # ─── Extra Functions  ───────────────────────────────────────────────────
 cd() {
