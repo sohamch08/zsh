@@ -16,6 +16,7 @@
   # Prompt layout
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     os_icon
+    ssh
     dir
     vcs
     newline
@@ -109,6 +110,10 @@
 
   # os_icon
   typeset -g POWERLEVEL9K_OS_ICON_FOREGROUND='#cdd6f4'
+
+  # ssh
+  typeset -g POWERLEVEL9K_SSH_VISUAL_IDENTIFIER_EXPANSION='⇄'
+  typeset -g POWERLEVEL9K_SSH_FOREGROUND='#f9e2af'
 
   # prompt_char
   typeset -g POWERLEVEL9K_PROMPT_CHAR_BACKGROUND=
