@@ -26,10 +26,10 @@
     background_jobs
     code
     # direnv
-    asdf
+    # asdf
     virtualenv
-    anaconda
-    pyenv
+    # anaconda
+    # pyenv
     goenv
     nodenv
     nvm
@@ -38,35 +38,35 @@
     rvm
     fvm
     luaenv
-    jenv
+    # jenv
     plenv
     perlbrew
-    phpenv
-    scalaenv
-    haskell_stack
-    kubecontext
-    terraform
-    aws_eb_env
-    azure
-    gcloud
-    google_app_cred
-    toolbox
-    context
-    nordvpn
-    ranger
-    yazi
-    nnn
-    lf
-    xplr
-    vim_shell
-    midnight_commander
+    # phpenv
+    # scalaenv
+    # haskell_stack
+    # kubecontext
+    # terraform
+    # aws_eb_env
+    # azure
+    # gcloud
+    # google_app_cred
+    # toolbox
+    # context
+    # nordvpn
+    # ranger
+    # yazi
+    # nnn
+    # lf
+    # xplr
+    # vim_shell
+    # midnight_commander
     nix_shell
-    chezmoi_shell
+    # chezmoi_shell
     vi_mode
-    todo
-    timewarrior
-    taskwarrior
-    per_directory_history
+    # todo
+    # timewarrior
+    # taskwarrior
+    # per_directory_history
     newline
   )
 
