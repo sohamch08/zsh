@@ -1,0 +1,140 @@
+# OS metadata
+.DS_Store
+
+# Editor settings
+.vscode/
+.idea/
+
+# Editor swap and backup files
+*.swp
+*.swo
+*~
+*.bak
+*.backup
+
+# AI tools and agent files
+**/.claude
+.codex/
+.agents/
+.Codex/
+.Agents/
+
+# Python bytecode and tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# LaTeX core auxiliary and intermediate files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.upa
+*.upb
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+*.dvi
+*.xdv
+*.vtc
+*-converted-to.*
+
+# LaTeX bibliography output
+*.bbl
+*.bcf
+*.blg
+*.bbl-SAVE-ERROR
+*.bcf-SAVE-ERROR
+*-blx.aux
+*-blx.bib
+*.brf
+*.run.xml
+
+# LaTeX build-tool and synchronization files
+*.fdb_latexmk
+*.synctex*
+*.pdfsync
+*.rubbercache
+rubber.cache
+latex.out/
+*.auxlock
+
+# LaTeX package output: algorithms, theorems, presentations, and listings
+*.alg
+*.loa
+*.thm
+*.nav
+*.snm
+*.vrb
+*.pre
+*.lol
+*.loe
+*.listing
+
+# LaTeX indexes, glossaries, and nomenclature
+*.idx
+*.ilg
+*.ind
+*.acn
+*.acr
+*.glg
+*.glo
+*.gls
+*.glg-abr
+*.glo-abr
+*.gls-abr
+*.glsdefs
+*.lzo
+*.lzs
+*.slg
+*.slo
+*.sls
+*.nlo
+*.nlg
+*.nls
+*.xdy
+
+# LaTeX mini tables of contents
+*.maf
+*.mtc
+*.mtc[0-9]*
+*.mlf
+*.mlt
+*.slf[0-9]*
+*.slt[0-9]*
+*.stc[0-9]*
+
+# LaTeX generated code, figures, and package caches
+*.pyg
+_minted*/
+*.data.minted
+*.sagetex.sage
+*.sagetex.py
+*.sagetex.scmd
+*.sout
+*.sympy
+sympy-plots-for-*.tex/
+*.pytxcode
+pythontex-files-*/
+svg-inkscape/
+*.tdo
+*.mw
+*.gin
+*.dpth
+*.md5
+*.tuc
+*.tui
+*.tuo
+
+# LaTeX editor temporary files
+.auctex-auto/
+.texpadtmp/
+*.lyx~
+TSWLatexianTemp*
