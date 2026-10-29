@@ -59,7 +59,7 @@ zinit light zdharma-continuum/fast-syntax-highlighting
 ###########################################################
 
 zinit ice depth=1; zinit light romkatv/powerlevel10k
-[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+[[ ! -f ~/.zsh/.p10k.zsh ]] || source ~/.zsh/.p10k.zsh
 
 
 ###########################################################

@@ -1,4 +1,5 @@
 # ~/.config/zsh/.zshenv
+export ZDIR="$HOME/.zsh"
 
 # ---------- OS detection ----------
 # IS_MAC / IS_LINUX are used to guard platform-specific config here and in .zshrc

@@ -8,10 +8,22 @@ ZPLUGINDIR="$HOME/.local/share/zsh/plugins"
 _zplugin_load() {
   local owner="$1" repo="$2"
   local entry="${3:-${2}.plugin.zsh}"
-  local file="${ZPLUGINDIR}/${owner}---${repo}/${entry}"
+  local plugin_dir="${ZPLUGINDIR}/${owner}---${repo}"
+  local file="${plugin_dir}/${entry}"
+
+  if [[ ! -d "$plugin_dir" ]]; then
+    command mkdir -p -- "$ZPLUGINDIR" || return 1
+    print -ru2 -- "Installing ${owner}/${repo}..."
+
+    command git clone --depth=1 -- \
+      "https://github.com/${owner}/${repo}.git" "$plugin_dir" || {
+        print -ru2 -- "ERROR: failed to install ${owner}/${repo}"
+        return 1
+      }
+  fi
 
   if [[ ! -r "$file" ]]; then
-    print -ru2 -- "Missing plugin: $file"
+    print -ru2 -- "Missing plugin entry: $file"
     return 1
   fi
 
@@ -73,8 +85,8 @@ _zplugin_load zdharma-continuum fast-syntax-highlighting
 
 _zplugin_load romkatv powerlevel10k powerlevel10k.zsh-theme
 
-[[ ! -r "${ZDOTDIR:-$HOME/.config/zsh}/.p10k.zsh" ]] ||
-  source "${ZDOTDIR:-$HOME/.config/zsh}/.p10k.zsh"
+[[ ! -r "${ZDIR:-$HOME/.zsh}/.p10k.zsh" ]] ||
+  source "${ZDIR:-$HOME/.zsh}/.p10k.zsh"
 
 # =========================================================
 # Vi mode

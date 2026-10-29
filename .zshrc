@@ -40,11 +40,11 @@ setopt CORRECT            # Suggest corrections for command names
 # Aliases, functions and settings — refreshed on reload
 # =========================================================
 
-source "$ZDOTDIR/aliases.zsh"
-source "$ZDOTDIR/bookmarks.zsh"
-source "$ZDOTDIR/rcaliases.zsh"
-source "$ZDOTDIR/fzf.zsh"
-source "$ZDOTDIR/tifr-vpn.zsh"
+source "$ZDIR/aliases.zsh"
+source "$ZDIR/bookmarks.zsh"
+source "$ZDIR/rcaliases.zsh"
+source "$ZDIR/fzf.zsh"
+source "$ZDIR/tifr-vpn.zsh"
 
 
 # =========================================================
@@ -58,7 +58,7 @@ if [[ -z ${_my_zsh_initialized-} ]]; then
   # plugins.zsh also loads .p10k.zsh on initial startup.
   # -------------------------------------------------------
 
-  source "$ZDOTDIR/plugins-woZinit.zsh"
+  source "$ZDIR/plugins.zsh"
 
   # -------------------------------------------------------
   # Zoxide — directory navigation
@@ -82,13 +82,13 @@ if [[ -z ${_my_zsh_initialized-} ]]; then
   # Mise — development tool environments
   # -------------------------------------------------------
 
-  eval "$(~/.local/bin/mise activate zsh)"
+  eval "$(mise activate zsh)"
 
   # -------------------------------------------------------
   # Direnv — project environment activation
   # -------------------------------------------------------
 
-  source "$ZDOTDIR/autoenv.zsh"
+  source "$ZDIR/autoenv.zsh"
 
   # Keep this variable unexported so new shells initialize.
   typeset -g _my_zsh_initialized=1
@@ -99,7 +99,7 @@ if [[ -z ${_my_zsh_initialized-} ]]; then
 #   # Reload prompt settings without reinitializing plugins
 #   # -------------------------------------------------------
 #
-#   source "$ZDOTDIR/.p10k.zsh"
+#   source "$ZDIR/.p10k.zsh"
 #
 fi
 
@@ -108,4 +108,5 @@ fi
 # Custom keybindings — refreshed on reload
 # =========================================================
 
-source "$ZDOTDIR/binds.zsh"
+source "$ZDIR/binds.zsh"
+

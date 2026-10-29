@@ -4,12 +4,12 @@
 
 alias sudo="sudo "
 alias cat="bat"
-alias reload="source $ZDOTDIR/.zshrc"
-alias zshedit="nvim $ZDOTDIR/.zshrc"
-alias aliasedit="nvim $ZDOTDIR/aliases.zsh"
+alias reload="source $HOME/.zshrc"
+alias zshedit="nvim $HOME/.zshrc"
+alias aliasedit="nvim $ZDIR/aliases.zsh"
 alias nvimb="nvim -c 'set backup backupdir=. backupext=~ backupskip='"
-alias promptreload='source "$ZDOTDIR/.p10k.zsh"'
-alias fullreload='source "$ZDOTDIR/.zshrc" && source "$ZDOTDIR/.p10k.zsh"'
+alias promptreload='source "$ZDIR/.p10k.zsh"'
+alias fullreload='source "$HOME/.zshrc" && source "$ZDIR/.p10k.zsh"'
 
 # ─── EZA Aliases  ──────────────────────────────────────────────────────
 alias eza='eza --icons=always'
