@@ -41,6 +41,7 @@ setopt CORRECT            # Suggest corrections for command names
 # =========================================================
 
 source "$ZDOTDIR/aliases.zsh"
+source "$ZDOTDIR/bookmarks.zsh"
 source "$ZDOTDIR/rcaliases.zsh"
 source "$ZDOTDIR/fzf.zsh"
 source "$ZDOTDIR/tifr-vpn.zsh"
@@ -91,15 +92,15 @@ if [[ -z ${_my_zsh_initialized-} ]]; then
 
   # Keep this variable unexported so new shells initialize.
   typeset -g _my_zsh_initialized=1
-
-else
-
-  # -------------------------------------------------------
-  # Reload prompt settings without reinitializing plugins
-  # -------------------------------------------------------
-
-  source "$ZDOTDIR/.p10k.zsh"
-
+#
+# else
+#
+#   # -------------------------------------------------------
+#   # Reload prompt settings without reinitializing plugins
+#   # -------------------------------------------------------
+#
+#   source "$ZDOTDIR/.p10k.zsh"
+#
 fi
 
 
