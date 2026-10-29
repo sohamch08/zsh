@@ -107,6 +107,9 @@ alias bathelp='bat --plain --language=help'
 help() {
     "$@" --help 2>&1 | bathelp
 }
+kpxc() {
+  flatpak run --command=keepassxc-cli org.keepassxc.KeePassXC "$@"
+}
 alias man="batman"
 alias sensors="sensors | bat -l cpuinfo -p"
 alias mv="mv -iv"
