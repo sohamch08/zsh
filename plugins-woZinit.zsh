@@ -80,4 +80,10 @@ _zplugin_load romkatv powerlevel10k powerlevel10k.zsh-theme
 # Vi mode
 # =========================================================
 
-_zplugin_load jeffreytse zsh-vi-mode
+# _zplugin_load jeffreytse zsh-vi-mode
+
+# Native Zsh vi editing.
+bindkey -v
+
+# Wait 10 ms to distinguish Escape from longer key sequences.
+KEYTIMEOUT=1

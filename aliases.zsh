@@ -8,6 +8,8 @@ alias reload="source $ZDOTDIR/.zshrc"
 alias zshedit="nvim $ZDOTDIR/.zshrc"
 alias aliasedit="nvim $ZDOTDIR/aliases.zsh"
 alias nvimb="nvim -c 'set backup backupdir=. backupext=~ backupskip='"
+alias promptreload='source "$ZDOTDIR/.p10k.zsh"'
+alias fullreload='source "$ZDOTDIR/.zshrc" && source "$ZDOTDIR/.p10k.zsh"'
 
 # ─── EZA Aliases  ──────────────────────────────────────────────────────
 alias eza='eza --icons=always'
@@ -44,6 +46,14 @@ alias y="yazi"
 alias del='shred -uzn3'
 alias rm="rm -Iv"
 
+# ─── Extra Functions  ───────────────────────────────────────────────────
+cd() {
+  if (( $# == 1 )) && [[ -n ${CD_BOOKMARKS[$1]-} ]]; then
+    builtin cd -- "${CD_BOOKMARKS[$1]}"
+  else
+    __zoxide_z "$@"
+  fi
+}
 # Rename files in the current directory: rename_series 5cmPerSec
 rename_series() {
   if (( $# != 1 )); then
