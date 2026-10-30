@@ -90,6 +90,14 @@ if [[ -z ${_my_zsh_initialized-} ]]; then
 
   source "$ZDOTDIR/autoenv.zsh"
 
+  # -------------------------------------------------------
+  # Opam — installed packages and switch environment
+  # -------------------------------------------------------
+
+  if [[ -r "$HOME/.opam/opam-init/init.zsh" ]]; then
+    source "$HOME/.opam/opam-init/init.zsh"
+  fi
+
   # Keep this variable unexported so new shells initialize.
   typeset -g _my_zsh_initialized=1
 #
@@ -117,12 +125,3 @@ cd() {
 # =========================================================
 
 source "$ZDOTDIR/binds.zsh"
-
-
-# BEGIN opam configuration
-# This is useful if you're using opam as it adds:
-#   - the correct directories to the PATH
-#   - auto-completion for the opam binary
-# This section can be safely removed at any time if needed.
-[[ ! -r '/home/soham/.opam/opam-init/init.zsh' ]] || source '/home/soham/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null; true
-# END opam configuration
