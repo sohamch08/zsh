@@ -65,3 +65,4 @@ export SOULSEEK_USERNAME="sohamc"
 export SOULSEEK_PASSWORD_CMD="pass show soulseek"
 export GPG_TTY=$(tty)
 export CMUS_HOME="${XDG_CONFIG_HOME:-$HOME/.local/state}/cmus"
+export PF_INFO="ascii title os host kernel memory wm de shell editor"

@@ -1,5 +1,11 @@
+# Print the startup banner before Powerlevel10k redirects console output.
+if [[ -z ${_my_zsh_initialized-} ]] && (( $+commands[pfetch] )); then
+  command pfetch
+  # command fastfetch
+fi
+
 # =========================================================
-# Powerlevel10k instant prompt — keep at the top
+# Powerlevel10k instant prompt — keep below intentional console output
 # =========================================================
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
