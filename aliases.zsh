@@ -47,6 +47,13 @@ alias del='shred -uzn3'
 alias rm="rm -Iv"
 alias cls="neoclear"
 
+# ─── Matrix Rain ────────────────────────────────────────────────────────
+alias neo='neo -S 14 -f 60 -d 0.8 -c green --lingerms 1,1 --rippct 0 --shortpct 0'
+alias neowake='neo -m "WAKE UP, SOHAM"'
+alias neorabbit='neo -m "FOLLOW THE WHITE RABBIT"'
+alias neomind='neo -m "FREE YOUR MIND"'
+alias neoredpill='neo -m "THIS TIME, CHOOSE THE RED PILL"'
+
 # ─── Extra Functions  ───────────────────────────────────────────────────
 # Rename files in the current directory: rename_series 5cmPerSec
 rename_series() {
