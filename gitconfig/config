@@ -72,3 +72,4 @@
 	list-aliases-global = "!{ printf \"[alias]\\n\"; git config --global --get-regexp \"^alias\\\\.\" | sed -E \"s/^alias\\\\.([^ ]+) (.*)$/    \\\\1 = \\\\2/\"; } | bat --language=gitconfig --color=always --paging=never"
 	list-aliases-local = "!{ printf \"[alias]\\n\"; git config --local --get-regexp \"^alias\\\\.\" | sed -E \"s/^alias\\\\.([^ ]+) (.*)$/    \\\\1 = \\\\2/\"; } | bat --language=gitconfig --color=always --paging=never"
 	undo = reset --soft HEAD^
+	license = "!gh repo license view MIT > LICENSE && git add LICENSE && git commit -m \"ADD MIT LICENSE\" && git push"
