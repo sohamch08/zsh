@@ -122,4 +122,4 @@ alias pci='lspci | bat -p -l properties'
 alias usb='lsusb | bat -p -l fstab'
 alias mounts='findmnt | bat -p -l fstab --wrap=never'
 alias gpg-fingerprint="gpg --with-colons --fingerprint | awk -F: '\$1==\"pub\"{p=1} \$1==\"fpr\" && p{print \$10; p=0}'"
-
+alias cmus='tmux new-session -A -D -s cmus /usr/bin/cmus'
