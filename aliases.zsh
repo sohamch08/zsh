@@ -48,13 +48,6 @@ alias rm="rm -Iv"
 alias cls="clear"
 
 # ─── Extra Functions  ───────────────────────────────────────────────────
-cd() {
-  if (( $# == 1 )) && [[ -n ${CD_BOOKMARKS[$1]-} ]]; then
-    builtin cd -- "${CD_BOOKMARKS[$1]}"
-  else
-    __zoxide_z "$@"
-  fi
-}
 # Rename files in the current directory: rename_series 5cmPerSec
 rename_series() {
   if (( $# != 1 )); then

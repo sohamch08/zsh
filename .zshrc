@@ -103,9 +103,26 @@ if [[ -z ${_my_zsh_initialized-} ]]; then
 #
 fi
 
+cd() {
+  if (( $# == 1 )) && [[ -n ${CD_BOOKMARKS[$1]-} ]]; then
+    builtin cd -- "${CD_BOOKMARKS[$1]}"
+  else
+    __zoxide_z "$@"
+  fi
+}
+
 
 # =========================================================
 # Custom keybindings — refreshed on reload
 # =========================================================
 
 source "$ZDOTDIR/binds.zsh"
+
+
+# BEGIN opam configuration
+# This is useful if you're using opam as it adds:
+#   - the correct directories to the PATH
+#   - auto-completion for the opam binary
+# This section can be safely removed at any time if needed.
+[[ ! -r '/home/soham/.opam/opam-init/init.zsh' ]] || source '/home/soham/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null; true
+# END opam configuration
