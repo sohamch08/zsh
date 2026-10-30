@@ -61,7 +61,7 @@ export EZA_ICON_SPACING=2
 export GEM_HOME="$HOME/.gems"
 export PATH="$HOME/.cargo/bin:$HOME/go/bin:$HOME/gems/bin:$PATH"
 export SOULSEEK_USERNAME="sohamc"
-export SOULSEEK_PASSWORD=$(pass show soulseek)
+# Fetch the password only when soulseek-rs needs it, never during shell startup.
 export SOULSEEK_PASSWORD_CMD="pass show soulseek"
 export GPG_TTY=$(tty)
 export CMUS_HOME="${XDG_CONFIG_HOME:-$HOME/.local/state}/cmus"
