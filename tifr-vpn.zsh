@@ -1,5 +1,6 @@
 alias tifrvpn='"$HOME/bin/tifr/tifrvpn"'
 alias tifr-on='"$HOME/bin/tifr/tifrvpn" -c'
+alias tifr-quiet='"$HOME/bin/tifr/tifrvpn" -c --quiet'
 alias tifr-off='"$HOME/bin/tifr/tifrvpn" -d'
 alias tifr-status='"$HOME/bin/tifr/tifrvpn" -s'
 alias tifr-setup='"$HOME/bin/tifr/tifrvpn" --setup'
