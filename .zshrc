@@ -109,4 +109,5 @@ fi
 # =========================================================
 
 source "$ZDIR/binds.zsh"
+source "$ZDIR/neomutt.zsh"
 
