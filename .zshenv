@@ -65,4 +65,4 @@ export SOULSEEK_USERNAME="sohamc"
 export SOULSEEK_PASSWORD="19158113"
 export SOULSEEK_PASSWORD_CMD="19158113"
 export GPG_TTY=$(tty)
-export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/catppuccin/themes/mocha/blue.yml"
+export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/mocha.yml"
