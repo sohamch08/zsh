@@ -107,7 +107,6 @@ alias bathelp='bat --plain --language=help'
 help() {
     "$@" --help 2>&1 | bathelp
 }
-alias man="batman"
 alias sensors="sensors | bat -l cpuinfo -p"
 alias mv="mv -iv"
 alias now='date "+%Y-%m-%d %H:%M:%S"'
