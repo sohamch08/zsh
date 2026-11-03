@@ -7,10 +7,6 @@ if [[ -o interactive && -t 0 ]]; then
         gpg --quiet --no-batch --pinentry-mode loopback \
             --decrypt "$password_file" >/dev/null
     }
-
-    if [[ -r "${PASSWORD_STORE_DIR:-$HOME/.password-store}/tifr.gpg" ]]; then
-        mail-unlock
-    fi
 fi
 
 neomutt() {
