@@ -33,6 +33,8 @@ alias locks="dnf versionlock list"
 
 
 # ─── Extra Aliases  ──────────────────────────────────────────────────────
+# Enable Lazygit colors even when the parent process disables color output.
+alias lazygit='env -u NO_COLOR TERM=xterm-256color COLORTERM=truecolor lazygit'
 alias lg="lazygit"
 alias b="bat"
 alias c="clear"
