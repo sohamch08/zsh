@@ -121,3 +121,7 @@ alias usb='lsusb | bat -p -l fstab'
 alias mounts='findmnt | bat -p -l fstab --wrap=never'
 alias gpg-fingerprint="gpg --with-colons --fingerprint | awk -F: '\$1==\"pub\"{p=1} \$1==\"fpr\" && p{print \$10; p=0}'"
 
+
+# TeX Live configuration formatters
+alias tlconf='tlmgr conf | awk -v cols="$(tput cols)" -f "$HOME/.zsh/tlconf.awk"'
+alias tlconf-simple='tlmgr conf | awk -v cols="${COLUMNS:-100}" -f "$HOME/.zsh/tlconf-simple.awk"'
