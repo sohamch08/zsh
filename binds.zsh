@@ -2,8 +2,8 @@
 # Key Bindings
 # =========================================================
 
-bindkey '^K' up-line-or-history
-bindkey '^J' down-line-or-history
+# bindkey '^K' up-line-or-history
+# bindkey '^J' down-line-or-history
 
 _zsh_fzf_bindings() {
   local keymap
@@ -12,6 +12,8 @@ _zsh_fzf_bindings() {
     bindkey -M "$keymap" '^R' fzf-history-widget
     bindkey -M "$keymap" '^O' fzf-cd-widget
     bindkey -M "$keymap" '\ec' fzf-cd-widget
+    bindkey -M "$keymap" '^K' up-line-or-history
+    bindkey -M "$keymap" '^J' down-line-or-history
   done
 }
 
