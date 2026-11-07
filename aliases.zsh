@@ -45,7 +45,7 @@ alias su="sudo su"
 alias y="yazi"
 alias del='shred -uzn3'
 alias rm="rm -Iv"
-alias cls="neoclear"
+alias cls="clear"
 
 # ─── Matrix Rain ────────────────────────────────────────────────────────
 alias neo='neo -S 14 -f 60 -d 0.8 -c green --lingerms 1,1 --rippct 0 --shortpct 0'
@@ -123,3 +123,16 @@ alias usb='lsusb | bat -p -l fstab'
 alias mounts='findmnt | bat -p -l fstab --wrap=never'
 alias gpg-fingerprint="gpg --with-colons --fingerprint | awk -F: '\$1==\"pub\"{p=1} \$1==\"fpr\" && p{print \$10; p=0}'"
 alias cmus='tmux new-session -A -D -s cmus /usr/bin/cmus'
+
+
+cstudy() {
+    command gcc \
+        -std=c17 -g -O2 \
+        -Wall -Wextra -Wpedantic \
+        -Wformat=2 -Wshadow -Wwrite-strings \
+        -Wstrict-prototypes -Wold-style-definition \
+        -Wredundant-decls -Wnested-externs \
+        -Wmissing-include-dirs \
+        -Wjump-misses-init -Wlogical-op \
+        "$@"
+}
