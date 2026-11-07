@@ -2,6 +2,11 @@
 # Powerlevel10k instant prompt — keep at the top
 # =========================================================
 
+# Enable colors in interactive programs even if the launcher disables them.
+unset NO_COLOR
+
+fastfetch
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -44,7 +49,6 @@ source "$ZDIR/aliases.zsh"
 source "$ZDIR/bookmarks.zsh"
 source "$ZDIR/rcaliases.zsh"
 source "$ZDIR/fzf.zsh"
-source "$ZDIR/tifr-vpn.zsh"
 
 
 # =========================================================
@@ -111,3 +115,4 @@ fi
 source "$ZDIR/binds.zsh"
 source "$ZDIR/neomutt.zsh"
 
+unset GIT_PAGER
