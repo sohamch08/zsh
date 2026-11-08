@@ -136,3 +136,8 @@ cstudy() {
         -Wjump-misses-init -Wlogical-op \
         "$@"
 }
+
+
+# TeX Live configuration formatters
+alias tlconf='tlmgr conf | awk -v cols="$(tput cols)" -f "$ZDOTDIR/tlconf.awk"'
+alias tlconf-simple='tlmgr conf | awk -v cols="${COLUMNS:-100}" -f "$ZDOTDIR/tlconf-simple.awk"'
