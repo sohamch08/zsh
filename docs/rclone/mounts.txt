@@ -1,0 +1,65 @@
+Rclone mounts help
+Sections begin with @@ COMMAND and end at the next section marker.
+
+@@ rcmount
+rcmount - Mount a remote as a local folder
+
+Usage:
+  rcmount REMOTE [OPTIONS...]
+
+What it does:
+Mount a whole remote in the background at ~/<name>-rclone, using full VFS
+caching. Create a missing mount folder or reuse an existing one. If the path
+is already mounted, report that and stop.
+
+Examples:
+  rcmount remote1
+  rcmount remote1:
+  rcmount remote2 --read-only
+
+Effects:
+Creates a local mount directory and background process. File operations
+through a writable mount can change remote files; VFS caching uses local
+storage.
+
+Notes:
+Only whole remote names are accepted, not remote subfolders. Additional
+options go to rclone mount. The existing folder normally needs to be empty.
+Applications can access the remote through the mount.
+
+Help:
+  rcmount -h
+  rcmount --help
+  rchelp rcmount
+
+Help is printed locally before any operation is started.
+
+@@ rcumount
+rcumount - Unmount a remote and remove its empty mount folder
+
+Usage:
+  rcumount REMOTE
+
+What it does:
+Disconnect ~/<name>-rclone if mounted, then remove the directory only if it is
+empty. Already-unmounted and missing-folder cases are handled normally.
+
+Examples:
+  rcumount remote1
+  rcumount remote1:
+  rcumount remote2
+
+Effects:
+Disconnects the mount and removes an empty local directory. Does not delete
+remote contents.
+
+Notes:
+If unmounting fails, cleanup stops. A folder containing local files is left
+intact and rmdir reports an error. Only whole remote names are accepted.
+
+Help:
+  rcumount -h
+  rcumount --help
+  rchelp rcumount
+
+Help is printed locally before any operation is started.

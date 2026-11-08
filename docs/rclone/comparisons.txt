@@ -1,0 +1,177 @@
+Rclone comparisons help
+Sections begin with @@ COMMAND and end at the next section marker.
+
+@@ rcstatus
+rcstatus - Show a combined remote/local comparison
+
+Usage:
+  rcstatus REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
+
+What it does:
+Print a legend followed by one combined rclone check report. Symbols: =
+identical, - local only, + remote only, * different, ! error.
+
+Options:
+  --size-only  Compare sizes without checking hashes.
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcstatus remote1 ./local
+  rcstatus remote3:Research ./documents --size-only
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Arguments are always REMOTE first, LOCAL_PATH second. Files are compared by
+size and available hashes. A nonzero exit code can mean differences or errors.
+REMOTE and REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder;
+quote paths containing spaces. Put additional options after the paths.
+
+Help:
+  rcstatus -h
+  rcstatus --help
+  rchelp rcstatus
+
+Help is printed locally before any operation is started.
+
+@@ rcremote-only
+rcremote-only - Show files missing locally
+
+Usage:
+  rcremote-only REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
+
+What it does:
+Report file paths that exist on the remote but are missing in the local
+directory. Does not download them.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcremote-only remote3:Research ./documents
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Arguments are always REMOTE first, LOCAL_PATH second. Files are compared by
+size and available hashes. A nonzero exit code can mean differences or errors.
+REMOTE and REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder;
+quote paths containing spaces. Put additional options after the paths.
+
+Help:
+  rcremote-only -h
+  rcremote-only --help
+  rchelp rcremote-only
+
+Help is printed locally before any operation is started.
+
+@@ rclocal-only
+rclocal-only - Show files missing from the remote
+
+Usage:
+  rclocal-only REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
+
+What it does:
+Report file paths that exist locally but are missing on the remote. Does not
+upload them.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rclocal-only remote3:Research ./documents
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Arguments are always REMOTE first, LOCAL_PATH second. Files are compared by
+size and available hashes. A nonzero exit code can mean differences or errors.
+REMOTE and REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder;
+quote paths containing spaces. Put additional options after the paths.
+
+Help:
+  rclocal-only -h
+  rclocal-only --help
+  rchelp rclocal-only
+
+Help is printed locally before any operation is started.
+
+@@ rcdiff
+rcdiff - Show files that differ on both sides
+
+Usage:
+  rcdiff REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
+
+What it does:
+Report file paths present on both sides with different sizes or available
+hashes. This is a list of paths, not a line-by-line text diff.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcdiff remote3:Research ./documents
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Arguments are always REMOTE first, LOCAL_PATH second. Files are compared by
+size and available hashes. A nonzero exit code can mean differences or errors.
+REMOTE and REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder;
+quote paths containing spaces. Put additional options after the paths.
+
+Help:
+  rcdiff -h
+  rcdiff --help
+  rchelp rcdiff
+
+Help is printed locally before any operation is started.
+
+@@ rcgit
+rcgit - Show local-only, remote-only, and changed files
+
+Usage:
+  rcgit REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
+
+What it does:
+Run three rclone checks and print separate local-only, remote-only, and
+different-on-both sections. This does not use Git or synchronize files.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcgit remote1 ./local
+  rcgit remote3:Research ./documents --size-only
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Three comparisons can take time on large remotes. Errors remain visible and
+any failed comparison preserves a nonzero result. Arguments are always REMOTE
+first, LOCAL_PATH second. Files are compared by size and available hashes. A
+nonzero exit code can mean differences or errors. REMOTE and REMOTE: both mean
+the remote root. Use REMOTE:PATH for a subfolder; quote paths containing
+spaces. Put additional options after the paths.
+
+Help:
+  rcgit -h
+  rcgit --help
+  rchelp rcgit
+
+Help is printed locally before any operation is started.
