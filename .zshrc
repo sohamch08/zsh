@@ -1,3 +1,8 @@
+# ---------- GPG ----------
+if [[ -t 0 ]]; then
+  export GPG_TTY=$(tty)
+fi
+
 # Print the startup banner before Powerlevel10k redirects console output.
 if [[ -z ${_my_zsh_initialized-} ]] && (( $+commands[pfetch] )); then
   command pfetch

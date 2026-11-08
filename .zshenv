@@ -28,14 +28,13 @@ elif command -v batcat >/dev/null 2>&1; then
   export MANPAGER="batcat -l man -p"
 fi
 
-# ---------- GPG ----------
-export GPG_TTY=$(tty)
 
 # ---------- PATH ----------
-# Personal binaries/scripts
-if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
-    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-fi
+# Keep identical PATH entries unique.
+typeset -U path PATH
+
+# Personal binaries/scripts.
+path=("$HOME/.local/bin" "$HOME/bin" "${path[@]}")
 export PATH
 
 # ---------- Lean / elan ----------
@@ -53,16 +52,6 @@ fi
   (( $#texbin )) && export PATH="${texbin[-1]}:$PATH"
 }
 
+# ---------- Application and personal variables ----------
+source "$ZDOTDIR/env.zsh"
 
-export EZA_CONFIG_DIR=$HOME/.config/eza
-export EZA_ICON_SPACING=2
-
-# Install Ruby Gems to ~/gems
-export GEM_HOME="$HOME/.gems"
-export PATH="$HOME/.cargo/bin:$HOME/go/bin:$HOME/gems/bin:$PATH"
-export SOULSEEK_USERNAME="sohamc"
-# Fetch the password only when soulseek-rs needs it, never during shell startup.
-export SOULSEEK_PASSWORD_CMD="pass show soulseek"
-export GPG_TTY=$(tty)
-export CMUS_HOME="${XDG_CONFIG_HOME:-$HOME/.local/state}/cmus"
-export PF_INFO="ascii title os host kernel memory wm de shell editor"
