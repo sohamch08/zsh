@@ -14,6 +14,7 @@ _zsh_fzf_bindings() {
     bindkey -M "$keymap" '\ec' fzf-cd-widget
     bindkey -M "$keymap" '^K' up-line-or-history
     bindkey -M "$keymap" '^J' down-line-or-history
+    bindkey -M "$keymap" '^P' push-line
   done
 }
 
