@@ -4,7 +4,7 @@ if [[ -t 0 ]]; then
 fi
 
 # Print the startup banner before Powerlevel10k redirects console output.
-if [[ -z ${_my_zsh_initialized-} ]] && (( $+commands[pfetch] )); then
+if [[ -z ${_my_zsh_initialized-} ]] && (($+commands[pfetch])); then
   command pfetch
   # command fastfetch
 fi
@@ -16,7 +16,6 @@ fi
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
 
 # =========================================================
 # History
@@ -36,16 +35,14 @@ setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_FIND_NO_DUPS
 setopt HIST_REDUCE_BLANKS
 
-
 # =========================================================
 # Shell behaviour
 # =========================================================
 
-setopt AUTOCD             # Enter directories by typing their path
-setopt NOBEEP             # Disable terminal bell
-setopt NUMERIC_GLOB_SORT  # Sort file2 before file10
-setopt CORRECT            # Suggest corrections for command names
-
+setopt AUTOCD            # Enter directories by typing their path
+setopt NOBEEP            # Disable terminal bell
+setopt NUMERIC_GLOB_SORT # Sort file2 before file10
+setopt CORRECT           # Suggest corrections for command names
 
 # =========================================================
 # Aliases, functions and settings — refreshed on reload
@@ -57,7 +54,6 @@ source "$ZDOTDIR/rcaliases.zsh"
 source "$ZDOTDIR/fzf.zsh"
 source "$ZDOTDIR/tifr-vpn.zsh"
 
-
 # =========================================================
 # Initialization — runs once per shell
 # =========================================================
@@ -66,10 +62,10 @@ if [[ -z ${_my_zsh_initialized-} ]]; then
 
   # -------------------------------------------------------
   # Plugins and prompt
-  # plugins.zsh also loads .p10k.zsh on initial startup.
+  # plugins-manual.zsh also loads .p10k.zsh on initial startup.
   # -------------------------------------------------------
 
-  source "$ZDOTDIR/plugins-woZinit.zsh"
+  source "$ZDOTDIR/plugins-manual.zsh"
 
   # -------------------------------------------------------
   # Zoxide — directory navigation
@@ -123,13 +119,12 @@ if [[ -z ${_my_zsh_initialized-} ]]; then
 fi
 
 cd() {
-  if (( $# == 1 )) && [[ -n ${CD_BOOKMARKS[$1]-} ]]; then
+  if (($# == 1)) && [[ -n ${CD_BOOKMARKS[$1]-} ]]; then
     builtin cd -- "${CD_BOOKMARKS[$1]}"
   else
     __zoxide_z "$@"
   fi
 }
-
 
 # =========================================================
 # Custom keybindings — refreshed on reload
