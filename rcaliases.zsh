@@ -29,12 +29,12 @@ rclog-clear                             # Clear log
 
 # ── LISTING ──────────────────────────────────────────────
 rcls visa:                              # List files on remote
-rctree gdrive:                          # Tree view via eza
+rctree gdrive:                          # Tree view without mounting
 
 # ── MOUNT ────────────────────────────────────────────────
 rcmount visa:                           # Mount remote
 rcumount visa:                          # Unmount remote
-# Mounts to: ~/.rclone-mounts/<remotename>
+# Mounts to: ~/<remotename>-mounts
 
 # ── TRANSFER ─────────────────────────────────────────────
 rcpull "visa:Visa Application" ~/local  # Download remote → local
@@ -56,7 +56,7 @@ rcremote-only "visa:Visa Application" ~/local  # Remote ahead
 rclocal-only "visa:Visa Application" ~/local   # Local ahead
 rcdiff "visa:Visa Application" ~/local         # Files that differ
 
-# Symbols:  = identical  < local ahead  > remote ahead  * different
+# Symbols: = identical  - only local  + only remote  * different  ! error
 EOF
 }
 
@@ -70,27 +70,47 @@ rcls() {
 
 # Tree view of any remote via eza (mounts temporarily)
 rctree() {
-    local remote="$1"
-    local mount="$HOME/${remote}-mounts"
-    mkdir -p "$mount"
-    rclone mount "$remote:" "$mount" --daemon --vfs-cache-mode full
-    lt "$mount"
+  local remote="${1%:}"
+
+  if (( $# != 1 )) || [[ -z $remote || $remote == *[:/]* ]]; then
+    print -u2 -- 'Usage: rctree REMOTE or REMOTE:'
+    return 2
+  fi
+
+  command rclone tree "${remote}:"
 }
 
 # Mount a remote
 rcmount() {
-    local remote="$1"
-    local mount="$HOME/${remote}-mounts/"
-    mkdir -p "$mount"
-    rclone mount "$remote:" "$mount" --daemon --vfs-cache-mode full
-    echo "Mounted $remote: at $mount"
+  local remote="${1%:}"
+
+  if (( $# != 1 )) || [[ -z $remote || $remote == *[:/]* ]]; then
+    print -u2 -- 'Usage: rcmount REMOTE or REMOTE:'
+    return 2
+  fi
+
+  local mount="$HOME/${remote}-mounts"
+
+  command mkdir -p -- "$mount" || return
+  command rclone mount "${remote}:" "$mount" \
+    --daemon --vfs-cache-mode full || return
+
+  print -r -- "Mounted ${remote}: at $mount"
 }
 
 # Unmount a remote
 rcumount() {
-    local remote="$1"
-    local mount="$HOME/${remote}-mounts/"
-    fusermount -u "$mount" && echo "Unmounted $remote:"
+  local remote="${1%:}"
+
+  if (( $# != 1 )) || [[ -z $remote || $remote == *[:/]* ]]; then
+    print -u2 -- 'Usage: rcumount REMOTE or REMOTE:'
+    return 2
+  fi
+
+  local mount="$HOME/${remote}-mounts"
+
+  command fusermount -u -- "$mount" || return
+  print -r -- "Unmounted ${remote}:"
 }
 
 # Copy remote → local
@@ -127,24 +147,25 @@ rcdry-up() {
 
 # Full status with symbols
 rcstatus() {
-    echo "=  identical"
-    echo "<  only on local (local ahead)"
-    echo ">  only on remote (remote ahead)"
-    echo "*  different on both"
-    echo "──────────────────────────────"
-    rclone check "$1" "$2" --combined -
+  print -r -- '=  identical'
+  print -r -- '-  only on local'
+  print -r -- '+  only on remote'
+  print -r -- '*  different on both'
+  print -r -- '!  error checking the file'
+  print -r -- '──────────────────────────────'
+  command rclone check "$1" "$2" --combined -
 }
 
 # Files only on remote
 rcremote-only() {
     echo "Remote ahead — files only on $1:"
-    rclone check "$1" "$2" --missing-on-destination -
+    rclone check "$1" "$2" --missing-on-dst -
 }
 
 # Files only on local
 rclocal-only() {
     echo "Local ahead — files only in $2:"
-    rclone check "$1" "$2" --missing-on-source -
+    rclone check "$1" "$2" --missing-on-src -
 }
 
 # Files that differ
@@ -153,26 +174,38 @@ rcdiff() {
     rclone check "$1" "$2" --differ -
 }
 
-# Full git-like summary
+# Full git-like summary.
 rcgit() {
-    local remote="$1"
-    local local_path="$2"
-    echo ""
-    echo "📡 Remote: $remote"
-    echo "💻 Local:  $local_path"
-    echo "──────────────────────────────────────"
+  if (( $# != 2 )); then
+    print -u2 -- 'Usage: rcgit REMOTE:PATH LOCAL_PATH'
+    return 2
+  fi
 
-    echo ""
-    echo "🔼 Local ahead (only on local):"
-    rclone check "$remote" "$local_path" --missing-on-source - 2>/dev/null || echo "  none"
+  local remote="$1"
+  local local_path="$2"
+  local -i result=0
 
-    echo ""
-    echo "🔽 Remote ahead (only on remote):"
-    rclone check "$remote" "$local_path" --missing-on-destination - 2>/dev/null || echo "  none"
+  print
+  print -r -- "📡 Remote: $remote"
+  print -r -- "💻 Local:  $local_path"
+  print -r -- '──────────────────────────────────────'
 
-    echo ""
-    echo "📝 Different on both:"
-    rclone check "$remote" "$local_path" --differ - 2>/dev/null || echo "  none"
+  print
+  print -r -- '🔼 Local ahead (only on local):'
+  command rclone check "$remote" "$local_path" \
+    --missing-on-src - || result=$?
 
-    echo "──────────────────────────────────────"
+  print
+  print -r -- '🔽 Remote ahead (only on remote):'
+  command rclone check "$remote" "$local_path" \
+    --missing-on-dst - || result=$?
+
+  print
+  print -r -- '📝 Different on both:'
+  command rclone check "$remote" "$local_path" \
+    --differ - || result=$?
+
+  print -r -- '──────────────────────────────────────'
+  return "$result"
 }
+
