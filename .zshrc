@@ -4,9 +4,8 @@ if [[ -t 0 ]]; then
 fi
 
 # Print the startup banner before Powerlevel10k redirects console output.
-if [[ -z ${_my_zsh_initialized-} ]] && (($+commands[pfetch])); then
+if [[ -n ${SSH_CONNECTION-} && -z ${_my_zsh_initialized-} ]] && (($+commands[pfetch])); then
   command pfetch
-  # command fastfetch
 fi
 
 # =========================================================
