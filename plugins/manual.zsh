@@ -82,7 +82,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --all --color=always -- "$re
 # =========================================================
 
 typeset -g ZSH_AUTOSUGGEST_MANUAL_REBIND=1
-typeset -g ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#7849CF'
+typeset -g ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#7849cf'
 typeset -g ZSH_AUTOSUGGEST_STRATEGY=(history)
 typeset -g ZSH_AUTOSUGGEST_USE_ASYNC=1
 

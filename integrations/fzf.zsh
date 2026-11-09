@@ -23,7 +23,8 @@ unset _fzf_fd_excludes
 
 export FZF_CTRL_T_OPTS="--height=60% --layout=reverse
   --preview 'bat --color=always --style=plain,numbers --line-range=:500 -- {}'
-  --preview-window=right:60%:wrap"
+  --preview-window=right:60%:wrap
+  --bind 'ctrl-o:execute(nvim -- {+})+abort' "
 export FZF_CTRL_R_OPTS='--height=60% --layout=reverse'
 export FZF_ALT_C_OPTS="--height=60% --layout=reverse
   --preview 'eza --all --color=always --icons=always --group-directories-first -- {}'
