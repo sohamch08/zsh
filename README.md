@@ -137,3 +137,15 @@ The directory entry points are `aliases/init.zsh`, `integrations/init.zsh`, and
 `prompt/init.zsh`. Plugin selection is controlled directly in `.zshrc`.
 Only one plugin loader and one rclone implementation should be active at a time.
 Scripts under `tools/` run when requested; they are not sourced during startup.
+
+## Benchmark
+
+Measured interactively _on login_ with [zsh-bench](https://github.com/romkatv/zsh-bench)
+
+| Metric            |     Result |
+| ----------------- | ---------: |
+| First prompt lag  |  72.473 ms |
+| First command lag | 365.547 ms |
+| Command lag       |  29.567 ms |
+| Input lag         |   7.043 ms |
+| Exit time         | 177.666 ms |
