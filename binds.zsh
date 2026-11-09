@@ -20,16 +20,18 @@ _zsh_fzf_bindings() {
   done
 }
 
-# zsh-vi-mode initializes insert and normal bindings at different times.
+# Vi-mode installs normal-mode bindings on the first Escape press.
+_zsh_vi_lazy_bindings() {
+  _zsh_fzf_bindings
+  if (( $+functions[_zsh_autosuggest_bind_widgets] )); then
+    _zsh_autosuggest_bind_widgets
+  fi
+}
+
+# Register before the deferred vi-mode plugin initializes; avoid duplicates on reload.
+typeset -ga zvm_after_init_commands zvm_after_lazy_keybindings_commands
 ((${zvm_after_init_commands[(Ie)_zsh_fzf_bindings]})) ||
   zvm_after_init_commands+=(_zsh_fzf_bindings)
-((${zvm_after_lazy_keybindings_commands[(Ie)_zsh_fzf_bindings]})) ||
-  zvm_after_lazy_keybindings_commands+=(_zsh_fzf_bindings)
+((${zvm_after_lazy_keybindings_commands[(Ie)_zsh_vi_lazy_bindings]})) ||
+  zvm_after_lazy_keybindings_commands+=(_zsh_vi_lazy_bindings)
 _zsh_fzf_bindings
-
-# Rebind autosuggestions after vi-mode changes editor widgets.
-((${zvm_after_init_commands[(Ie)_zsh_autosuggest_bind_widgets]})) ||
-  zvm_after_init_commands+=(_zsh_autosuggest_bind_widgets)
-
-((${zvm_after_lazy_keybindings_commands[(Ie)_zsh_autosuggest_bind_widgets]})) ||
-  zvm_after_lazy_keybindings_commands+=(_zsh_autosuggest_bind_widgets)

@@ -63,7 +63,6 @@ source "$ZDOTDIR/bookmarks.zsh" || return
 # =========================================================
 
 if [[ -z ${_zsh_plugins_initialized-} ]]; then
-  typeset -g ZVM_LAZY_KEYBINDINGS=true
 
   source "$ZDOTDIR/plugins/manual.zsh" || return
 
@@ -104,9 +103,10 @@ cd() {
 
 source "$ZDOTDIR/binds.zsh" || return
 
-# Keep unexported so child shells initialize independently.
+# Load optional plugins once the shell is waiting for input.
 if [[ -z ${_my_zsh_initialized-} ]]; then
-  eval "$("$HOME/.cargo/bin/zsh-patina" activate)"
+  zsh-defer -12 source "$ZDOTDIR/plugins/deferred.zsh"
 fi
 
+# Keep unexported so child shells initialize independently.
 typeset -g _my_zsh_initialized=1
