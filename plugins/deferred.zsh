@@ -25,6 +25,7 @@ _zplugin_load junegunn fzf-git.sh fzf-git.sh || return
 # Autosuggestions
 # =========================================================
 
+typeset -g ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 typeset -g ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 typeset -g ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#7849cf'
 typeset -g ZSH_AUTOSUGGEST_STRATEGY=(history)
