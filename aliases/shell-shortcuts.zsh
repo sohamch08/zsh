@@ -8,9 +8,10 @@ alias cls='clear'
 # Configuration editing and reloading.
 alias zshedit='nvim "$ZDOTDIR/.zshrc"'
 alias aliasedit='nvim "$ZDOTDIR/aliases"'
-alias reload='source "$ZDOTDIR/.zshenv" && source "$ZDOTDIR/.zshrc"'
-alias promptreload='source "$ZDOTDIR/prompt/p10k.zsh"'
-alias fullreload='source "$ZDOTDIR/.zshenv" && source "$ZDOTDIR/.zshrc" && source "$ZDOTDIR/prompt/p10k.zsh"'
+alias reload='source "$ZDOTDIR/.zshrc"'
+alias promptreload='source "$ZDOTDIR/prompt/init.zsh"'
+alias envreload='source "$ZDOTDIR/.zshenv"'
+alias fullreload='exec zsh'
 
 # Date and environment inspection.
 alias now='date "+%Y-%m-%d %H:%M:%S"'
