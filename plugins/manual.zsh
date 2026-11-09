@@ -45,39 +45,23 @@ zplugin-update() {
 }
 
 # =========================================================
-# Completions
+# Fast Compinit Load
 # =========================================================
 
-# Preserve completion for fast-theme without Zinit's symlinks.
-fpath=(
-  "$ZPLUGINDIR/zdharma-continuum---fast-syntax-highlighting"
-  $fpath
-)
+typeset -g ZSH_COMPDUMP="$HOME/.cache/zsh/.zcompdump"
+zstyle ':plugin:ez-compinit' use-cache yes
 
-[[ -d "$HOME/.cache/zsh" ]] || mkdir -p "$HOME/.cache/zsh"
-autoload -Uz compinit
-compinit -d "$HOME/.cache/zsh/.zcompdump"
+_zplugin_load mattmc3 ez-compinit || return
 
 # =========================================================
-# Deja
+# Auto Completion
 # =========================================================
 
-export DEJA_HIGHLIGHT_STYLE='fg=cyan'
-export DEJA_ACCEPT_KEY='^L'
-export DEJA_CYCLE_KEY='^N'
-export DEJA_CYCLE_FUZZY_KEY=
-export DEJA_CYCLE_FUZZY_BACK_KEY=
-export DEJA_TOGGLE_EMPTY_KEY=
+_zplugin_load zsh-users zsh-completions || return
 
-if ((! ${+functions[_deja_fetch]})); then
-  _zplugin_load Giammarco-Ferranti deja || return
-fi
-
-# =========================================================
-# Syntax highlighting
-# =========================================================
-
-_zplugin_load zdharma-continuum fast-syntax-highlighting || return
+# Initialize cached completions before fzf-tab.
+run-compinit
+_comp_options+=(globdots)
 
 # =========================================================
 # Prompt
@@ -86,13 +70,7 @@ _zplugin_load zdharma-continuum fast-syntax-highlighting || return
 _zplugin_load romkatv powerlevel10k powerlevel10k.zsh-theme || return
 
 # =========================================================
-# Vi mode
+# Zsh Defer Plugin
 # =========================================================
 
-_zplugin_load jeffreytse zsh-vi-mode || return
-
-# Native Zsh vi editing.
-# bindkey -v
-
-# Wait 10 ms to distinguish Escape from longer key sequences.
-# KEYTIMEOUT=1
+_zplugin_load romkatv zsh-defer

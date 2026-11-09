@@ -4,9 +4,12 @@
 # IS_MAC / IS_LINUX are used to guard platform-specific config here and in .zshrc
 typeset -g IS_MAC=0 IS_LINUX=0
 case "$OSTYPE" in
-  darwin*) IS_MAC=1 ;;
-  linux*)  IS_LINUX=1 ;;
+darwin*) IS_MAC=1 ;;
+linux*) IS_LINUX=1 ;;
 esac
+if [[ -o interactive ]]; then
+  setopt NO_GLOBAL_RCS
+fi
 
 # ---------- XDG base directories ----------
 # Centralizes config/cache/data locations
@@ -20,14 +23,6 @@ export XDG_MUSIC_DIR="$HOME/Music"
 # Default editor used by git, crontab, etc.
 export EDITOR="nvim"
 export VISUAL="nvim"
-
-# ---------- Pager ----------
-if command -v bat >/dev/null 2>&1; then
-  export MANPAGER="bat -l man -p"
-elif command -v batcat >/dev/null 2>&1; then
-  export MANPAGER="batcat -l man -p"
-fi
-
 
 # ---------- PATH ----------
 # Keep identical PATH entries unique.
@@ -48,10 +43,9 @@ fi
 # year changes yearly, so resolve the newest install that actually exists.
 () {
   local -a texbin
-  texbin=( /usr/local/texlive/*/bin/*(N/) )
-  (( $#texbin )) && export PATH="${texbin[-1]}:$PATH"
+  texbin=(/usr/local/texlive/*/bin/*(N/))
+  (($#texbin)) && export PATH="${texbin[-1]}:$PATH"
 }
 
 # ---------- Application and personal variables ----------
 source "$ZDOTDIR/env.zsh"
-

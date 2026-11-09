@@ -24,6 +24,7 @@
 
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     status
+    command_execution_time
     background_jobs
     code
     # direnv
@@ -31,17 +32,17 @@
     virtualenv
     # anaconda
     # pyenv
-    goenv
-    nodenv
-    nvm
-    nodeenv
-    rbenv
-    rvm
-    fvm
-    luaenv
+    # goenv
+    # nodenv
+    # nvm
+    # nodeenv
+    # rbenv
+    # rvm
+    # fvm
+    # luaenv
     # jenv
-    plenv
-    perlbrew
+    # plenv
+    # perlbrew
     # phpenv
     # scalaenv
     # haskell_stack
@@ -61,7 +62,7 @@
     # xplr
     # vim_shell
     # midnight_commander
-    nix_shell
+    # nix_shell
     # chezmoi_shell
     vi_mode
     # todo
@@ -140,8 +141,42 @@
   # Keep short paths in full; shorten past 40 characters or when the right prompt needs room.
   # Keep the nearest Git root and current directory in full; collapse ancestors as needed.
   # This also renders the instant prompt, without launching external commands.
+  # Reset cached path rendering when this prompt configuration is reloaded.
+  typeset -g _p10k_dir_cache_key='' _p10k_dir_cache_pwd='' _p10k_dir_cache_repo_hint=''
+  typeset -ga _p10k_dir_cache_args=()
+
   function prompt_dir() {
     emulate -L zsh -o extended_glob
+    local -i available=$((COLUMNS - 26)) writable=0
+    # Powerlevel10k builds the upper right prompt before calling this segment.
+    if [[ -n ${right-} ]] && (($+functions[_p9k_prompt_length])); then
+      _p9k_prompt_length "${(e)right}"
+      ((available -= _p9k__ret))
+    fi
+    ((${#VCS_STATUS_LOCAL_BRANCH} > 4)) &&
+      ((available -= ${#VCS_STATUS_LOCAL_BRANCH} - 4))
+
+    # Keep the last Git hint while an asynchronous query is pending.
+    # The hint invalidates the cache; the existing path logic still finds the anchor.
+    local repo_hint=${_p10k_dir_cache_repo_hint-}
+    [[ ${_p10k_dir_cache_pwd-} == "$PWD" ]] || repo_hint=''
+    case ${VCS_STATUS_RESULT-} in
+    ok-*) repo_hint=${VCS_STATUS_WORKDIR-} ;;
+    norepo-*) repo_hint='' ;;
+    esac
+    [[ -w $PWD ]] && writable=1
+
+    local -a cache_inputs=(
+      "$PWD" "$HOME" "$available" "$POWERLEVEL9K_DIR_MAX_LENGTH"
+      "$repo_hint" "$writable" "$POWERLEVEL9K_DIR_FOREGROUND"
+      "$POWERLEVEL9K_DIR_SHORTENED_FOREGROUND" "$POWERLEVEL9K_DIR_ANCHOR_FOREGROUND"
+    )
+    local cache_key=${(pj:\0:)cache_inputs}
+    if [[ $cache_key == ${_p10k_dir_cache_key-} ]]; then
+      p10k segment "${_p10k_dir_cache_args[@]}"
+      return
+    fi
+
     local base=/ relative=${PWD#/} prefix=/ icon=FOLDER_ICON
     if [[ $PWD == "$HOME" || $PWD == "$HOME"/* ]]; then
       base=$HOME
@@ -154,16 +189,9 @@
     local -a parts labels
     parts=("${(@s:/:)relative}")
     local -i i repo=0 count=$#parts budget=$POWERLEVEL9K_DIR_MAX_LENGTH
-    local -i available=$((COLUMNS - 26)) shorten=0 collapse=0 omitted=0 tight
+    local -i shorten=0 collapse=0 omitted=0 tight
     local cursor=$base name text="$prefix" plain="$prefix"
 
-    # Powerlevel10k builds the upper right prompt before calling this segment.
-    if [[ -n ${right-} ]] && (($+functions[_p9k_prompt_length])); then
-      _p9k_prompt_length "${(e)right}"
-      ((available -= _p9k__ret))
-    fi
-    ((${#VCS_STATUS_LOCAL_BRANCH} > 4)) &&
-      ((available -= ${#VCS_STATUS_LOCAL_BRANCH} - 4))
     ((available < budget)) && budget=$available
     ((budget < 1)) && budget=1
     ((${#prefix} + ${#relative} > budget)) && shorten=1
@@ -220,14 +248,18 @@
       text='~'
       icon=HOME_ICON
     }
-    [[ -w $PWD ]] || icon=LOCK_ICON
+    ((writable)) || icon=LOCK_ICON
     text+="%F{$POWERLEVEL9K_DIR_FOREGROUND}"
     if ((shorten && available < POWERLEVEL9K_DIR_MAX_LENGTH)); then
       # Drop directory padding/icon when space is needed for the code versions.
-      p10k segment -s COMPACT -f "$POWERLEVEL9K_DIR_FOREGROUND" -t "$text"
+      _p10k_dir_cache_args=(-s COMPACT -f "$POWERLEVEL9K_DIR_FOREGROUND" -t "$text")
     else
-      p10k segment -r -i "$icon" -f "$POWERLEVEL9K_DIR_FOREGROUND" -t "$text"
+      _p10k_dir_cache_args=(-r -i "$icon" -f "$POWERLEVEL9K_DIR_FOREGROUND" -t "$text")
     fi
+    _p10k_dir_cache_key=$cache_key
+    _p10k_dir_cache_pwd=$PWD
+    _p10k_dir_cache_repo_hint=$repo_hint
+    p10k segment "${_p10k_dir_cache_args[@]}"
   }
 
   # vcs
