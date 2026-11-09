@@ -4,7 +4,7 @@
 theme = "patina"
 
 # Enable or disable dynamic highlighting. Can be `true` or `false` ...
-dynamic = true
+dynamic = false
 
 # ... or a table with the keys `callables` and `paths`.
 # dynamic = { callables = true, paths = "complete" }
