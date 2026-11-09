@@ -78,6 +78,12 @@ zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --all --color=always -- "$realpath"'
 
 # =========================================================
+# FZF-git
+# =========================================================
+
+_zplugin_load junegunn fzf-git.sh fzf-git.sh || return
+
+# =========================================================
 # Autosuggestions
 # =========================================================
 
