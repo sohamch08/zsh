@@ -96,3 +96,9 @@ _zplugin_load jeffreytse zsh-vi-mode || return
 
 # Wait 10 ms to distinguish Escape from longer key sequences.
 # KEYTIMEOUT=1
+
+# =========================================================
+# Colored Man Pages
+# =========================================================
+
+_zplugin_load houssamouhra colored-man-pages || return
