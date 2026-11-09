@@ -59,19 +59,14 @@ autoload -Uz compinit
 compinit -d "$HOME/.cache/zsh/.zcompdump"
 
 # =========================================================
-# Deja
+# Autosuggestions
 # =========================================================
 
-export DEJA_HIGHLIGHT_STYLE='fg=cyan'
-export DEJA_ACCEPT_KEY='^L'
-export DEJA_CYCLE_KEY='^N'
-export DEJA_CYCLE_FUZZY_KEY=
-export DEJA_CYCLE_FUZZY_BACK_KEY=
-export DEJA_TOGGLE_EMPTY_KEY=
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#7849CF'
+ZSH_AUTOSUGGEST_STRATEGY=(history)
+ZSH_AUTOSUGGEST_USE_ASYNC=1
 
-if ((! ${+functions[_deja_fetch]})); then
-  _zplugin_load Giammarco-Ferranti deja || return
-fi
+_zplugin_load zsh-users zsh-autosuggestions zsh-autosuggestions.zsh || return
 
 # =========================================================
 # Syntax highlighting
