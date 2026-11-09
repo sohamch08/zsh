@@ -25,3 +25,10 @@ _zsh_fzf_bindings() {
 ((${zvm_after_lazy_keybindings_commands[(Ie)_zsh_fzf_bindings]})) ||
   zvm_after_lazy_keybindings_commands+=(_zsh_fzf_bindings)
 _zsh_fzf_bindings
+
+# Rebind autosuggestions after vi-mode changes editor widgets.
+((${zvm_after_init_commands[(Ie)_zsh_autosuggest_bind_widgets]})) ||
+  zvm_after_init_commands+=(_zsh_autosuggest_bind_widgets)
+
+((${zvm_after_lazy_keybindings_commands[(Ie)_zsh_autosuggest_bind_widgets]})) ||
+  zvm_after_lazy_keybindings_commands+=(_zsh_autosuggest_bind_widgets)

@@ -63,9 +63,10 @@ _zplugin_load zsh-users zsh-completions || return
 # Autosuggestions
 # =========================================================
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#7849CF'
-ZSH_AUTOSUGGEST_STRATEGY=(history)
-ZSH_AUTOSUGGEST_USE_ASYNC=1
+typeset -g ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+typeset -g ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#7849CF'
+typeset -g ZSH_AUTOSUGGEST_STRATEGY=(history)
+typeset -g ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 _zplugin_load zsh-users zsh-autosuggestions zsh-autosuggestions.zsh || return
 
