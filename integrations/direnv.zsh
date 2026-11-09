@@ -1,33 +1,43 @@
-# Generate missing project .envrc files before direnv loads the environment.
-if (($+commands[direnv])); then
+# Discover uv environments at most once every two seconds in the same directory.
+if (( $+commands[direnv] )); then
   eval "$(direnv hook zsh)"
+  zmodload zsh/datetime
+
+  typeset -g _uv_direnv_scan_pwd=''
+  typeset -gi _uv_direnv_scan_time=0
 
   _uv_direnv_hook() {
     emulate -L zsh
-    local dir=$PWD envrc
 
-    while true; do
-      envrc="$dir/.envrc"
-      # Existing files and symlinks keep direnv's normal approval requirements.
-      [[ -e "$envrc" || -L "$envrc" ]] && break
+    if [[ $PWD != $_uv_direnv_scan_pwd ]] ||
+        (( EPOCHSECONDS - _uv_direnv_scan_time >= 2 )); then
+      _uv_direnv_scan_pwd=$PWD
+      _uv_direnv_scan_time=$EPOCHSECONDS
+      local dir=$PWD envrc
 
-      if [[ -f "$dir/.venv/pyvenv.cfg" &&
-        -x "$dir/.venv/bin/python" ]]; then
-        # Only approve a file this hook has just created; never overwrite one.
-        if (
-          setopt noclobber
-          print -r -- 'layout uv' >"$envrc"
-        ); then
-          command direnv allow "$envrc"
+      while true; do
+        envrc="$dir/.envrc"
+        [[ -e "$envrc" || -L "$envrc" ]] && break
+
+        if [[ -f "$dir/.venv/pyvenv.cfg" && -x "$dir/.venv/bin/python" ]]; then
+          if (setopt noclobber; print -r -- 'layout uv' > "$envrc"); then
+            command direnv allow "$envrc"
+          fi
+          break
         fi
-        break
-      fi
 
-      [[ $dir == / ]] && break
-      dir=${dir:h}
-    done
+        [[ $dir == / ]] && break
+        dir=${dir:h}
+      done
+    fi
 
+    # Preserve direnv's normal checks on every prompt and directory change.
     _direnv_hook
+  }
+
+  uv-direnv-rescan() {
+    _uv_direnv_scan_pwd=''
+    _uv_direnv_hook
   }
 
   autoload -Uz add-zsh-hook
