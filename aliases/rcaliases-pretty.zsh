@@ -43,6 +43,39 @@ _rc_help_section() {
   return 0
 }
 
+# Apply the palette initialized by colored-man-pages; define no colors here.
+_rc_render_help() {
+  emulate -L zsh
+  if [[ ! -t 1 || ${TERM:-dumb} == dumb || ${+NO_COLOR} == 1 ||
+        ${(t)less_termcap} != association* ]]; then
+    print -r -- "$1"
+    return
+  fi
+
+  local heading=${less_termcap[md]-} accent=${less_termcap[us]-}
+  local heading_end=${less_termcap[me]-} accent_end=${less_termcap[ue]-}
+
+  local line remaining rendered
+  local token_pattern='(^|[^[:alnum:]_-])(--?[[:alpha:]][[:alnum:]-]*|rc[[:alnum:]-]*)([^[:alnum:]_-]|$)'
+  local -a match
+  local -i first=1 MBEGIN MEND
+  for line in "${(@f)1}"; do
+    if (( first )) || [[ $line != [[:space:]]* && $line == *: ]]; then
+      print -r -- "${heading}${line}${heading_end}"
+      first=0
+      continue
+    fi
+
+    rendered=''
+    remaining=$line
+    while [[ $remaining =~ $token_pattern ]]; do
+      rendered+="${remaining[1,MBEGIN-1]}${match[1]}${accent}${match[2]}${accent_end}${match[3]}"
+      remaining=${remaining[MEND+1,-1]}
+    done
+    print -r -- "${rendered}${remaining}"
+  done
+}
+
 _rc_show_help() {
   local topic="${1:-index}" group
   case $topic in
@@ -70,19 +103,7 @@ _rc_show_help() {
   else
     help_text=$(_rc_help_section "$topic" "$doc_file") || return
   fi
-  local help_viewer help_color=auto
-  if (($+commands[bat])); then
-    help_viewer=bat
-  elif (($+commands[batcat])); then
-    help_viewer=batcat
-  else
-    print -r -- "$help_text"
-    return
-  fi
-  ((${+NO_COLOR})) && help_color=never
-  print -r -- "$help_text" |
-    command "$help_viewer" --language=help --style=plain --paging=never \
-      --color="$help_color" --wrap=never -- -
+  _rc_render_help "$help_text"
 }
 
 # Help is handled before the operation or its argument validation can run.

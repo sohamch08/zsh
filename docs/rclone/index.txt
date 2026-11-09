@@ -62,8 +62,10 @@ Shared rules:
   Copies can overwrite files; sync can also delete extra destination files.
   Copy previews do not show sync deletions; use rcplan or sync --dry-run.
   Colors appear in terminals; NO_COLOR disables them. Icons need a Nerd Font.
-  Help uses bat/batcat coloring when available, with no pager or line numbers.
-  Without bat/batcat, help is printed as plain text. NO_COLOR disables help colors.
+  Help uses the current colored-man-pages palette for headings, commands, and options.
+  Reload colored-man-pages after editing its colors; both man and helper help follow it.
+  Before the plugin loads, help stays plain. No pager or line numbers are added.
+  Redirected help stays plain; NO_COLOR or TERM=dumb also disables help colors.
   Help recognizes exact -h/--help arguments anywhere before a standalone --.
   Arguments after -- are not interpreted as helper-help requests; normal
   argument validation still applies. Use ./-h for a local filename named -h.
