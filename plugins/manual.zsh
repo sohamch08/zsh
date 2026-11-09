@@ -60,6 +60,24 @@ _zplugin_load mattmc3 ez-compinit || return
 _zplugin_load zsh-users zsh-completions || return
 
 # =========================================================
+# FZF-tab
+# =========================================================
+
+# Initialize cached completions before fzf-tab.
+run-compinit
+_comp_options+=(globdots)
+
+# Searchable Tab completion.
+_zplugin_load Aloxaf fzf-tab || return
+
+zstyle ':completion:*' menu no
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+
+# Preview directories when completing cd.
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --all --color=always -- "$realpath"'
+
+# =========================================================
 # Autosuggestions
 # =========================================================
 
