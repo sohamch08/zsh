@@ -45,7 +45,13 @@ zplugin-update() {
 }
 
 # =========================================================
-# Completions
+# Auto Completion
+# =========================================================
+
+_zplugin_load zsh-users zsh-completions || return
+
+# =========================================================
+# Syntax Highlighting
 # =========================================================
 
 # Preserve completion for fast-theme without Zinit's symlinks.
