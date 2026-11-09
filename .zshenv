@@ -7,6 +7,9 @@ case "$OSTYPE" in
 darwin*) IS_MAC=1 ;;
 linux*) IS_LINUX=1 ;;
 esac
+if [[ -o interactive ]]; then
+  setopt NO_GLOBAL_RCS
+fi
 
 # ---------- XDG base directories ----------
 # Centralizes config/cache/data locations
