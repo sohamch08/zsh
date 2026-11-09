@@ -80,6 +80,9 @@ _zplugin_load romkatv powerlevel10k powerlevel10k.zsh-theme || return
 # Vi mode
 # =========================================================
 
+typeset -g ZVM_INIT_MODE=sourcing
+typeset -g ZVM_CURSOR_STYLE_ENABLED=true
+
 _zplugin_load jeffreytse zsh-vi-mode || return
 
 # Native Zsh vi editing.
