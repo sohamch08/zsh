@@ -2,10 +2,7 @@ if [[ -o interactive && -t 0 ]]; then
     export GPG_TTY="$(tty)"
 
     mail-unlock() {
-        local password_file="${PASSWORD_STORE_DIR:-$HOME/.password-store}/tifr.gpg"
-
-        gpg --quiet --no-batch --pinentry-mode loopback \
-            --decrypt "$password_file" >/dev/null
+        command gopass show -o mail/TIFR >/dev/null
     }
 fi
 
