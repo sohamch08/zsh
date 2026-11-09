@@ -30,7 +30,8 @@ fi
 
 # Mise.
 if [[ -x "$HOME/.local/bin/mise" ]]; then
-  eval "$("$HOME/.local/bin/mise" activate zsh)"
+  typeset -U path
+  path=("${XDG_DATA_HOME:-$HOME/.local/share}/mise/shims" $path)
 fi
 
 # Direnv and your project environment hook.
