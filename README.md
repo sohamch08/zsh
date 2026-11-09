@@ -3,6 +3,51 @@
 Zsh configuration stored in `~/.config/zsh`, with `.zshrc` as the main
 interactive-shell loader.
 
+## Set the configuration directory through `/etc/zshenv`
+
+Place this repository at `~/.config/zsh`. Zsh reads its system-wide environment
+file before personal startup files, so set `ZDOTDIR` there. This selects the
+configuration directory, not the terminal's working directory.
+
+Edit the system file, preserving its existing contents:
+
+```sh
+sudoedit /etc/zshenv
+```
+
+Some installations use `/etc/zsh/zshenv` instead; edit the file your installation
+actually loads. Add this block once, or update the existing directory-selection
+block:
+
+```zsh
+if [[ -z "$XDG_CONFIG_HOME" ]]; then
+  export XDG_CONFIG_HOME="$HOME/.config"
+fi
+
+if [[ -d "$XDG_CONFIG_HOME/zsh" ]]; then
+  export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+fi
+```
+
+With the default XDG location, Zsh loads `~/.config/zsh/.zshenv` and, for
+interactive shells, `~/.config/zsh/.zshrc` automatically. An existing
+`XDG_CONFIG_HOME` selects its `zsh` subdirectory instead.
+
+Check discovery without inheriting the current `ZDOTDIR`:
+
+```sh
+env -u ZDOTDIR zsh -c 'print -r -- "$ZDOTDIR"'
+# Expected with the default XDG location: /home/your-user/.config/zsh
+```
+
+Then restart the current shell:
+
+```sh
+exec zsh
+```
+
+See the [Zsh startup-file documentation](https://zsh.sourceforge.io/Doc/Release/Files.html).
+
 ## Structure
 
 ```text
