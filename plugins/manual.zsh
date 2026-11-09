@@ -45,6 +45,15 @@ zplugin-update() {
 }
 
 # =========================================================
+# Fast Compinit Load
+# =========================================================
+
+typeset -g ZSH_COMPDUMP="$HOME/.cache/zsh/.zcompdump"
+zstyle ':plugin:ez-compinit' use-cache yes
+
+_zplugin_load mattmc3 ez-compinit || return
+
+# =========================================================
 # Auto Completion
 # =========================================================
 
@@ -59,10 +68,6 @@ fpath=(
   "$ZPLUGINDIR/zdharma-continuum---fast-syntax-highlighting"
   $fpath
 )
-
-[[ -d "$HOME/.cache/zsh" ]] || mkdir -p "$HOME/.cache/zsh"
-autoload -Uz compinit
-compinit -d "$HOME/.cache/zsh/.zcompdump"
 
 # =========================================================
 # Autosuggestions
