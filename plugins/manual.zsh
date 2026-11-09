@@ -60,16 +60,6 @@ _zplugin_load mattmc3 ez-compinit || return
 _zplugin_load zsh-users zsh-completions || return
 
 # =========================================================
-# Syntax Highlighting
-# =========================================================
-
-# Preserve completion for fast-theme without Zinit's symlinks.
-fpath=(
-  "$ZPLUGINDIR/zdharma-continuum---fast-syntax-highlighting"
-  $fpath
-)
-
-# =========================================================
 # Autosuggestions
 # =========================================================
 
@@ -78,12 +68,6 @@ ZSH_AUTOSUGGEST_STRATEGY=(history)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 _zplugin_load zsh-users zsh-autosuggestions zsh-autosuggestions.zsh || return
-
-# =========================================================
-# Syntax highlighting
-# =========================================================
-
-_zplugin_load zdharma-continuum fast-syntax-highlighting || return
 
 # =========================================================
 # Prompt

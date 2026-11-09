@@ -105,4 +105,8 @@ cd() {
 source "$ZDOTDIR/binds.zsh" || return
 
 # Keep unexported so child shells initialize independently.
+if [[ -z ${_my_zsh_initialized-} ]]; then
+  eval "$("$HOME/.cargo/bin/zsh-patina" activate)"
+fi
+
 typeset -g _my_zsh_initialized=1
