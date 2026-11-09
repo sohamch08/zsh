@@ -395,7 +395,7 @@ _rc_git() {
 }
 
 _rc_config() {
-  command sed 's/token = .*/token = ██████████████████████████████/' \
+  command sed -E 's/^([[:space:]]*(token|root_folder_id)[[:space:]]*=[[:space:]]*).*/\1██████████████████████████████/' \
     "$HOME/.config/rclone/rclone.conf" | command bat --language=ini "$@"
 }
 

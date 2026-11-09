@@ -10,9 +10,9 @@ alias rc='rclone'
 # rcremotes: print every configured remote name, such as visa: and gdrive:.
 alias rcremotes='rclone listremotes'
 
-# rcconfig: display ~/.config/rclone/rclone.conf with bat, masking token lines.
+# rcconfig: display config with bat, masking token and root_folder_id values.
 # Other configuration fields are displayed as stored; this is not full redaction.
-alias rcconfig='sed "s/token = .*/token = ██████████████████████████████/" ~/.config/rclone/rclone.conf | bat --language=ini'
+alias rcconfig='sed -E "s/^([[:space:]]*(token|root_folder_id)[[:space:]]*=[[:space:]]*).*/\1██████████████████████████████/" ~/.config/rclone/rclone.conf | bat --language=ini'
 
 # rcedit: open the rclone configuration file in nvim for editing.
 alias rcedit='nvim ~/.config/rclone/rclone.conf'
@@ -33,7 +33,7 @@ alias rclog-clear='> ~/.config/rclone/rclone.log'
 _rc_remote_path() {
   local target="${1-}"
   if [[ -z $target || $target == -* || $target == /* ||
-        $target == ./* || $target == ../* ]]; then
+    $target == ./* || $target == ../* ]]; then
     print -u2 -- 'Expected REMOTE, REMOTE:, or REMOTE:PATH.'
     return 2
   fi
@@ -70,7 +70,7 @@ _rc_auto_path() {
 _rc_remote_command() {
   local subcommand="$1"
   shift
-  if (( $# < 1 )); then
+  if (($# < 1)); then
     print -u2 -- "Usage: remote helper REMOTE[:PATH] [OPTIONS...] ($subcommand)"
     return 2
   fi
@@ -85,7 +85,7 @@ _rc_remote_command() {
 _rc_pair_command() {
   local operation="$1" direction="$2"
   shift 2
-  if (( $# < 2 )) || [[ -z $1 || -z $2 || $1 == -* || $2 == -* ]]; then
+  if (($# < 2)) || [[ -z $1 || -z $2 || $1 == -* || $2 == -* ]]; then
     print -u2 -- 'Usage: transfer/status helper SOURCE DESTINATION [OPTIONS...]'
     return 2
   fi
@@ -95,19 +95,25 @@ _rc_pair_command() {
   shift 2
 
   case $direction in
-    down) source_path=$(_rc_remote_path "$source_path") || return ;;
-    up) destination_path=$(_rc_remote_path "$destination_path") || return ;;
-    auto)
-      configured=$(command rclone listremotes) || return
-      source_path=$(_rc_auto_path "$source_path" "$configured") || return
-      destination_path=$(_rc_auto_path "$destination_path" "$configured") || return
-      ;;
+  down) source_path=$(_rc_remote_path "$source_path") || return ;;
+  up) destination_path=$(_rc_remote_path "$destination_path") || return ;;
+  auto)
+    configured=$(command rclone listremotes) || return
+    source_path=$(_rc_auto_path "$source_path" "$configured") || return
+    destination_path=$(_rc_auto_path "$destination_path" "$configured") || return
+    ;;
   esac
 
   case $operation in
-    copy|copyto|sync) defaults=(--progress) ;;
-    copy-preview) operation=copy; defaults=(--progress --dry-run) ;;
-    sync-preview) operation=sync; defaults=(--progress --dry-run) ;;
+  copy | copyto | sync) defaults=(--progress) ;;
+  copy-preview)
+    operation=copy
+    defaults=(--progress --dry-run)
+    ;;
+  sync-preview)
+    operation=sync
+    defaults=(--progress --dry-run)
+    ;;
   esac
 
   command rclone "$operation" "${defaults[@]}" "$@" -- \
@@ -118,38 +124,38 @@ _rc_pair_command() {
 # rcl REMOTE[:PATH] [OPTIONS...]
 # List the immediate files and folders, without sizes or recursive traversal.
 # Example: rcl "visa:Visa Application"
-rcl()      { _rc_remote_command lsf "$@"; }
+rcl() { _rc_remote_command lsf "$@"; }
 
 # rcd REMOTE[:PATH] [OPTIONS...]
 # List only the immediate folders. It does not change your working directory.
 # Example: rcd gdrive
-rcd()      { _rc_remote_command lsf "${1-}" --dirs-only "${@:2}"; }
+rcd() { _rc_remote_command lsf "${1-}" --dirs-only "${@:2}"; }
 
 # rct REMOTE[:PATH] [OPTIONS...]
 # Show a tree two levels deep, with folders first. Override depth with --level.
 # Example: rct gdrive:Papers --level 4
-rct()      { _rc_remote_command tree "${1-}" --level 2 --dirsfirst "${@:2}"; }
+rct() { _rc_remote_command tree "${1-}" --level 2 --dirsfirst "${@:2}"; }
 
 # rcls REMOTE[:PATH] [OPTIONS...]
 # Recursively list files and their sizes; directory entries are not included.
 # Example: rcls visa --max-depth 1
-rcls()     { _rc_remote_command ls "${1-}" --human-readable "${@:2}"; }
+rcls() { _rc_remote_command ls "${1-}" --human-readable "${@:2}"; }
 
 # rctree REMOTE[:PATH] [OPTIONS...]
 # Show the full tree unless you supply --level. Does not mount the remote.
 # Example: rctree gdrive:Papers --level 3
-rctree()   { _rc_remote_command tree "$@"; }
+rctree() { _rc_remote_command tree "$@"; }
 
 # rcsize REMOTE[:PATH] [OPTIONS...]
 # Count files and add up their sizes recursively. Does not download their contents.
 # Example: rcsize "visa:Visa Application"
-rcsize()   { _rc_remote_command size "$@"; }
+rcsize() { _rc_remote_command size "$@"; }
 
 # rcspace REMOTE [OPTIONS...]
 # Show storage quota, used space, and free space when supported by the provider.
 # This describes account/remote capacity; use rcsize for a particular folder.
 # Example: rcspace gdrive
-rcspace()  { _rc_remote_command about "$@"; }
+rcspace() { _rc_remote_command about "$@"; }
 
 # rcbrowse REMOTE[:PATH] [OPTIONS...]
 # Open rclone's interactive storage explorer, which scans file sizes.
@@ -190,7 +196,7 @@ _rc_mount_name() {
 # Reuses an existing mount folder; if it is already mounted, reports that and stops.
 # Example: rcmount visa:  ->  ~/visa-rclone
 rcmount() {
-  if (( $# < 1 )); then
+  if (($# < 1)); then
     print -u2 -- 'Usage: rcmount REMOTE [OPTIONS...]'
     return 2
   fi
@@ -216,7 +222,7 @@ rcmount() {
 # If the folder contains local files, rmdir leaves it intact and returns an error.
 # Example: rcumount visa  (visa: works too)
 rcumount() {
-  if (( $# != 1 )); then
+  if (($# != 1)); then
     print -u2 -- 'Usage: rcumount REMOTE'
     return 2
   fi
@@ -249,19 +255,19 @@ rcumount() {
 # Copy with progress: local -> remote, remote -> local, or remote -> remote.
 # Can update existing files, but does not delete extra destination files.
 # Example: rccopy ./papers gdrive:Papers --include '*.pdf'
-rccopy()   { _rc_pair_command copy auto "$@"; }
+rccopy() { _rc_pair_command copy auto "$@"; }
 
 # rcto SOURCE DESTINATION [OPTIONS...]
 # Copy a file to an exact destination filename, optionally renaming it there.
 # Can replace an existing destination file; displays transfer progress.
 # Example: rcto ./draft.pdf gdrive:Papers/final.pdf
-rcto()     { _rc_pair_command copyto auto "$@"; }
+rcto() { _rc_pair_command copyto auto "$@"; }
 
 # rcplan SOURCE DESTINATION [OPTIONS...]
 # Preview a sync, including copies, updates, and extra destination files to delete.
 # Uses --dry-run: shows planned operations without performing them.
 # Example: rcplan ./papers gdrive:Papers
-rcplan()   { _rc_pair_command sync-preview auto "$@"; }
+rcplan() { _rc_pair_command sync-preview auto "$@"; }
 
 # rcmirror SOURCE DESTINATION [OPTIONS...]
 # Sync with progress so the destination matches the source, including deletions.
@@ -273,12 +279,12 @@ rcmirror() { _rc_pair_command sync auto "$@"; }
 # rcpull REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
 # Copy remote contents to a local directory, keeping extra local files.
 # Example: rcpull "visa:Visa Application" ~/Downloads/Visa
-rcpull()      { _rc_pair_command copy down "$@"; }
+rcpull() { _rc_pair_command copy down "$@"; }
 
 # rcpush LOCAL_PATH REMOTE[:PATH] [OPTIONS...]
 # Copy local contents to a remote directory, keeping extra remote files.
 # Example: rcpush ~/Documents gdrive:Documents
-rcpush()      { _rc_pair_command copy up "$@"; }
+rcpush() { _rc_pair_command copy up "$@"; }
 
 # rcsync-down REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
 # Make the local destination match the remote source, deleting extra local files.
@@ -288,17 +294,17 @@ rcsync-down() { _rc_pair_command sync down "$@"; }
 # rcsync-up LOCAL_PATH REMOTE[:PATH] [OPTIONS...]
 # Make the remote destination match the local source, deleting extra remote files.
 # Example: rcsync-up ./papers gdrive:Papers --dry-run  (preview before syncing)
-rcsync-up()   { _rc_pair_command sync up "$@"; }
+rcsync-up() { _rc_pair_command sync up "$@"; }
 
 # rcdry-down REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
 # Preview a remote -> local COPY without changing files. Does not plan deletions.
 # Example: rcdry-down visa ~/Downloads/Visa
-rcdry-down()  { _rc_pair_command copy-preview down "$@"; }
+rcdry-down() { _rc_pair_command copy-preview down "$@"; }
 
 # rcdry-up LOCAL_PATH REMOTE[:PATH] [OPTIONS...]
 # Preview a local -> remote COPY without changing files. Does not plan deletions.
 # Example: rcdry-up ~/Documents gdrive:Documents
-rcdry-up()    { _rc_pair_command copy-preview up "$@"; }
+rcdry-up() { _rc_pair_command copy-preview up "$@"; }
 
 # ─── STATUS: REMOTE FIRST, LOCAL DIRECTORY SECOND ──────────────────────────────
 # rcstatus REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
@@ -307,7 +313,7 @@ rcdry-up()    { _rc_pair_command copy-preview up "$@"; }
 # * different, ! error. A nonzero exit code can indicate differences or errors.
 # Example: rcstatus gdrive:Papers ./papers
 rcstatus() {
-  if (( $# < 2 )); then
+  if (($# < 2)); then
     print -u2 -- 'Usage: rcstatus REMOTE[:PATH] LOCAL_PATH [OPTIONS...]'
     return 2
   fi
@@ -334,7 +340,7 @@ rclocal-only() { _rc_pair_command check down "$@" --missing-on-src -; }
 # Report files present on both sides whose size or available hash differs.
 # Reports paths, not a line-by-line text diff. Does not change either side.
 # Example: rcdiff gdrive:Papers ./papers
-rcdiff()       { _rc_pair_command check down "$@" --differ -; }
+rcdiff() { _rc_pair_command check down "$@" --differ -; }
 
 # rcgit REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
 # Run three comparisons and show separate local-only, remote-only, and changed
@@ -342,7 +348,7 @@ rcdiff()       { _rc_pair_command check down "$@" --differ -; }
 # Preserves a nonzero result when any comparison reports differences or errors.
 # Example: rcgit "visa:Visa Application" ~/local
 rcgit() {
-  if (( $# < 2 )); then
+  if (($# < 2)); then
     print -u2 -- 'Usage: rcgit REMOTE[:PATH] LOCAL_PATH [OPTIONS...]'
     return 2
   fi
@@ -388,7 +394,7 @@ rchelp() {
 rchelp                                      # Show this help
 rcremotes                                   # List configured remotes
 rc config                                   # Interactive rclone configuration
-rcconfig                                    # Show config, masking token lines
+rcconfig                                    # Show config, masking token and root_folder_id
 rcedit                                      # Edit config in nvim
 rclog                                       # Follow the configured log file
 rclog-clear                                 # Empty that log file

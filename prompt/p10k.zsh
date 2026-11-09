@@ -1,8 +1,8 @@
 # Powerlevel10k (Catppuccin Mocha)
 
 'builtin' 'local' '-a' 'p10k_config_opts'
-[[ ! -o 'aliases'         ]] || p10k_config_opts+=('aliases')
-[[ ! -o 'sh_glob'         ]] || p10k_config_opts+=('sh_glob')
+[[ ! -o 'aliases' ]] || p10k_config_opts+=('aliases')
+[[ ! -o 'sh_glob' ]] || p10k_config_opts+=('sh_glob')
 [[ ! -o 'no_brace_expand' ]] || p10k_config_opts+=('no_brace_expand')
 'builtin' 'setopt' 'no_aliases' 'no_sh_glob' 'brace_expand'
 
@@ -154,42 +154,45 @@
     local -a parts labels
     parts=("${(@s:/:)relative}")
     local -i i repo=0 count=$#parts budget=$POWERLEVEL9K_DIR_MAX_LENGTH
-    local -i available=$(( COLUMNS - 26 )) shorten=0 collapse=0 omitted=0 tight
+    local -i available=$((COLUMNS - 26)) shorten=0 collapse=0 omitted=0 tight
     local cursor=$base name text="$prefix" plain="$prefix"
 
     # Powerlevel10k builds the upper right prompt before calling this segment.
-    if [[ -n ${right-} ]] && (( $+functions[_p9k_prompt_length] )); then
+    if [[ -n ${right-} ]] && (($+functions[_p9k_prompt_length])); then
       _p9k_prompt_length "${(e)right}"
-      (( available -= _p9k__ret ))
+      ((available -= _p9k__ret))
     fi
-    (( ${#VCS_STATUS_LOCAL_BRANCH} > 4 )) &&
-      (( available -= ${#VCS_STATUS_LOCAL_BRANCH} - 4 ))
-    (( available < budget )) && budget=$available
-    (( budget < 1 )) && budget=1
-    (( ${#prefix} + ${#relative} > budget )) && shorten=1
+    ((${#VCS_STATUS_LOCAL_BRANCH} > 4)) &&
+      ((available -= ${#VCS_STATUS_LOCAL_BRANCH} - 4))
+    ((available < budget)) && budget=$available
+    ((budget < 1)) && budget=1
+    ((${#prefix} + ${#relative} > budget)) && shorten=1
 
-    for (( i=1; i<=count; ++i )); do
+    for ((i = 1; i <= count; ++i)); do
       cursor="${cursor%/}/$parts[i]"
       [[ -e "$cursor/.git" ]] && repo=$i
       labels[i]=$parts[i]
     done
-    for (( i=1; shorten && i<count; ++i )); do
-      (( i == repo )) && continue
+    for ((i = 1; shorten && i < count; ++i)); do
+      ((i == repo)) && continue
       name=$parts[i]
       labels[i]=${name[1]}
       [[ $name == .* ]] && labels[i]=${name[1,2]}
     done
     plain+="${(j:/:)labels}"
-    (( shorten && ${#plain} > budget )) && collapse=1
+    ((shorten && ${#plain} > budget)) && collapse=1
 
     for tight in 0 1; do
       text=$prefix
       plain=$prefix
-      (( tight && collapse )) && { text=''; plain=''; }
+      ((tight && collapse)) && {
+        text=''
+        plain=''
+      }
       omitted=0
-      for (( i=1; i<=count; ++i )); do
-        if (( collapse && i != repo && i < count && (tight || (i > 1 && i < count-1)) )); then
-          if (( ! omitted )); then
+      for ((i = 1; i <= count; ++i)); do
+        if ((collapse && i != repo && i < count && (tight || (i > 1 && i < count - 1)))); then
+          if ((! omitted)); then
             text+="%F{$POWERLEVEL9K_DIR_SHORTENED_FOREGROUND}…/"
             plain+='…/'
           fi
@@ -200,20 +203,26 @@
         plain+=$labels[i]
         name=${(V)labels[i]}
         name=${name//\%/%%}
-        if (( i == repo || i == count )); then
+        if ((i == repo || i == count)); then
           text+="%F{$POWERLEVEL9K_DIR_ANCHOR_FOREGROUND}%B${name}%b"
         else
           text+="%F{$POWERLEVEL9K_DIR_SHORTENED_FOREGROUND}${name}"
         fi
-        (( i < count )) && { text+='/'; plain+='/'; }
+        ((i < count)) && {
+          text+='/'
+          plain+='/'
+        }
       done
-      (( ${#plain} <= budget )) && break
+      ((${#plain} <= budget)) && break
     done
 
-    [[ $PWD == "$HOME" ]] && { text='~'; icon=HOME_ICON; }
+    [[ $PWD == "$HOME" ]] && {
+      text='~'
+      icon=HOME_ICON
+    }
     [[ -w $PWD ]] || icon=LOCK_ICON
     text+="%F{$POWERLEVEL9K_DIR_FOREGROUND}"
-    if (( shorten && available < POWERLEVEL9K_DIR_MAX_LENGTH )); then
+    if ((shorten && available < POWERLEVEL9K_DIR_MAX_LENGTH)); then
       # Drop directory padding/icon when space is needed for the code versions.
       p10k segment -s COMPACT -f "$POWERLEVEL9K_DIR_FOREGROUND" -t "$text"
     else
@@ -234,17 +243,17 @@
       return
     fi
 
-    if (( $1 )); then
-      local       meta='%F{#cba6f7}'
-      local      clean='%F{#cba6f7}'
-      local   modified='%F{#f9e2af}'
-      local  untracked='%F{#89b4fa}'
+    if (($1)); then
+      local meta='%F{#cba6f7}'
+      local clean='%F{#cba6f7}'
+      local modified='%F{#f9e2af}'
+      local untracked='%F{#89b4fa}'
       local conflicted='%F{#f38ba8}'
     else
-      local       meta='%F{#9399b2}'
-      local      clean='%F{#9399b2}'
-      local   modified='%F{#9399b2}'
-      local  untracked='%F{#9399b2}'
+      local meta='%F{#9399b2}'
+      local clean='%F{#9399b2}'
+      local modified='%F{#9399b2}'
+      local untracked='%F{#9399b2}'
       local conflicted='%F{#9399b2}'
     fi
 
@@ -252,15 +261,15 @@
 
     if [[ -n $VCS_STATUS_LOCAL_BRANCH ]]; then
       local branch=${(V)VCS_STATUS_LOCAL_BRANCH}
-      (( $#branch > 32 )) && branch[13,-13]="…"
+      (($#branch > 32)) && branch[13,-13]="…"
       res+="${clean}${(g::)POWERLEVEL9K_VCS_BRANCH_ICON}${branch//\%/%%}"
     fi
 
-    if [[ -n $VCS_STATUS_TAG
-          && -z $VCS_STATUS_LOCAL_BRANCH
-        ]]; then
+    if [[ -n $VCS_STATUS_TAG &&
+      -z $VCS_STATUS_LOCAL_BRANCH ]] \
+      ; then
       local tag=${(V)VCS_STATUS_TAG}
-      (( $#tag > 32 )) && tag[13,-13]="…"
+      (($#tag > 32)) && tag[13,-13]="…"
       res+="${meta}#${clean}${tag//\%/%%}"
     fi
 
@@ -275,23 +284,23 @@
       res+=" ${modified}wip"
     fi
 
-    if (( VCS_STATUS_COMMITS_AHEAD || VCS_STATUS_COMMITS_BEHIND )); then
-      (( VCS_STATUS_COMMITS_BEHIND )) && res+=" ${clean}⇣${VCS_STATUS_COMMITS_BEHIND}"
-      (( VCS_STATUS_COMMITS_AHEAD && !VCS_STATUS_COMMITS_BEHIND )) && res+=" "
-      (( VCS_STATUS_COMMITS_AHEAD  )) && res+="${clean}⇡${VCS_STATUS_COMMITS_AHEAD}"
+    if ((VCS_STATUS_COMMITS_AHEAD || VCS_STATUS_COMMITS_BEHIND)); then
+      ((VCS_STATUS_COMMITS_BEHIND)) && res+=" ${clean}⇣${VCS_STATUS_COMMITS_BEHIND}"
+      ((VCS_STATUS_COMMITS_AHEAD && ! VCS_STATUS_COMMITS_BEHIND)) && res+=" "
+      ((VCS_STATUS_COMMITS_AHEAD)) && res+="${clean}⇡${VCS_STATUS_COMMITS_AHEAD}"
     elif [[ -n $VCS_STATUS_REMOTE_BRANCH ]]; then
     fi
 
-    (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${clean}⇠${VCS_STATUS_PUSH_COMMITS_BEHIND}"
-    (( VCS_STATUS_PUSH_COMMITS_AHEAD && !VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" "
-    (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+="${clean}⇢${VCS_STATUS_PUSH_COMMITS_AHEAD}"
-    (( VCS_STATUS_STASHES        )) && res+=" ${clean}*${VCS_STATUS_STASHES}"
-    [[ -n $VCS_STATUS_ACTION     ]] && res+=" ${conflicted}${VCS_STATUS_ACTION}"
-    (( VCS_STATUS_NUM_CONFLICTED )) && res+=" ${conflicted}~${VCS_STATUS_NUM_CONFLICTED}"
-    (( VCS_STATUS_NUM_STAGED     )) && res+=" ${modified}+${VCS_STATUS_NUM_STAGED}"
-    (( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified}!${VCS_STATUS_NUM_UNSTAGED}"
-    (( VCS_STATUS_NUM_UNTRACKED  )) && res+=" ${untracked}${(g::)POWERLEVEL9K_VCS_UNTRACKED_ICON}${VCS_STATUS_NUM_UNTRACKED}"
-    (( VCS_STATUS_HAS_UNSTAGED == -1 )) && res+=" ${modified}─"
+    ((VCS_STATUS_PUSH_COMMITS_BEHIND)) && res+=" ${clean}⇠${VCS_STATUS_PUSH_COMMITS_BEHIND}"
+    ((VCS_STATUS_PUSH_COMMITS_AHEAD && ! VCS_STATUS_PUSH_COMMITS_BEHIND)) && res+=" "
+    ((VCS_STATUS_PUSH_COMMITS_AHEAD)) && res+="${clean}⇢${VCS_STATUS_PUSH_COMMITS_AHEAD}"
+    ((VCS_STATUS_STASHES)) && res+=" ${clean}*${VCS_STATUS_STASHES}"
+    [[ -n $VCS_STATUS_ACTION ]] && res+=" ${conflicted}${VCS_STATUS_ACTION}"
+    ((VCS_STATUS_NUM_CONFLICTED)) && res+=" ${conflicted}~${VCS_STATUS_NUM_CONFLICTED}"
+    ((VCS_STATUS_NUM_STAGED)) && res+=" ${modified}+${VCS_STATUS_NUM_STAGED}"
+    ((VCS_STATUS_NUM_UNSTAGED)) && res+=" ${modified}!${VCS_STATUS_NUM_UNSTAGED}"
+    ((VCS_STATUS_NUM_UNTRACKED)) && res+=" ${untracked}${(g::)POWERLEVEL9K_VCS_UNTRACKED_ICON}${VCS_STATUS_NUM_UNTRACKED}"
+    ((VCS_STATUS_HAS_UNSTAGED == -1)) && res+=" ${modified}─"
 
     typeset -g my_git_format=$res
   }
@@ -315,14 +324,14 @@
   typeset -g POWERLEVEL9K_VCS_GIT_ICON=' '
 
   typeset -ga POWERLEVEL9K_VCS_GIT_REMOTE_ICONS=(
-    '*github.com*'             VCS_GIT_GITHUB_ICON
-    '*gitea.tcs.tifr.res.in*'   VCS_GIT_GITEA_ICON
-    '*gitea.com*'              VCS_GIT_GITEA_ICON
-    '*gitea.io*'               VCS_GIT_GITEA_ICON
-    '*gitlab.com*'             VCS_GIT_GITLAB_ICON
-    '*codeberg.org*'           VCS_GIT_CODEBERG_ICON
-    '*bitbucket.org*'          VCS_GIT_BITBUCKET_ICON
-    '*'                       VCS_GIT_ICON
+    '*github.com*' VCS_GIT_GITHUB_ICON
+    '*gitea.tcs.tifr.res.in*' VCS_GIT_GITEA_ICON
+    '*gitea.com*' VCS_GIT_GITEA_ICON
+    '*gitea.io*' VCS_GIT_GITEA_ICON
+    '*gitlab.com*' VCS_GIT_GITLAB_ICON
+    '*codeberg.org*' VCS_GIT_CODEBERG_ICON
+    '*bitbucket.org*' VCS_GIT_BITBUCKET_ICON
+    '*' VCS_GIT_ICON
   )
 
   typeset -g POWERLEVEL9K_VCS_BACKENDS=(git)
@@ -635,7 +644,7 @@
   # terraform
   typeset -g POWERLEVEL9K_TERRAFORM_SHOW_DEFAULT=false
   typeset -g POWERLEVEL9K_TERRAFORM_CLASSES=(
-      '*'         OTHER)
+    '*' OTHER)
   typeset -g POWERLEVEL9K_TERRAFORM_OTHER_FOREGROUND='#89dceb'
 
   # terraform_version
@@ -645,7 +654,7 @@
   typeset -g POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND='kubectl|helm|kubens|kubectx|oc|istioctl|kogito|k9s|helmfile|flux|fluxctl|stern|kubeseal|skaffold|kubent|kubecolor|cmctl|sparkctl'
 
   typeset -g POWERLEVEL9K_KUBECONTEXT_CLASSES=(
-      '*'       DEFAULT)
+    '*' DEFAULT)
   typeset -g POWERLEVEL9K_KUBECONTEXT_DEFAULT_FOREGROUND='#cba6f7'
 
   typeset -g POWERLEVEL9K_KUBECONTEXT_DEFAULT_CONTENT_EXPANSION=
@@ -656,7 +665,7 @@
   typeset -g POWERLEVEL9K_AWS_SHOW_ON_COMMAND='aws|awless|cdk|terraform|tofu|pulumi|terragrunt'
 
   typeset -g POWERLEVEL9K_AWS_CLASSES=(
-      '*'       DEFAULT)
+    '*' DEFAULT)
   typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND='#fab387'
 
   typeset -g POWERLEVEL9K_AWS_CONTENT_EXPANSION='${P9K_AWS_PROFILE//\%/%%}${P9K_AWS_REGION:+ ${P9K_AWS_REGION//\%/%%}}'
@@ -668,7 +677,7 @@
   typeset -g POWERLEVEL9K_AZURE_SHOW_ON_COMMAND='az|terraform|tofu|pulumi|terragrunt'
 
   typeset -g POWERLEVEL9K_AZURE_CLASSES=(
-      '*'         OTHER)
+    '*' OTHER)
 
   typeset -g POWERLEVEL9K_AZURE_OTHER_FOREGROUND='#89dceb'
 
@@ -685,7 +694,7 @@
   typeset -g POWERLEVEL9K_GOOGLE_APP_CRED_SHOW_ON_COMMAND='terraform|tofu|pulumi|terragrunt'
 
   typeset -g POWERLEVEL9K_GOOGLE_APP_CRED_CLASSES=(
-      '*'             DEFAULT)
+    '*' DEFAULT)
   typeset -g POWERLEVEL9K_GOOGLE_APP_CRED_DEFAULT_FOREGROUND='#89dceb'
 
   typeset -g POWERLEVEL9K_GOOGLE_APP_CRED_DEFAULT_CONTENT_EXPANSION='${P9K_GOOGLE_APP_CRED_PROJECT_ID//\%/%%}'
@@ -745,10 +754,10 @@
   # Coding indicators and reload
   source "${${(%):-%x}:A:h}/prompt-code.zsh"
 
-  (( ! $+functions[p10k] )) || p10k reload
+  ((! $+functions[p10k])) || p10k reload
 }
 
 typeset -g POWERLEVEL9K_CONFIG_FILE=${${(%):-%x}:a}
 
-(( ${#p10k_config_opts} )) && setopt ${p10k_config_opts[@]}
+((${#p10k_config_opts})) && setopt ${p10k_config_opts[@]}
 'builtin' 'unset' 'p10k_config_opts'

@@ -15,7 +15,5 @@ export SOHAM_PAPERS_DIR="$HOME/My Papers"
 export SOHAM_PAPERS_NOTES_DIR="$HOME/projects/Research"
 export SOHAM_PAPERS_CACHE="$HOME/.cache/hyprlife/papers.json"
 
-
-
 # ----------- PATH ---------------
 export PATH="$HOME/.cargo/bin:$HOME/go/bin:$GEM_HOME/bin:$PATH"

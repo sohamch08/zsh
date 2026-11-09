@@ -19,8 +19,8 @@ _zsh_fzf_bindings() {
 }
 
 # zsh-vi-mode initializes insert and normal bindings at different times.
-(( ${zvm_after_init_commands[(Ie)_zsh_fzf_bindings]} )) ||
+((${zvm_after_init_commands[(Ie)_zsh_fzf_bindings]})) ||
   zvm_after_init_commands+=(_zsh_fzf_bindings)
-(( ${zvm_after_lazy_keybindings_commands[(Ie)_zsh_fzf_bindings]} )) ||
+((${zvm_after_lazy_keybindings_commands[(Ie)_zsh_fzf_bindings]})) ||
   zvm_after_lazy_keybindings_commands+=(_zsh_fzf_bindings)
 _zsh_fzf_bindings

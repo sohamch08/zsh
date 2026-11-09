@@ -62,8 +62,8 @@ Usage:
   rcconfig [BAT_OPTIONS...]
 
 What it does:
-Read ~/.config/rclone/rclone.conf, mask token = lines, and display the result
-using bat.
+Read ~/.config/rclone/rclone.conf, mask token and root_folder_id values, and
+display the result using bat.
 
 Examples:
   rcconfig
@@ -73,8 +73,8 @@ Effects:
 Does not change local or remote files.
 
 Notes:
-Only token lines are masked. Other fields are displayed as stored; this is not
-full redaction. Extra options are passed to bat.
+Only token and root_folder_id values are masked. Other fields are displayed as
+stored; this is not full redaction. Extra options are passed to bat.
 
 Help:
   rcconfig -h

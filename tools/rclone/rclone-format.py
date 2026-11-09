@@ -9,7 +9,6 @@ from collections import defaultdict
 from datetime import datetime
 from pathlib import PurePosixPath
 
-
 # File extension -> Nerd Font icon and ANSI color. Folders use bold blue.
 ICONS = {
     ".py": ("", "33"),
@@ -38,16 +37,18 @@ def safe(text):
     return "".join(c if c.isprintable() else repr(c)[1:-1] for c in text)
 
 
-def size(value):
+def size(value) -> str:
     if value is None or value < 0:
         return "?"
     if value < 1000:
         return str(value)
-    for unit in ("k", "M", "G", "T", "P", "E"):
+    units = ("", "k", "M", "G", "T", "P", "E")
+    unit_index = 0
+    while value >= 1000 and unit_index < len(units) - 1:
         value /= 1000
-        if value < 1000 or unit == "E":
-            amount = f"{value:.1f}" if value < 10 else f"{value:.0f}"
-            return amount.removesuffix(".0") + unit
+        unit_index += 1
+    amount = f"{value:.1f}" if value < 10 else f"{value:.0f}"
+    return amount.removesuffix(".0") + units[unit_index]
 
 
 def modified(value):
@@ -55,16 +56,21 @@ def modified(value):
     if not value:
         return "-"
     try:
-        timestamp = datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone()
+        # Python 3.9/3.10 need an explicit offset for UTC timestamps.
+        if sys.version_info < (3, 11) and value.endswith("Z"):
+            value = value[:-1] + "+00:00"
+        timestamp = datetime.fromisoformat(value).astimezone()
     except (ValueError, OverflowError):
         return "-"
     if timestamp.year <= 1:
         return "-"
-    ending = timestamp.strftime("%H:%M" if timestamp.year == datetime.now().year else "%Y")
+    ending = timestamp.strftime(
+        "%H:%M" if timestamp.year == datetime.now().year else "%Y"
+    )
     return f"{timestamp.day:>2} {timestamp:%b} {ending}"
 
 
-def amount(item):
+def amount(item) -> str:
     # Directory size is not an aggregate: obtaining it would require extra scans.
     return "-" if item.get("IsDir") else size(item.get("Size"))
 
@@ -162,7 +168,9 @@ def render(items, mode, color, show_size=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("mode", choices=("list", "dirs", "long", "tree"))
-    parser.add_argument("--size", action="store_true", help="include a size column in trees")
+    parser.add_argument(
+        "--size", action="store_true", help="include a size column in trees"
+    )
     args = parser.parse_args()
     try:
         items = json.load(sys.stdin)

@@ -1,5 +1,5 @@
 # Generate missing project .envrc files before direnv loads the environment.
-if (( $+commands[direnv] )); then
+if (($+commands[direnv])); then
   eval "$(direnv hook zsh)"
 
   _uv_direnv_hook() {
@@ -12,9 +12,12 @@ if (( $+commands[direnv] )); then
       [[ -e "$envrc" || -L "$envrc" ]] && break
 
       if [[ -f "$dir/.venv/pyvenv.cfg" &&
-            -x "$dir/.venv/bin/python" ]]; then
+        -x "$dir/.venv/bin/python" ]]; then
         # Only approve a file this hook has just created; never overwrite one.
-        if (setopt noclobber; print -r -- 'layout uv' > "$envrc"); then
+        if (
+          setopt noclobber
+          print -r -- 'layout uv' >"$envrc"
+        ); then
           command direnv allow "$envrc"
         fi
         break
