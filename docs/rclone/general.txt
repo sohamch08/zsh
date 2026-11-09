@@ -181,7 +181,7 @@ Effects:
 Does not change local or remote files.
 
 Notes:
-Documentation is grouped in docs/rclone beside rcaliases-pretty.zsh. Each
+Documentation is grouped in docs/rclone under the zsh configuration directory. Each
 command is a named @@ COMMAND section; only that section is displayed. Unknown
 topics return an error. No pager, Python, or remote connection is needed. rc
 keeps native rclone help; rchelp rc explains the alias.

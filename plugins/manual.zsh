@@ -17,9 +17,9 @@ _zplugin_load() {
 
     command git clone --depth=1 -- \
       "https://github.com/${owner}/${repo}.git" "$plugin_dir" || {
-        print -ru2 -- "ERROR: failed to install ${owner}/${repo}"
-        return 1
-      }
+      print -ru2 -- "ERROR: failed to install ${owner}/${repo}"
+      return 1
+    }
   fi
 
   if [[ ! -r "$file" ]]; then
@@ -69,30 +69,27 @@ export DEJA_CYCLE_FUZZY_KEY=
 export DEJA_CYCLE_FUZZY_BACK_KEY=
 export DEJA_TOGGLE_EMPTY_KEY=
 
-if (( ! ${+functions[_deja_fetch]} )); then
-  _zplugin_load Giammarco-Ferranti deja
+if ((! ${+functions[_deja_fetch]})); then
+  _zplugin_load Giammarco-Ferranti deja || return
 fi
 
 # =========================================================
 # Syntax highlighting
 # =========================================================
 
-_zplugin_load zdharma-continuum fast-syntax-highlighting
+_zplugin_load zdharma-continuum fast-syntax-highlighting || return
 
 # =========================================================
 # Prompt
 # =========================================================
 
-_zplugin_load romkatv powerlevel10k powerlevel10k.zsh-theme
-
-[[ ! -r "${ZDOTDIR:-$HOME/.config/zsh}/.p10k.zsh" ]] ||
-  source "${ZDOTDIR:-$HOME/.config/zsh}/.p10k.zsh"
+_zplugin_load romkatv powerlevel10k powerlevel10k.zsh-theme || return
 
 # =========================================================
 # Vi mode
 # =========================================================
 
-_zplugin_load jeffreytse zsh-vi-mode
+_zplugin_load jeffreytse zsh-vi-mode || return
 
 # Native Zsh vi editing.
 # bindkey -v
