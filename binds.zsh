@@ -42,3 +42,9 @@ _zsh_fzf_bindings() {
 }
 
 _zsh_fzf_bindings
+
+if [[ ${ZSH_BENCH_RUN:-0} == 1 ]]; then
+  for keymap in emacs viins vicmd; do
+    bindkey -M "$keymap" '^J' accept-line
+  done
+fi
