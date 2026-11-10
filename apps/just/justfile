@@ -1,0 +1,27 @@
+set dotenv-load := false
+
+default:
+    @just --global-justfile --list
+
+# Enable the nearest existing .venv; leave existing .envrc files untouched.
+[no-cd]
+autoenv:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    search_dir="$PWD"
+    while true; do
+        envrc="$search_dir/.envrc"
+        # Existing files, including symlinks, require normal direnv approval.
+        if [[ -e "$envrc" || -L "$envrc" ]]; then
+            exit 0
+        fi
+        if [[ -f "$search_dir/.venv/pyvenv.cfg" && -x "$search_dir/.venv/bin/python" ]]; then
+            # Only authorize a config that this command has just created.
+            if (set -o noclobber; printf '%s\n' 'layout uv' > "$envrc"); then
+                direnv allow "$envrc"
+            fi
+            exit 0
+        fi
+        [[ "$search_dir" == / ]] && exit 0
+        search_dir="$(dirname -- "$search_dir")"
+    done

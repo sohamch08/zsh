@@ -1,0 +1,197 @@
+Rclone general help
+Sections begin with @@ COMMAND and end at the next section marker.
+
+@@ rc
+rc - Run native rclone commands
+
+Usage:
+  rc SUBCOMMAND [ARGUMENTS...]
+
+What it does:
+An alias for rclone. All subcommands, options, and argument rules are native
+rclone behavior. Unlike the convenience helpers, native remote paths require a
+colon.
+
+Examples:
+  rc --help
+  rc copy --help
+  rc config
+  rc lsf remote1:
+
+Effects:
+Depends on the subcommand. Listing commands inspect data; copy, sync, delete,
+and configuration commands can change it.
+
+Notes:
+rc -h and rc --help show native rclone help. rchelp rc shows this shortcut
+explanation.
+
+@@ rcremotes
+rcremotes - List configured remote names
+
+Usage:
+  rcremotes [OPTIONS...]
+
+What it does:
+Print configured remotes, such as remote1:, remote2:, and remote3:.
+
+Options:
+  --long  Include each remote backend type.
+
+Examples:
+  rcremotes
+  rcremotes --long
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Reads configuration; listing remote names does not browse their files.
+
+Help:
+  rcremotes -h
+  rcremotes --help
+  rchelp rcremotes
+
+Help is printed locally before any operation is started.
+
+@@ rcconfig
+rcconfig - Display the rclone configuration
+
+Usage:
+  rcconfig [BAT_OPTIONS...]
+
+What it does:
+Read ~/.config/rclone/rclone.conf, mask token and root_folder_id values, and
+display the result using bat.
+
+Examples:
+  rcconfig
+  rcconfig --paging=never
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Only token and root_folder_id values are masked. Other fields are displayed as
+stored; this is not full redaction. Extra options are passed to bat.
+
+Help:
+  rcconfig -h
+  rcconfig --help
+  rchelp rcconfig
+
+Help is printed locally before any operation is started.
+
+@@ rcedit
+rcedit - Edit the rclone configuration
+
+Usage:
+  rcedit [NVIM_OPTIONS...]
+
+What it does:
+Open ~/.config/rclone/rclone.conf in nvim.
+
+Examples:
+  rcedit
+
+Effects:
+Saving in the editor changes the local rclone configuration. Help does not
+open the editor.
+
+Help:
+  rcedit -h
+  rcedit --help
+  rchelp rcedit
+
+Help is printed locally before any operation is started.
+
+@@ rclog
+rclog - Follow the configured log file
+
+Usage:
+  rclog [TAIL_OPTIONS...]
+
+What it does:
+Show the last lines of ~/.config/rclone/rclone.log and continue showing new
+lines as they are appended.
+
+Examples:
+  rclog
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Press Ctrl+C to stop following. This command does not enable rclone logging;
+it only follows this file. Extra options are passed to tail.
+
+Help:
+  rclog -h
+  rclog --help
+  rchelp rclog
+
+Help is printed locally before any operation is started.
+
+@@ rclog-clear
+rclog-clear - Empty the rclone log file
+
+Usage:
+  rclog-clear
+
+What it does:
+Truncate ~/.config/rclone/rclone.log while keeping the file itself.
+
+Examples:
+  rclog-clear
+
+Effects:
+Deletes the current log contents. Creates an empty file if it is missing and
+the parent directory exists. Does not change remote files.
+
+Help:
+  rclog-clear -h
+  rclog-clear --help
+  rchelp rclog-clear
+
+Help is printed locally before any operation is started.
+
+@@ rchelp
+rchelp - Read local rclone shortcut documentation
+
+Usage:
+  rchelp [COMMAND]
+
+What it does:
+With no argument, show the command index and shared rules. With a command
+name, print the same documentation used by that shortcut's -h and --help
+flags.
+
+Options:
+  -h, --help  Show this explanation of rchelp.
+
+Examples:
+  rchelp
+  rchelp rcls
+  rchelp rcmount
+  rchelp rcsync-up
+  rchelp rc
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Documentation is grouped in docs/rclone under the zsh configuration directory. Each
+command is a named @@ COMMAND section; only that section is displayed. Unknown
+topics return an error. No pager, Python, or remote connection is needed. rc
+keeps native rclone help; rchelp rc explains the alias.
+When available, bat or batcat highlights the help using your configured theme,
+without a pager, borders, or line numbers. Otherwise help is plain text.
+Colors are enabled for terminals; set NO_COLOR to disable them.
+
+Help:
+  rchelp -h
+  rchelp --help
+  rchelp rchelp
+
+Help is printed locally before any operation is started.

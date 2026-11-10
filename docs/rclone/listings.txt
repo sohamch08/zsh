@@ -1,0 +1,190 @@
+Rclone listings help
+Sections begin with @@ COMMAND and end at the next section marker.
+
+@@ rcl
+rcl - List immediate files and folders
+
+Usage:
+  rcl REMOTE[:PATH] [OPTIONS...]
+
+What it does:
+Show immediate files and folders with icons, file-type colors, and folders
+first. Does not recurse by default.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcl remote1
+  rcl remote1:
+  rcl "remote1:Example Folder"
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+REMOTE and REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder;
+quote paths containing spaces. Put additional options after the paths.
+
+Help:
+  rcl -h
+  rcl --help
+  rchelp rcl
+
+Help is printed locally before any operation is started.
+
+@@ rcd
+rcd - List immediate folders only
+
+Usage:
+  rcd REMOTE[:PATH] [OPTIONS...]
+
+What it does:
+Show immediate directories with colored folder icons. Does not change the
+terminal working directory.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcd remote2
+  rcd "remote1:Example Folder"
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+REMOTE and REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder;
+quote paths containing spaces. Put additional options after the paths.
+
+Help:
+  rcd -h
+  rcd --help
+  rchelp rcd
+
+Help is printed locally before any operation is started.
+
+@@ rcls
+rcls - Show Size, Date Modified, and Name
+
+Usage:
+  rcls REMOTE[:PATH] [OPTIONS...]
+
+What it does:
+List immediate files AND folders in three columns: Size, Date Modified, and
+Name. Sizes are green, dates blue, and names/icons colored by type. Does not
+recurse by default.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcls remote1
+  rcls remote2:
+  rcls "remote1:Example Folder"
+  rcls remote3 --include '*.pdf'
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Dates use the remote modification time in the local timezone; unavailable
+dates show -. Folder sizes show - rather than triggering recursive scans. Use
+rct or rctree for recursive views. REMOTE and REMOTE: both mean the remote
+root. Use REMOTE:PATH for a subfolder; quote paths containing spaces. Put
+additional options after the paths.
+
+Help:
+  rcls -h
+  rcls --help
+  rchelp rcls
+
+Help is printed locally before any operation is started.
+
+@@ rct
+rct - Show a two-level tree
+
+Usage:
+  rct REMOTE[:PATH] [OPTIONS...]
+
+What it does:
+Show a tree with folder/file icons, colors, and folders first. Defaults to two
+levels deep. Does not mount the remote.
+
+Options:
+  --size, -s       Add a green file-size column.
+  --no-size        Hide the size column (default).
+  --level N        Set tree depth; also accepts --level=N.
+  --max-depth N    Alternative depth spelling.
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rct remote1
+  rct remote2 --size
+  rct remote3 --level 4 --size
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Folder sizes show -, not recursively aggregated totals. lsjson filtering
+options are forwarded; native tree --sort and --modtime are not implemented.
+Large trees wait for the complete listing before rendering. REMOTE and REMOTE:
+both mean the remote root. Use REMOTE:PATH for a subfolder; quote paths
+containing spaces. Put additional options after the paths.
+
+Help:
+  rct -h
+  rct --help
+  rchelp rct
+
+Help is printed locally before any operation is started.
+
+@@ rctree
+rctree - Show a full remote tree
+
+Usage:
+  rctree REMOTE[:PATH] [OPTIONS...]
+
+What it does:
+Show a tree with folder/file icons, colors, and folders first. Traverses the
+full selected subtree unless depth is limited. Does not mount the remote.
+
+Options:
+  --size, -s       Add a green file-size column.
+  --no-size        Hide the size column (default).
+  --level N        Set tree depth; also accepts --level=N.
+  --max-depth N    Alternative depth spelling.
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rctree remote1
+  rctree remote3 --size
+  rctree remote2 --level 3 --no-size
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Folder sizes show -, not recursively aggregated totals. lsjson filtering
+options are forwarded; native tree --sort and --modtime are not implemented.
+Large trees wait for the complete listing before rendering. REMOTE and REMOTE:
+both mean the remote root. Use REMOTE:PATH for a subfolder; quote paths
+containing spaces. Put additional options after the paths.
+
+Help:
+  rctree -h
+  rctree --help
+  rchelp rctree
+
+Help is printed locally before any operation is started.

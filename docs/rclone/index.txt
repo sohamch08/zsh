@@ -1,0 +1,77 @@
+Rclone shortcuts
+
+Help:
+  COMMAND -h                 Explain a shortcut without running it.
+  COMMAND --help             Same as -h; also works after path arguments.
+  rchelp COMMAND             Read the same command documentation.
+  rchelp                     Show this index.
+
+General:
+  rc              Native rclone (rc --help / rc copy --help).
+  rcremotes       List configured remote names; --long shows backend types.
+  rcconfig        Display config, masking token lines only.
+  rcedit          Edit the local rclone configuration in nvim.
+  rclog           Follow the existing rclone log; Ctrl+C stops following.
+  rclog-clear     Empty the local log file.
+
+Browse and inspect:
+  rcl             Immediate files and folders, with icons and colors.
+  rcd             Immediate folders only; does not change directory.
+  rcls            One-folder listing: Size / Date Modified / Name.
+  rct             Two-level tree; --size/-s adds file sizes.
+  rctree          Full tree; --level N limits depth, --size adds sizes.
+  rcinfo          Recursive file totals AND account/root storage quota.
+  rcbrowse        Interactive storage explorer (includes deletion actions).
+  rcpick          Pick a configured remote with FZF, then explore it.
+
+Mount:
+  rcmount         Mount NAME or NAME: at ~/<name>-rclone.
+  rcumount        Unmount, then remove the local folder only if empty.
+
+Transfers (SOURCE first, DESTINATION second):
+  rccopy          Copy local/remote paths; keep extra destination files.
+  rcto            Copy a file to an exact destination filename.
+  rcpull          Copy REMOTE -> LOCAL.
+  rcpush          Copy LOCAL -> REMOTE.
+  rcdry-down      Preview a REMOTE -> LOCAL copy.
+  rcdry-up        Preview a LOCAL -> REMOTE copy.
+  rcplan          Preview sync, including destination deletions.
+  rcmirror        Sync any source/destination; can delete destination files.
+  rcsync-down     Mirror REMOTE -> LOCAL; can delete local files.
+  rcsync-up       Mirror LOCAL -> REMOTE; can delete remote files.
+
+Compare (REMOTE first, LOCAL second; no file changes):
+  rcstatus        One combined report and symbol legend.
+  rcremote-only   Files present remotely but missing locally.
+  rclocal-only    Files present locally but missing remotely.
+  rcdiff          Paths present on both sides but different.
+  rcgit           Three sections: local only, remote only, changed on both.
+
+Shared rules:
+  remote1, remote2, and remote3 are example names. Replace them with your own
+  configured names from rcremotes.
+  Remote roots accept remote1 OR remote1:; subfolders use "remote1:Example Folder".
+  Quote paths containing spaces. Put extra options after path arguments.
+  Generic transfers recognize bare configured remote names on either side.
+  Write ./remote1 to mean a local folder named like a configured remote1 remote.
+  Directional helpers always keep their local operand local.
+  Mount helpers accept whole remote names, not subfolder paths.
+  rcls does not recurse by default. Dates are local times where available.
+  Directory sizes show - rather than triggering extra recursive scans.
+  Trees support --size/-s, --no-size, --level N, and lsjson filters.
+  Copies can overwrite files; sync can also delete extra destination files.
+  Copy previews do not show sync deletions; use rcplan or sync --dry-run.
+  Colors appear in terminals; NO_COLOR disables them. Icons need a Nerd Font.
+  Help uses the current colored-man-pages palette for headings, commands, and options.
+  Reload colored-man-pages after editing its colors; both man and helper help follow it.
+  Before the plugin loads, help stays plain. No pager or line numbers are added.
+  Redirected help stays plain; NO_COLOR or TERM=dumb also disables help colors.
+  Help recognizes exact -h/--help arguments anywhere before a standalone --.
+  Arguments after -- are not interpreted as helper-help requests; normal
+  argument validation still applies. Use ./-h for a local filename named -h.
+  rc is raw rclone: it needs native remote:path syntax and uses native help.
+
+Documentation lives in docs/rclone/: index.txt plus general.txt, listings.txt,
+storage.txt, mounts.txt, transfers.txt, and comparisons.txt. Each command starts
+with @@ COMMAND; its help ends at the next marker. Edit named sections rather
+than maintaining line numbers. Help does not contact any remote.

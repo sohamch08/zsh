@@ -1,0 +1,369 @@
+Rclone transfers help
+Sections begin with @@ COMMAND and end at the next section marker.
+
+@@ rccopy
+rccopy - Copy between local paths and remotes
+
+Usage:
+  rccopy SOURCE DESTINATION [OPTIONS...]
+
+What it does:
+Copy files with progress, skipping identical files. Supports local -> remote,
+remote -> local, or remote -> remote.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+  --dry-run  Preview without performing copies.
+
+Examples:
+  rccopy ./documents remote3:Research
+  rccopy remote1 remote3
+  rccopy remote1 ./backup --dry-run
+
+Effects:
+Can create or update destination files. Does not delete extra destination
+files. Directory contents are copied into the destination.
+
+Notes:
+Bare configured remote names are recognized on either side. Use ./remote1 for a
+local folder named like the remote1 remote. Directory operations transfer the
+contents into the destination, not the enclosing directory. REMOTE and REMOTE:
+both mean the remote root. Use REMOTE:PATH for a subfolder; quote paths
+containing spaces. Put additional options after the paths.
+
+Help:
+  rccopy -h
+  rccopy --help
+  rchelp rccopy
+
+Help is printed locally before any operation is started.
+
+@@ rcto
+rcto - Copy a file to an exact destination filename
+
+Usage:
+  rcto SOURCE DESTINATION [OPTIONS...]
+
+What it does:
+Use rclone copyto with progress to choose an exact destination filename,
+optionally renaming the uploaded or downloaded file.
+
+Options:
+  --dry-run  Preview the copy without changing files.
+
+Examples:
+  rcto ./draft.pdf remote3:Research/final.pdf
+  rcto remote1:report.pdf ./downloaded-report.pdf
+
+Effects:
+Can create or replace the destination file. Does not delete unrelated
+destination files.
+
+Notes:
+Bare configured remote names are recognized on either side. Use ./remote1 for a
+local folder named like the remote1 remote. Directory operations transfer the
+contents into the destination, not the enclosing directory. REMOTE and REMOTE:
+both mean the remote root. Use REMOTE:PATH for a subfolder; quote paths
+containing spaces. Put additional options after the paths.
+
+Help:
+  rcto -h
+  rcto --help
+  rchelp rcto
+
+Help is printed locally before any operation is started.
+
+@@ rcplan
+rcplan - Preview a mirror including destination deletions
+
+Usage:
+  rcplan SOURCE DESTINATION [OPTIONS...]
+
+What it does:
+Run rclone sync with --dry-run and progress. Show the copies, updates, and
+deletions needed to make the destination match the source.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcplan ./documents remote3:Research
+  rcplan remote1 ./backup
+
+Effects:
+Preview only: normally does not change source or destination files. Do not
+override --dry-run if you want a preview.
+
+Notes:
+Bare configured remote names are recognized on either side. Use ./remote1 for a
+local folder named like the remote1 remote. Directory operations transfer the
+contents into the destination, not the enclosing directory. REMOTE and REMOTE:
+both mean the remote root. Use REMOTE:PATH for a subfolder; quote paths
+containing spaces. Put additional options after the paths.
+
+Help:
+  rcplan -h
+  rcplan --help
+  rchelp rcplan
+
+Help is printed locally before any operation is started.
+
+@@ rcmirror
+rcmirror - Make the destination match the source
+
+Usage:
+  rcmirror SOURCE DESTINATION [OPTIONS...]
+
+What it does:
+Run rclone sync with progress. Either path can be local or remote. Preview
+with rcplan using the same source and destination.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcplan ./documents remote3:Research
+  rcmirror ./documents remote3:Research
+  rcmirror remote1 ./backup --dry-run
+
+Effects:
+Creates and updates destination files and can DELETE extra destination files.
+Source files are not changed.
+
+Notes:
+Bare configured remote names are recognized on either side. Use ./remote1 for a
+local folder named like the remote1 remote. Directory operations transfer the
+contents into the destination, not the enclosing directory. REMOTE and REMOTE:
+both mean the remote root. Use REMOTE:PATH for a subfolder; quote paths
+containing spaces. Put additional options after the paths.
+
+Help:
+  rcmirror -h
+  rcmirror --help
+  rchelp rcmirror
+
+Help is printed locally before any operation is started.
+
+@@ rcpull
+rcpull - copy remote -> local
+
+Usage:
+  rcpull REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
+
+What it does:
+Copy contents with progress, leaving extra destination files alone.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcpull "remote1:Example Folder" ./local
+
+Effects:
+Can create or update destination files; extra destination files are not
+deleted.
+
+Notes:
+Only the remote operand is normalized; the local operand always stays local,
+even if its name matches a configured remote. Directory operations transfer
+the contents into the destination, not the enclosing directory. REMOTE and
+REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder; quote
+paths containing spaces. Put additional options after the paths.
+
+Help:
+  rcpull -h
+  rcpull --help
+  rchelp rcpull
+
+Help is printed locally before any operation is started.
+
+@@ rcpush
+rcpush - copy local -> remote
+
+Usage:
+  rcpush LOCAL_PATH REMOTE[:PATH] [OPTIONS...]
+
+What it does:
+Copy contents with progress, leaving extra destination files alone.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcpush ./local "remote1:Example Folder"
+
+Effects:
+Can create or update destination files; extra destination files are not
+deleted.
+
+Notes:
+Only the remote operand is normalized; the local operand always stays local,
+even if its name matches a configured remote. Directory operations transfer
+the contents into the destination, not the enclosing directory. REMOTE and
+REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder; quote
+paths containing spaces. Put additional options after the paths.
+
+Help:
+  rcpush -h
+  rcpush --help
+  rchelp rcpush
+
+Help is printed locally before any operation is started.
+
+@@ rcsync-down
+rcsync-down - Mirror remote -> local
+
+Usage:
+  rcsync-down REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
+
+What it does:
+Sync with progress so the destination matches the source, including removal of
+extra destination files.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcsync-down "remote1:Example Folder" ./local --dry-run
+  rcsync-down "remote1:Example Folder" ./local
+
+Effects:
+Can create, update, and DELETE destination files. Does not change source
+files.
+
+Notes:
+Only the remote operand is normalized; the local operand always stays local,
+even if its name matches a configured remote. Directory operations transfer
+the contents into the destination, not the enclosing directory. REMOTE and
+REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder; quote
+paths containing spaces. Put additional options after the paths.
+
+Help:
+  rcsync-down -h
+  rcsync-down --help
+  rchelp rcsync-down
+
+Help is printed locally before any operation is started.
+
+@@ rcsync-up
+rcsync-up - Mirror local -> remote
+
+Usage:
+  rcsync-up LOCAL_PATH REMOTE[:PATH] [OPTIONS...]
+
+What it does:
+Sync with progress so the destination matches the source, including removal of
+extra destination files.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcsync-up ./local "remote1:Example Folder" --dry-run
+  rcsync-up ./local "remote1:Example Folder"
+
+Effects:
+Can create, update, and DELETE destination files. Does not change source
+files.
+
+Notes:
+Only the remote operand is normalized; the local operand always stays local,
+even if its name matches a configured remote. Directory operations transfer
+the contents into the destination, not the enclosing directory. REMOTE and
+REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder; quote
+paths containing spaces. Put additional options after the paths.
+
+Help:
+  rcsync-up -h
+  rcsync-up --help
+  rchelp rcsync-up
+
+Help is printed locally before any operation is started.
+
+@@ rcdry-down
+rcdry-down - Preview a copy remote -> local
+
+Usage:
+  rcdry-down REMOTE[:PATH] LOCAL_PATH [OPTIONS...]
+
+What it does:
+Preview the copy without performing it. Copy contents with progress, leaving
+extra destination files alone.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcdry-down "remote1:Example Folder" ./local
+
+Effects:
+Preview only; normally does not change files.
+
+Notes:
+Only the remote operand is normalized; the local operand always stays local,
+even if its name matches a configured remote. Directory operations transfer
+the contents into the destination, not the enclosing directory. REMOTE and
+REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder; quote
+paths containing spaces. Put additional options after the paths. This previews
+COPY, not SYNC: it does not show sync deletions. Use rcplan or a directional
+sync with --dry-run for that.
+
+Help:
+  rcdry-down -h
+  rcdry-down --help
+  rchelp rcdry-down
+
+Help is printed locally before any operation is started.
+
+@@ rcdry-up
+rcdry-up - Preview a copy local -> remote
+
+Usage:
+  rcdry-up LOCAL_PATH REMOTE[:PATH] [OPTIONS...]
+
+What it does:
+Preview the copy without performing it. Copy contents with progress, leaving
+extra destination files alone.
+
+Options:
+  --include 'PATTERN'  Include matching files.
+  --exclude 'PATTERN'  Exclude matching files.
+  --max-depth N       Limit traversal depth where applicable.
+
+Examples:
+  rcdry-up ./local "remote1:Example Folder"
+
+Effects:
+Preview only; normally does not change files.
+
+Notes:
+Only the remote operand is normalized; the local operand always stays local,
+even if its name matches a configured remote. Directory operations transfer
+the contents into the destination, not the enclosing directory. REMOTE and
+REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder; quote
+paths containing spaces. Put additional options after the paths. This previews
+COPY, not SYNC: it does not show sync deletions. Use rcplan or a directional
+sync with --dry-run for that.
+
+Help:
+  rcdry-up -h
+  rcdry-up --help
+  rchelp rcdry-up
+
+Help is printed locally before any operation is started.

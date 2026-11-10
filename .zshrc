@@ -1,21 +1,37 @@
-# =========================================================
-# Powerlevel10k instant prompt — keep at the top
-# =========================================================
-
-# Enable colors in interactive programs even if the launcher disables them.
-unset NO_COLOR
-
-fastfetch
-
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# GPG terminal
+if [[ -t 0 ]]; then
+  export GPG_TTY=$TTY
 fi
 
+# Preserve colors on macOS.
+if (( IS_MAC )); then
+  unset NO_COLOR
+fi
 
-# =========================================================
+# Print intentional output before instant prompt.
+if [[ -z ${_my_zsh_initialized-} ]]; then
+  if (( IS_MAC )); then
+    if (( $+commands[fastfetch] )); then
+      command fastfetch
+    fi
+  elif [[ -n ${SSH_CONNECTION-} ]]; then
+    source "$ZDOTDIR/integrations/pfetch.zsh" || return
+    pfetch-banner
+  fi
+fi
+
+# Apply the initial project environment and show instant prompt.
+if [[ -z ${_my_zsh_initialized-} ]]; then
+  if (( $+commands[direnv] )); then
+    emulate zsh -c "$(direnv export zsh)"
+  fi
+
+  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  fi
+fi
+
 # History
-# =========================================================
-
 HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
 [[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
 
@@ -24,95 +40,64 @@ SAVEHIST=1000000
 
 setopt APPEND_HISTORY
 setopt SHARE_HISTORY
-setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_FIND_NO_DUPS
 setopt HIST_REDUCE_BLANKS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_VERIFY
 
-
-# =========================================================
 # Shell behaviour
-# =========================================================
+setopt AUTOCD
+setopt NOBEEP
+setopt NUMERIC_GLOB_SORT
+setopt CORRECT
 
-setopt AUTOCD             # Enter directories by typing their path
-setopt NOBEEP             # Disable terminal bell
-setopt NUMERIC_GLOB_SORT  # Sort file2 before file10
-setopt CORRECT            # Suggest corrections for command names
+# Refresh aliases and functions on reload.
+source "$ZDOTDIR/aliases/init.zsh" || return
+source "$ZDOTDIR/functions.zsh" || return
 
+# Named directories
+hash -d hl="$HOME/projects/HyprLife"
+hash -d res="$HOME/projects/Research"
 
-# =========================================================
-# Aliases, functions and settings — refreshed on reload
-# =========================================================
-
-source "$ZDIR/aliases.zsh"
-source "$ZDIR/bookmarks.zsh"
-source "$ZDIR/rcaliases.zsh"
-source "$ZDIR/fzf.zsh"
-
-
-# =========================================================
-# Initialization — runs once per shell
-# =========================================================
-
-if [[ -z ${_my_zsh_initialized-} ]]; then
-
-  # -------------------------------------------------------
-  # Plugins and prompt
-  # plugins.zsh also loads .p10k.zsh on initial startup.
-  # -------------------------------------------------------
-
-  source "$ZDIR/plugins.zsh"
-
-  # -------------------------------------------------------
-  # Zoxide — directory navigation
-  # -------------------------------------------------------
-
-  eval "$(zoxide init --cmd cd zsh)"
-
-  # -------------------------------------------------------
-  # Fzf — completion and default keybindings
-  # -------------------------------------------------------
-
-  eval "$(fzf --zsh)"
-
-  # -------------------------------------------------------
-  # Local binaries
-  # -------------------------------------------------------
-
-  source "$HOME/.local/bin/env"
-
-  # -------------------------------------------------------
-  # Mise — development tool environments
-  # -------------------------------------------------------
-
-  eval "$(mise activate zsh)"
-
-  # -------------------------------------------------------
-  # Direnv — project environment activation
-  # -------------------------------------------------------
-
-  source "$ZDIR/autoenv.zsh"
-
-  # Keep this variable unexported so new shells initialize.
-  typeset -g _my_zsh_initialized=1
-#
-# else
-#
-#   # -------------------------------------------------------
-#   # Reload prompt settings without reinitializing plugins
-#   # -------------------------------------------------------
-#
-#   source "$ZDIR/.p10k.zsh"
-#
+# Initialize plugins once per shell.
+if [[ -z ${_zsh_plugins_initialized-} ]]; then
+  source "$ZDOTDIR/plugins/manual.zsh" || return
+  typeset -g _zsh_plugins_initialized=1
 fi
 
+# Shared integrations
+source "$ZDOTDIR/integrations/init.zsh" || return
 
-# =========================================================
-# Custom keybindings — refreshed on reload
-# =========================================================
+# Mac integrations
+if (( IS_MAC )); then
+  source "$ZDOTDIR/integrations/neomutt.zsh" || return
+  unset GIT_PAGER
+fi
 
-source "$ZDIR/binds.zsh"
-source "$ZDIR/neomutt.zsh"
+# Initialize the prompt once per shell.
+if [[ -z ${_my_zsh_initialized-} ]]; then
+  source "$ZDOTDIR/prompt/init.zsh" || return
+fi
 
-unset GIT_PAGER
+# Use zoxide when available.
+cd() {
+  if (( $+functions[__zoxide_z] )); then
+    __zoxide_z "$@"
+  else
+    builtin cd -- "$@"
+  fi
+}
+
+# Refresh bindings on reload.
+source "$ZDOTDIR/binds.zsh" || return
+
+# Defer optional plugins until the shell is waiting for input.
+if [[ -z ${_my_zsh_initialized-} ]]; then
+  zsh-defer -12 source "$ZDOTDIR/plugins/deferred.zsh"
+fi
+
+# Keep unexported so child shells initialize independently.
+typeset -g _my_zsh_initialized=1

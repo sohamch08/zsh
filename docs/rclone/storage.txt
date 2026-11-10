@@ -1,0 +1,103 @@
+Rclone storage help
+Sections begin with @@ COMMAND and end at the next section marker.
+
+@@ rcinfo
+rcinfo - Show file totals and remote storage quota
+
+Usage:
+  rcinfo REMOTE[:PATH] [OPTIONS...]
+
+What it does:
+Run both rclone size and rclone about. The first section shows the recursive
+object count and total size of the selected path. The second shows
+account/root storage fields provided by the backend: total, used, free, trash,
+other, and objects.
+
+Examples:
+  rcinfo remote1
+  rcinfo remote2:
+  rcinfo "remote1:Example Folder"
+
+Effects:
+Does not change local or remote files.
+
+Notes:
+Quota is requested from the remote root even when a subfolder is selected.
+Some providers do not support quota or omit fields. Both sections are
+attempted, failures remain visible, and any failure gives a nonzero result.
+Extra options are forwarded to both rclone commands. REMOTE and REMOTE: both
+mean the remote root. Use REMOTE:PATH for a subfolder; quote paths containing
+spaces. Put additional options after the paths.
+
+Help:
+  rcinfo -h
+  rcinfo --help
+  rchelp rcinfo
+
+Help is printed locally before any operation is started.
+
+@@ rcbrowse
+rcbrowse - Explore remote storage interactively
+
+Usage:
+  rcbrowse REMOTE[:PATH] [OPTIONS...]
+
+What it does:
+Open rclone ncdu, which scans file sizes and lets you navigate the remote.
+
+Options:
+  Arrows or h/j/k/l  Navigate.
+  q                  Quit.
+  d                  Delete a file or directory.
+  ?                  Show native explorer key help.
+
+Examples:
+  rcbrowse remote1
+  rcbrowse remote3:Research
+
+Effects:
+Opening and navigating inspect data. The explorer also provides deletion
+actions that can change remote files.
+
+Notes:
+REMOTE and REMOTE: both mean the remote root. Use REMOTE:PATH for a subfolder;
+quote paths containing spaces. Put additional options after the paths.
+
+Help:
+  rcbrowse -h
+  rcbrowse --help
+  rchelp rcbrowse
+
+Help is printed locally before any operation is started.
+
+@@ rcpick
+rcpick - Choose a remote and open its storage explorer
+
+Usage:
+  rcpick
+
+What it does:
+List configured remotes, choose one with FZF, then open the same explorer as
+rcbrowse.
+
+Options:
+  Enter  Select a remote.
+  Esc    Cancel the picker.
+
+Examples:
+  rcpick
+
+Effects:
+The picker inspects configuration. The selected explorer includes remote
+deletion actions.
+
+Notes:
+Requires fzf. Explorer navigation uses arrows or h/j/k/l; q quits and d can
+delete entries.
+
+Help:
+  rcpick -h
+  rcpick --help
+  rchelp rcpick
+
+Help is printed locally before any operation is started.

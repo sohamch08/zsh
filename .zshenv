@@ -1,12 +1,13 @@
 # ~/.config/zsh/.zshenv
-export ZDIR="$HOME/.zsh"
+export ZDOTDIR="${ZDOTDIR:-$HOME/.zsh}"
+export ZDIR="$ZDOTDIR"
 
 # ---------- OS detection ----------
 # IS_MAC / IS_LINUX are used to guard platform-specific config here and in .zshrc
 typeset -g IS_MAC=0 IS_LINUX=0
 case "$OSTYPE" in
-  darwin*) IS_MAC=1 ;;
-  linux*)  IS_LINUX=1 ;;
+darwin*) IS_MAC=1 ;;
+linux*) IS_LINUX=1 ;;
 esac
 
 # ---------- XDG base directories ----------
@@ -30,13 +31,16 @@ elif command -v batcat >/dev/null 2>&1; then
 fi
 
 # ---------- GPG ----------
-export GPG_TTY=$(tty)
+if [[ -t 0 ]]; then
+  export GPG_TTY=$TTY
+fi
 
 # ---------- PATH ----------
-# Personal binaries/scripts
-if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
-    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-fi
+# Keep identical PATH entries unique.
+typeset -U path PATH
+
+# Personal binaries/scripts.
+path=("$HOME/.local/bin" "$HOME/bin" "${path[@]}")
 export PATH
 
 # ---------- Lean / elan ----------
@@ -50,19 +54,11 @@ fi
 # year changes yearly, so resolve the newest install that actually exists.
 () {
   local -a texbin
-  texbin=( /usr/local/texlive/*/bin/*(N/) )
-  (( $#texbin )) && export PATH="${texbin[-1]}:$PATH"
+  texbin=(/usr/local/texlive/*/bin/*(N/))
+  (($#texbin)) && export PATH="${texbin[-1]}:$PATH"
 }
 
+# ---------- Application and personal variables ----------
+source "$ZDOTDIR/env.zsh"
 
-export EZA_CONFIG_DIR=$HOME/.config/eza
-export EZA_ICON_SPACING=2
-
-# Install Ruby Gems to ~/gems
-export GEM_HOME="$HOME/.gems"
-export PATH="$HOME/.cargo/bin:$HOME/go/bin:$HOME/gems/bin:$PATH"
-export SOULSEEK_USERNAME="sohamc"
-export SOULSEEK_PASSWORD="19158113"
-export SOULSEEK_PASSWORD_CMD="19158113"
-export GPG_TTY=$(tty)
 export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/mocha.yml"
