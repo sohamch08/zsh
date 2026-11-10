@@ -18,6 +18,7 @@ typeset -g _p10k_code_cache_key=''
 typeset -gF _p10k_code_cache_at=0 _p10k_code_cache_ttl=2
 typeset -gi _p10k_code_pending=0
 typeset -gA _p10k_code_segments=()
+typeset -g _p10k_code_text=''
 
 _p10k_code_key_now() {
   REPLY="$PWD|$PATH|$VIRTUAL_ENV|$CONDA_PREFIX|$AWS_PROFILE|$AWS_DEFAULT_PROFILE|$AWS_VAULT|$AWS_REGION|$AWS_DEFAULT_REGION|$DOCKER_CONTEXT|$DOCKER_HOST|$MISE_ENV|$RUSTUP_TOOLCHAIN|$PYENV_VERSION|$RBENV_VERSION|$NODENV_VERSION|$LUAENV_VERSION"
@@ -26,12 +27,13 @@ _p10k_code_key_now() {
 _p10k_code_refresh() {
   emulate -L zsh
   [[ $TERM != dumb && -r $_p10k_code_config ]] || return 0
-  (( $+commands[starship] )) || return 0
+  (($+commands[starship])) || return 0
   local REPLY
   _p10k_code_key_now
   if [[ $REPLY != $_p10k_code_env_key ]]; then
     _p10k_code_env_key=$REPLY
     _p10k_code_segments=()
+    _p10k_code_text=''
     _p10k_code_cache_key=''
     _p10k_code_cache_at=0
   fi
@@ -43,7 +45,7 @@ _p10k_code_refresh() {
   fi
 
   if [[ $REPLY == $_p10k_code_cache_key ]] &&
-      (( EPOCHREALTIME - _p10k_code_cache_at < _p10k_code_cache_ttl )); then
+    ((EPOCHREALTIME - _p10k_code_cache_at < _p10k_code_cache_ttl)); then
     return 0
   fi
 
@@ -67,9 +69,9 @@ _p10k_code_collect() {
     sysread -i "$1" -s 65536 -t 0 chunk
     read_result=$?
     case $read_result in
-      0) _p10k_code_buffer+=$chunk ;;
-      4) return 0 ;;
-      *) break ;;
+    0) _p10k_code_buffer+=$chunk ;;
+    4) return 0 ;;
+    *) break ;;
     esac
   done
   zle -F "$1"
@@ -78,7 +80,7 @@ _p10k_code_collect() {
 
   local REPLY
   _p10k_code_key_now
-  if (( _p10k_code_pending )) || [[ $REPLY != $_p10k_code_job_key ]]; then
+  if ((_p10k_code_pending)) || [[ $REPLY != $_p10k_code_job_key ]]; then
     _p10k_code_refresh
     return 0
   fi
@@ -88,7 +90,7 @@ _p10k_code_collect() {
   _p10k_code_cache_at=$EPOCHREALTIME
   local records=$_p10k_code_buffer
   _p10k_code_buffer=''
-  (( read_result == 5 )) && [[ $records == 0$'\n'* ]] || return 0
+  ((read_result == 5)) && [[ $records == 0$'\n'* ]] || return 0
   records=${records#*$'\n'}
 
   local -A next_segments=()
@@ -98,15 +100,15 @@ _p10k_code_collect() {
     kind=${line%%|*}
     text=${line#*|}
     case $kind in
-      c|cpp|cmake|python|php|lua|nodejs|golang|haskell|rust|ruby|latex|package|aws|docker)
-        next_segments[$kind]=${text//\%/%%}
-        ;;
+    c | cpp | cmake | python | php | lua | nodejs | golang | haskell | rust | ruby | latex | package | aws | docker)
+      next_segments[$kind]=${text//\%/%%}
+      ;;
     esac
   done
 
   local -i changed=0
-  (( ${#next_segments} == ${#_p10k_code_segments} )) || changed=1
-  if (( ! changed )); then
+  ((${#next_segments} == ${#_p10k_code_segments})) || changed=1
+  if ((! changed)); then
     for kind in "${(@k)next_segments}"; do
       if [[ ${next_segments[$kind]} != ${_p10k_code_segments[$kind]-} ]]; then
         changed=1
@@ -115,9 +117,7 @@ _p10k_code_collect() {
     done
   fi
   _p10k_code_segments=("${(@kv)next_segments}")
-  if (( changed )) && zle; then
-    p10k display -r
-  fi
+  ((changed)) && _p10k_code_build_text
 }
 
 # Force a refresh after a tool/config change, without waiting for cache expiry.
@@ -128,23 +128,35 @@ code-refresh() {
   _p10k_code_refresh
 }
 
-prompt_code() {
+_p10k_code_build_text() {
   emulate -L zsh
-  local kind color reference
+  local kind color
+  _p10k_code_text=''
+
   for kind in c cpp cmake python php lua nodejs golang haskell rust ruby latex package aws docker; do
+    [[ -n ${_p10k_code_segments[$kind]-} ]] || continue
+
     case $kind in
-      c|cpp|cmake|lua) color='#89b4fa' ;;
-      python|golang|latex) color='#94e2d5' ;;
-      php|haskell) color='#cba6f7' ;;
-      nodejs) color='#a6e3a1' ;;
-      rust|package) color='#fab387' ;;
-      ruby) color='#f38ba8' ;;
-      aws) color='#f9e2af' ;;
-      docker) color='#06969a' ;;
+    c | cpp | cmake | lua) color='#89b4fa' ;;
+    python | golang | latex) color='#94e2d5' ;;
+    php | haskell) color='#cba6f7' ;;
+    nodejs) color='#a6e3a1' ;;
+    rust | package) color='#fab387' ;;
+    ruby) color='#f38ba8' ;;
+    aws) color='#f9e2af' ;;
+    docker) color='#06969a' ;;
     esac
-    reference='${_p10k_code_segments['$kind']-}'
-    p10k segment -s "$kind" -f "$color" -e -c "$reference" -t "$reference"
+
+    [[ -z $_p10k_code_text ]] ||
+      _p10k_code_text+=' %F{#6c7086}%f '
+
+    _p10k_code_text+="%F{$color}${_p10k_code_segments[$kind]}%f"
   done
 }
 
+prompt_code() {
+  p10k segment -e \
+    -c '${_p10k_code_text-}' \
+    -t '${_p10k_code_text-}'
+}
 add-zsh-hook precmd _p10k_code_refresh
