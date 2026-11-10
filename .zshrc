@@ -93,13 +93,11 @@ if [[ -z ${_my_zsh_initialized-} ]]; then
 fi
 
 # =========================================================
-# Bookmark-aware directory navigation
+# Directory navigation
 # =========================================================
 
 cd() {
-  if (($# == 1)) && [[ -n ${CD_BOOKMARKS[$1]-} ]]; then
-    builtin cd -- "${CD_BOOKMARKS[$1]}"
-  elif (($+functions[__zoxide_z])); then
+  if (($+functions[__zoxide_z])); then
     __zoxide_z "$@"
   else
     builtin cd -- "$@"
