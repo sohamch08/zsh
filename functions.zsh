@@ -276,3 +276,21 @@ weather() {
   echo "${C_CYAN}Fetching weather data...${C_NC}"
   curl -s "https://wttr.in/${loc}${format}"
 }
+
+pingmap() {
+  if [[ "$1" == "help" || "$1" == "-h" || -z "$1" ]]; then
+    echo "${C_CYAN}📍 pingmap${C_NC}: Detailed connection latency breakdown."
+    echo "Usage: ${C_YELLOW}pingmap <url> ${C_NC}"
+    echo "Example: pingmap google.com"
+    return 0
+  fi
+
+  local url="$1"
+
+  # Prepend https:// when the URL has no scheme
+  [[ "$url" != http* ]] && url="https://$url"
+
+  echo "${C_CYAN}Mapping network route to: $url${C_NC}"
+  echo "----------------------------------------"
+  curl -w "  HTTP Status   : %{http_code}\n  DNS Lookup    : %{time_namelookup}s\n  TCP Connect   : %{time_connect}s\n  TLS Handshake : %{time_appconnect}s\n  Pre-Transfer  : %{time_pretransfer}s\n  First Byte    : %{time_starttransfer}s\n----------------------------------------\n  ${C_GREEN}Total Time    : %{time_total}s${C_NC}\n\n" -o /dev/null -s "$url"
+}
