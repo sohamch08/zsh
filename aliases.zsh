@@ -22,14 +22,19 @@ alias lS='eza -alghH --color=always --group-directories-first --sort=size'
 alias lm='eza -alghH --color=always --group-directories-first --sort=modified'
 
 
-# ─── DNF Aliases  ──────────────────────────────────────────────────────
-alias i="sudo dnf install -y"
-alias u="sudo dnf upgrade --refresh -y"
-alias autoremove="sudo dnf autoremove -y"
-alias lock="sudo dnf versionlock add"
-alias unlock="sudo dnf versionlock delete"
-alias uninstall="sudo dnf remove -y"
-alias locks="dnf versionlock list"
+# Homebrew Aliases
+alias i='brew install'               # i wget
+alias u='brew update && brew upgrade'
+alias brm='brew uninstall'           # brm wget
+alias brs='brew search'               # bs python
+alias brinfo='brew info'              # binfo ffmpeg
+alias brls='brew list --versions'      # Installed packages and versions
+alias brout='brew outdated'           # Available upgrades
+alias brefresh='brew update'         # Refresh package metadata
+alias brdeps='brew deps --tree'       # bdeps ffmpeg
+alias bwhy='brew uses --installed'   # bwhy openssl@3
+alias brdoctor='brew doctor'          # Diagnose setup problems
+alias brclean='brew autoremove && brew cleanup'
 
 
 # ─── Extra Aliases  ──────────────────────────────────────────────────────
