@@ -146,11 +146,12 @@ Scripts under `tools/` run when requested; they are not sourced during startup.
 ## Benchmark
 
 Measured interactively _on login_ with [zsh-bench](https://github.com/romkatv/zsh-bench)
+at commit `440ddfd` (Cache zoxide and direnv hook initialization).
 
 | Metric            |     Result |
 | ----------------- | ---------: |
-| First prompt lag  |  17.738 ms |
-| First command lag | 119.619 ms |
-| Command lag       |  21.703 ms |
-| Input lag         |   2.936 ms |
-| Exit time         |  64.081 ms |
+| First prompt lag  |  23.188 ms |
+| First command lag | 136.651 ms |
+| Command lag       |  18.649 ms |
+| Input lag         |   4.222 ms |
+| Exit time         |  69.551 ms |
