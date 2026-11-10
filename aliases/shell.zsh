@@ -28,6 +28,7 @@ alias man='batman'
 
 # ----- Shell benchmarks -----
 alias zbench='"$HOME/zsh-bench/zsh-bench"'
+alias zbench='zbench --login yes --iters 32'
 alias zbench-login='zbench --login yes'
 alias zbench-interactive='zbench --login no'
 alias zbench8='zbench --iters 8'
