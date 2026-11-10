@@ -17,50 +17,92 @@ Powerlevel10k handles the prompt; a small Git-based loader manages plugins.
 - Cached completion and initialization scripts, deferred optional plugins,
   and explicit plugin updates.
 
-## Set the configuration directory through `/etc/zshenv`
+## Setup
 
-Place this repository at `~/.config/zsh`. Zsh reads its system-wide environment
-file before personal startup files, so set `ZDOTDIR` there. This selects the
-configuration directory, not the terminal's working directory.
+### 1. Install the tools
 
-Edit the system file, preserving its existing contents:
+Install **Zsh, Git, fzf, fd, bat, eza, zoxide, direnv, and Starship** with your
+package manager. Use a Nerd Font in your terminal for prompt and file icons.
+Install [Patina](https://github.com/michel-kraemer/zsh-patina#how-to-install)
+with Cargo; the active configuration calls `~/.cargo/bin/zsh-patina`:
+
+```sh
+cargo install --locked zsh-patina
+```
+
+Mise, opam, and pfetch have guarded integrations. Aliases for Neovim, lazygit,
+yazi, rclone, dust, and batman need those tools when invoked.
+
+### 2. Clone and personalize
+
+For a fresh installation:
+
+```sh
+mkdir -p "$HOME/.config"
+git clone --branch zsh/minimal https://github.com/sohamch08/zsh.git "$HOME/.config/zsh"
+```
+
+Review `env.zsh`, the named directories in `.zshrc`, and `aliases/` for personal
+paths and commands. This setup uses the standard `~/.config`, `~/.cache`,
+`~/.local/share`, and `~/.local/state` locations.
+
+### 3. Create the initialization caches
+
+Run in Zsh (`zsh -f` starts it without loading this configuration):
+
+```zsh
+mkdir -p "$HOME/.cache/zsh/init"
+zoxide init --cmd cd zsh > "$HOME/.cache/zsh/init/zoxide.zsh"
+direnv hook zsh > "$HOME/.cache/zsh/init/direnv.zsh"
+zcompile "$HOME/.cache/zsh/init/zoxide.zsh"
+zcompile "$HOME/.cache/zsh/init/direnv.zsh"
+```
+
+These files are sourced during startup. Repeat this block after upgrading
+zoxide or direnv. Keep the generated files outside Git.
+
+The Python environment helper uses `layout uv`. For a fresh direnv setup:
+
+```sh
+mkdir -p "$HOME/.config/direnv"
+ln -s "$HOME/.config/zsh/apps/direnv/direnvrc" "$HOME/.config/direnv/direnvrc"
+```
+
+For an existing `direnvrc`, merge the supplied `layout_uv` function instead.
+The helper discovers existing `.venv` environments and creates and authorizes
+its own `layout uv` file; existing `.envrc` files remain under normal direnv
+approval. It does not create Python environments or install packages.
+
+### 4. Point Zsh at this directory
+
+Edit the system startup file, preserving its other contents:
 
 ```sh
 sudoedit /etc/zshenv
 ```
 
-Some installations use `/etc/zsh/zshenv` instead; edit the file your installation
-actually loads. Add this block once, or update the existing directory-selection
-block:
+Some distributions use `/etc/zsh/zshenv`. Add this line to the file Zsh loads:
 
 ```zsh
-if [[ -z "$XDG_CONFIG_HOME" ]]; then
-  export XDG_CONFIG_HOME="$HOME/.config"
-fi
-
-if [[ -d "$XDG_CONFIG_HOME/zsh" ]]; then
-  export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-fi
+[[ -d "$HOME/.config/zsh" ]] && export ZDOTDIR="$HOME/.config/zsh"
 ```
 
-With the default XDG location, Zsh loads `~/.config/zsh/.zshenv` and, for
-interactive shells, `~/.config/zsh/.zshrc` automatically. An existing
-`XDG_CONFIG_HOME` selects its `zsh` subdirectory instead.
+Zsh will read this repository's `.zshenv` and `.zshrc` directly. No `.zshrc`
+symlink is needed. See [Zsh startup files](https://zsh.sourceforge.io/Doc/Release/Files.html).
 
-Check discovery without inheriting the current `ZDOTDIR`:
-
-```sh
-env -u ZDOTDIR zsh -c 'print -r -- "$ZDOTDIR"'
-# Expected with the default XDG location: /home/your-user/.config/zsh
-```
-
-Then restart the current shell:
+### 5. Start and verify
 
 ```sh
 exec zsh
 ```
 
-See the [Zsh startup-file documentation](https://zsh.sourceforge.io/Doc/Release/Files.html).
+The first interactive start downloads missing plugins. Later starts use local
+copies. Verify discovery without inheriting the current `ZDOTDIR`:
+
+```sh
+env -u ZDOTDIR zsh -c 'print -r -- "$ZDOTDIR"'
+# Expected: /home/your-user/.config/zsh
+```
 
 ## Structure
 
