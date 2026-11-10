@@ -34,6 +34,8 @@ _zsh_fzf_bindings() {
     bindkey -M "$keymap" '^J' down-line-or-history
     bindkey -M "$keymap" '^P' push-line
     bindkey -M "$keymap" '^L' autosuggest-accept
+    bindkey -M viins '^?' backward-delete-char
+    bindkey -M viins '^H' backward-delete-char
     bindkey -M "$keymap" -r '\ec'
     bindkey -M "$keymap" -r '^G'
   done
