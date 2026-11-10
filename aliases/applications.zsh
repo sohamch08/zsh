@@ -1,5 +1,6 @@
 # ----- Application shortcuts -----
 alias e='nvim'
+alias j='just'
 alias nvimb="nvim -c 'set backup backupdir=. backupext=~ backupskip='"
 alias lg='lazygit'
 alias m='neomutt'
