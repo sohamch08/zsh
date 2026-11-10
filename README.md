@@ -5,15 +5,15 @@ editing. Config lives in `~/.config/zsh`; plugins install automatically.
 
 ## What you get
 
-| Feature | Includes |
-| --- | --- |
-| Prompt | [Powerlevel10k](https://github.com/romkatv/powerlevel10k), Git status, command duration, async Starship project info |
-| Vi editing | Block cursor in normal mode, bar in insert mode, 0.1-second Escape timeout |
-| Search | FZF files/history/directories, [fzf-tab](https://github.com/Aloxaf/fzf-tab), [fzf-git](https://github.com/junegunn/fzf-git.sh) |
-| Typing | [Autosuggestions](https://github.com/zsh-users/zsh-autosuggestions), [Patina](https://github.com/michel-kraemer/zsh-patina) highlighting |
-| Navigation | Zoxide, named directories, direnv, existing Python `.venv` discovery |
-| Startup | Instant prompt, cached completions, cached init scripts, deferred plugins |
-| Extras | Colored man pages, file/system aliases, rclone and TeX Live helpers |
+| Feature    | Includes                                                                                                                                 |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Prompt     | [Powerlevel10k](https://github.com/romkatv/powerlevel10k), Git status, command duration, async Starship project info                     |
+| Vi editing | Block cursor in normal mode, bar in insert mode, 0.1-second Escape timeout                                                               |
+| Search     | FZF files/history/directories, [fzf-tab](https://github.com/Aloxaf/fzf-tab), [fzf-git](https://github.com/junegunn/fzf-git.sh)           |
+| Typing     | [Autosuggestions](https://github.com/zsh-users/zsh-autosuggestions), [Patina](https://github.com/michel-kraemer/zsh-patina) highlighting |
+| Navigation | Zoxide, named directories, direnv, existing Python `.venv` discovery                                                                     |
+| Startup    | Instant prompt, cached completions, cached init scripts, deferred plugins                                                                |
+| Extras     | Colored man pages, file/system aliases, rclone and TeX Live helpers                                                                      |
 
 ## Setup
 
@@ -72,28 +72,28 @@ Verify: `env -u ZDOTDIR zsh -c 'print -r -- "$ZDOTDIR"'` should print
 
 ## Make it yours
 
-| File | Change |
-| --- | --- |
-| `env.zsh` | Personal paths and app variables |
-| `.zshrc` | History, named directories (`~hl`, `~res`), startup order |
-| `aliases/` and `binds.zsh` | Commands and keyboard shortcuts |
-| `prompt/p10k.zsh` | Prompt layout and colors |
-| `prompt/p10k-code.toml` | Project metadata modules |
-| `plugins/manual.zsh` and `plugins/deferred.zsh` | Active plugins |
-| `apps/` | Companion app configs to merge or link; FZF reads its config directly |
+| File                                            | Change                                                                |
+| ----------------------------------------------- | --------------------------------------------------------------------- |
+| `env.zsh`                                       | Personal paths and app variables                                      |
+| `.zshrc`                                        | History, named directories (`~hl`, `~res`), startup order             |
+| `aliases/` and `binds.zsh`                      | Commands and keyboard shortcuts                                       |
+| `prompt/p10k.zsh`                               | Prompt layout and colors                                              |
+| `prompt/p10k-code.toml`                         | Project metadata modules                                              |
+| `plugins/manual.zsh` and `plugins/deferred.zsh` | Active plugins                                                        |
+| `apps/`                                         | Companion app configs to merge or link; FZF reads its config directly |
 
 Plugin clones live in `~/.local/share/zsh/plugins`. The alternative Zinit loader
 is inactive. Mise, opam, and pfetch integrations are enabled when available.
 
 ## Shortcuts and updates
 
-| Key | Action |
-| --- | --- |
-| `Esc` / `i` | Normal / insert mode |
-| `Ctrl-F` / `Ctrl-R` / `Ctrl-O` | FZF files / history / directories |
-| `Ctrl-K` / `Ctrl-J` | Previous / next line or history entry |
-| `Ctrl-L` | Accept autosuggestion |
-| `Ctrl-P` | Save current input with `push-line` |
+| Key                            | Action                                |
+| ------------------------------ | ------------------------------------- |
+| `Esc` / `i`                    | Normal / insert mode                  |
+| `Ctrl-F` / `Ctrl-R` / `Ctrl-O` | FZF files / history / directories     |
+| `Ctrl-K` / `Ctrl-J`            | Previous / next line or history entry |
+| `Ctrl-L`                       | Accept autosuggestion                 |
+| `Ctrl-P`                       | Save current input with `push-line`   |
 
 - `reload` — refresh aliases, functions, settings, and bindings.
 - `promptreload` / `envreload` — refresh prompt / environment settings.
@@ -106,13 +106,13 @@ is inactive. Mise, opam, and pfetch integrations are enabled when available.
 Measured on login with [zsh-bench](https://github.com/romkatv/zsh-bench),
 32 iterations, at commit `00311b0`:
 
-| Metric | Result |
-| --- | ---: |
-| First prompt lag | 23.460 ms |
+| Metric            |     Result |
+| ----------------- | ---------: |
+| First prompt lag  |  23.460 ms |
 | First command lag | 141.219 ms |
-| Command lag | 12.593 ms |
-| Input lag | 4.284 ms |
-| Exit time | 76.069 ms |
+| Command lag       |  12.593 ms |
+| Input lag         |   4.284 ms |
+| Exit time         |  76.069 ms |
 
 With zsh-bench cloned to `~/zsh-bench`, run:
 
