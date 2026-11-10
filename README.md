@@ -145,7 +145,7 @@ Measured interactively _on login_ with [zsh-bench](https://github.com/romkatv/zs
 | Metric            |     Result |
 | ----------------- | ---------: |
 | First prompt lag  |  17.738 ms |
-| First command lag | 132.227 ms |
-| Command lag       |  22.696 ms |
+| First command lag | 119.619 ms |
+| Command lag       |  21.703 ms |
 | Input lag         |   2.936 ms |
 | Exit time         |  64.081 ms |
