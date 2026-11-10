@@ -56,10 +56,3 @@ zinit light zdharma-continuum/fast-syntax-highlighting
 
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
-
-###########################################################
-#### ZSH VI Mode ##########################################
-###########################################################
-
-zinit ice depth=1
-zinit light jeffreytse/zsh-vi-mode

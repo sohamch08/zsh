@@ -2,8 +2,27 @@
 # Key Bindings
 # =========================================================
 
-# bindkey '^K' up-line-or-history
-# bindkey '^J' down-line-or-history
+# Use Zsh's built-in vi editing mode; KEYTIMEOUT is in hundredths of a second.
+bindkey -v
+KEYTIMEOUT=10
+
+# DECSCUSR: steady block in normal mode, steady bar in insert mode.
+_zsh_vi_cursor() {
+  case $KEYMAP in
+    vicmd) print -rn -- $'\e[2 q' ;;
+    *)     print -rn -- $'\e[6 q' ;;
+  esac
+}
+
+# Restore the terminal's default cursor before running a command.
+_zsh_reset_cursor() {
+  print -rn -- $'\e[0 q'
+}
+
+autoload -Uz add-zle-hook-widget
+add-zle-hook-widget line-init _zsh_vi_cursor
+add-zle-hook-widget keymap-select _zsh_vi_cursor
+add-zle-hook-widget line-finish _zsh_reset_cursor
 
 _zsh_fzf_bindings() {
   local keymap
@@ -20,18 +39,4 @@ _zsh_fzf_bindings() {
   done
 }
 
-# Vi-mode installs normal-mode bindings on the first Escape press.
-_zsh_vi_lazy_bindings() {
-  _zsh_fzf_bindings
-  if (( $+functions[_zsh_autosuggest_bind_widgets] )); then
-    _zsh_autosuggest_bind_widgets
-  fi
-}
-
-# Register before the deferred vi-mode plugin initializes; avoid duplicates on reload.
-typeset -ga zvm_after_init_commands zvm_after_lazy_keybindings_commands
-((${zvm_after_init_commands[(Ie)_zsh_fzf_bindings]})) ||
-  zvm_after_init_commands+=(_zsh_fzf_bindings)
-((${zvm_after_lazy_keybindings_commands[(Ie)_zsh_vi_lazy_bindings]})) ||
-  zvm_after_lazy_keybindings_commands+=(_zsh_vi_lazy_bindings)
 _zsh_fzf_bindings

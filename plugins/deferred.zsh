@@ -33,17 +33,7 @@ typeset -g ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 _zplugin_load zsh-users zsh-autosuggestions zsh-autosuggestions.zsh || return
 
-# =========================================================
-# Vi mode
-# =========================================================
-
-typeset -g ZVM_INIT_MODE=sourcing
-typeset -g ZVM_CURSOR_STYLE_ENABLED=true
-typeset -g ZVM_LAZY_KEYBINDINGS=true
-
-_zplugin_load jeffreytse zsh-vi-mode || return
-
-# Bind suggestions once, after vi-mode has installed its editor widgets.
+# Bind suggestions once, after the custom keybindings are installed.
 _zsh_autosuggest_start
 
 # =========================================================
