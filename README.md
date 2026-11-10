@@ -127,6 +127,8 @@ env -u ZDOTDIR zsh -c 'print -r -- "$ZDOTDIR"'
 Startup order: environment → instant prompt and history → aliases and functions
 → core plugins → integrations → prompt settings → keybindings → deferred plugins.
 Named directories such as `~hl` and `~res` are defined in `.zshrc`.
+FZF reads `apps/fzf/config` directly. Other files under `apps/` are companion
+configs to merge or link into each application's configuration directory.
 
 ## Plugins
 
@@ -145,6 +147,35 @@ Named directories such as `~hl` and `~res` are defined in `.zshrc`.
 The active loader clones missing plugins into `~/.local/share/zsh/plugins` on
 first use. `plugins/zinit.zsh` is an alternative, not part of normal startup.
 
+## Daily use
+
+| Key | Action |
+| --- | --- |
+| `Esc` / `i` | Normal mode / insert mode |
+| `Ctrl-F` | Search files with FZF |
+| `Ctrl-R` | Search command history |
+| `Ctrl-O` | Search directories and change directory |
+| `Ctrl-K` / `Ctrl-J` | Previous / next line or history entry |
+| `Ctrl-L` | Accept the autosuggestion |
+| `Ctrl-P` | Save the current input with `push-line` |
+
+The cursor returns to the terminal default while commands run. History lives
+in `~/.local/state/zsh/history`.
+
+| Command | Action |
+| --- | --- |
+| `reload` | Reload aliases, functions, settings, and keybindings |
+| `promptreload` | Reload the Powerlevel10k theme and metadata bridge |
+| `envreload` | Reload environment variables and paths |
+| `fullreload` | Restart Zsh, including plugins and one-time integrations |
+| `code-refresh` | Request fresh project metadata |
+| `uv-direnv-rescan` | Discover and apply the current Python environment |
+| `zplugin-update` | Update cloned plugins with fast-forward pulls |
+
+Use `fullreload` after plugin or integration changes. Regenerate the
+[initialization caches](#3-create-the-initialization-caches) after zoxide or
+direnv upgrades. Patina activation and `direnv export zsh` remain dynamic.
+
 ## Benchmark
 
 Measured interactively _on login_ with [zsh-bench](https://github.com/romkatv/zsh-bench)
@@ -158,3 +189,19 @@ using `--login yes --iters 32` at commit `00311b0`
 | Command lag       |  12.593 ms |
 | Input lag         |   4.284 ms |
 | Exit time         |  76.069 ms |
+
+Reproduce with [zsh-bench](https://github.com/romkatv/zsh-bench):
+
+```sh
+git clone https://github.com/romkatv/zsh-bench.git "$HOME/zsh-bench"
+"$HOME/zsh-bench/zsh-bench" --login yes --iters 32
+```
+
+Results depend on the machine and runtime conditions. Patina is not recognized
+by this benchmark's highlighting detector; deferred autosuggestions can also
+be absent from its initial capability check.
+
+## Credits and license
+
+README organization inspired by [houssamouhra/zsh-config](https://github.com/houssamouhra/zsh-config).
+See [LICENSE](LICENSE) for the MIT license.
