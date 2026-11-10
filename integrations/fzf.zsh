@@ -1,15 +1,8 @@
 # =========================================================
 # FZF
 # =========================================================
-
-export FZF_DEFAULT_OPTS='
-  --layout=reverse
-  --color=fg:#908caa,hl:#ebbcba
-  --color=fg+:#e0def4,bg+:#26233a,hl+:#ebbcba
-  --color=border:#403d52,header:#31748f,gutter:#191724
-  --color=spinner:#f6c177,info:#9ccfd8
-  --color=pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa
-'
+export FZF_DEFAULT_OPTS_FILE="$ZDOTDIR/apps/fzf/config"
+unset FZF_DEFAULT_OPTS
 
 # Include hidden paths, while respecting ignore files and skipping dependencies/caches.
 _fzf_fd_excludes='--exclude .git --exclude .hg --exclude .svn
