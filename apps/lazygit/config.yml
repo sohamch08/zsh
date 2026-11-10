@@ -1,4 +1,5 @@
 gui:
+  commitGraphStyle: classic
   screenMode: normal
   nerdFontsVersion: "3"
   commitAuthorLongLength: 17
