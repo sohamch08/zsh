@@ -58,6 +58,7 @@ setopt CORRECT           # Suggest corrections for command names
 # =========================================================
 
 source "$ZDOTDIR/aliases/init.zsh" || return
+source "$ZDOTDIR/functions.zsh" || return
 source "$ZDOTDIR/bookmarks.zsh" || return
 
 # =========================================================
