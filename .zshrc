@@ -54,12 +54,18 @@ setopt NUMERIC_GLOB_SORT # Sort file2 before file10
 setopt CORRECT           # Suggest corrections for command names
 
 # =========================================================
-# Aliases, functions, and bookmarks: refreshed on reload
+# Aliases and functions: refreshed on reload
 # =========================================================
 
 source "$ZDOTDIR/aliases/init.zsh" || return
 source "$ZDOTDIR/functions.zsh" || return
-source "$ZDOTDIR/bookmarks.zsh" || return
+
+# =========================================================
+# Bookmarks: refreshed on reload
+# =========================================================
+
+hash -d hl="$HOME/projects/HyprLife"
+hash -d res="$HOME/projects/Research"
 
 # =========================================================
 # Plugins: initialized once per shell
