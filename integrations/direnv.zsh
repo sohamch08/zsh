@@ -1,6 +1,6 @@
 # Discover uv environments at most once every two seconds in the same directory.
 if (($+commands[direnv])); then
-  eval "$(direnv hook zsh)"
+  source "$HOME/.cache/zsh/init/direnv.zsh"
   zmodload zsh/datetime
 
   typeset -g _uv_direnv_scan_pwd=''

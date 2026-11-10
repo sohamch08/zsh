@@ -14,7 +14,7 @@ opam-activate() {
 
 # Zoxide.
 if (($+commands[zoxide])); then
-  eval "$(zoxide init --cmd cd zsh)"
+  source "$HOME/.cache/zsh/init/zoxide.zsh"
 fi
 
 # FZF completion and widgets.
