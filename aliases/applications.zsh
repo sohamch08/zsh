@@ -17,3 +17,8 @@ alias neoredpill='neo -m "THIS TIME, CHOOSE THE RED PILL"'
 # ----- TeX Live -----
 alias tlconf='tlmgr conf | awk -v cols="$(tput cols)" -f "$ZDOTDIR/tools/tlconf/tlconf.awk"'
 alias tlconf-simple='tlmgr conf | awk -v cols="${COLUMNS:-100}" -f "$ZDOTDIR/tools/tlconf/tlconf-simple.awk"'
+
+# ----- Tmux -----
+alias tma="tmux attach-session"
+alias tmls="tmux ls"
+alias tmk="tmux kill-session"
