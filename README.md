@@ -104,21 +104,25 @@ is inactive. Mise, opam, and pfetch integrations are enabled when available.
 ## Benchmark
 
 Measured on login with [zsh-bench](https://github.com/romkatv/zsh-bench),
-32 iterations, at commit `00311b0`:
+32 iterations:
 
 | Metric            |     Result |
 | ----------------- | ---------: |
-| First prompt lag  |  23.460 ms |
-| First command lag | 141.219 ms |
-| Command lag       |  12.593 ms |
-| Input lag         |   4.284 ms |
-| Exit time         |  76.069 ms |
+| First prompt lag  |  66.036 ms |
+| First command lag | 128.465 ms |
+| Command lag       |   3.499 ms |
+| Input lag         |   1.670 ms |
+| Exit time         |  86.798 ms |
 
 With zsh-bench cloned to `~/zsh-bench`, run:
 
 ```sh
-"$HOME/zsh-bench/zsh-bench" --login yes --iters 32
+ZSH_BENCH_RUN=1 "$HOME/zsh-bench/zsh-bench" --login yes --iters 32
 ```
+
+The `zbench` alias runs this command. `ZSH_BENCH_RUN=1` binds `Ctrl-J` to
+`accept-line` only in benchmark shells so zsh-bench can submit commands.
+Normal shells keep `Ctrl-J` bound to `down-line-or-history`.
 
 Inspired by [houssamouhra/zsh-config](https://github.com/houssamouhra/zsh-config).
 [MIT license](LICENSE).
