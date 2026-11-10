@@ -57,7 +57,7 @@ See the [Zsh startup-file documentation](https://zsh.sourceforge.io/Doc/Release/
 ├── .zshrc                          # Interactive startup and loading order
 ├── env.zsh                         # Application variables and personal paths
 ├── bookmarks.zsh                   # Named directory bookmarks
-├── binds.zsh                       # Custom bindings and vi-mode callbacks
+├── binds.zsh                       # Built-in vi mode and custom bindings
 ├── README.md
 ├── LICENSE
 │
@@ -124,14 +124,19 @@ environment, Powerlevel10k instant prompt, history, and shell options. It then
 loads:
 
 1. `aliases/init.zsh` and `bookmarks.zsh`.
-2. `plugins/manual.zsh`, once per shell. This loads Deja, syntax highlighting,
-   the Powerlevel10k theme, and zsh-vi-mode.
+2. `plugins/manual.zsh`, once per shell. This loads completions, the Powerlevel10k
+   theme, and the deferred plugin loader.
 3. `integrations/init.zsh`. FZF settings and VPN aliases refresh on reload;
    zoxide, FZF widgets, mise, direnv, and opam initialize once per shell when
    available.
 4. `prompt/init.zsh` on initial startup. This loads `p10k.zsh`, which sources
    `prompt-code.zsh` and uses the neighboring `p10k-code.toml` for project metadata.
-5. The bookmark-aware `cd` function and `binds.zsh`.
+5. The bookmark-aware `cd` function and `binds.zsh`, which enables Zsh's built-in
+   vi mode with `bindkey -v` and a 0.1-second Escape timeout (`KEYTIMEOUT=10`).
+   The cursor is a block in normal mode and a vertical bar in insert mode;
+   the terminal's default cursor is restored when running a command.
+6. `plugins/deferred.zsh` once the shell is waiting for input. This loads FZF-tab,
+   FZF-git, autosuggestions, colored man pages, and syntax highlighting.
 
 The directory entry points are `aliases/init.zsh`, `integrations/init.zsh`, and
 `prompt/init.zsh`. Plugin selection is controlled directly in `.zshrc`.
