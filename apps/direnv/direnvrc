@@ -1,12 +1,13 @@
-# Activate an existing uv-style environment. Never create or sync one.
+# Activate an existing uv virtual environment without creating one.
 layout_uv() {
   local venv="$PWD/.venv"
-  watch_file "$venv/pyvenv.cfg" "$venv/bin/python"
-  if [[ ! -f "$venv/pyvenv.cfg" || ! -x "$venv/bin/python" ]]; then
-    log_status "No usable .venv found; leaving the environment unchanged."
+
+  if [[ ! -d "$venv/bin" ]]; then
+    log_status "No existing .venv found; skipping activation."
     return 0
   fi
-  unset PYTHONHOME
+
   export VIRTUAL_ENV="$venv"
   PATH_add "$VIRTUAL_ENV/bin"
+  export UV_ACTIVE=1
 }
