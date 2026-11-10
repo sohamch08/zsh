@@ -8,6 +8,9 @@ if (( IS_MAC )); then
   unset NO_COLOR
 fi
 
+# Let Git choose its pager from its own configuration.
+unset GIT_PAGER
+
 # Print intentional output before instant prompt.
 if [[ -z ${_my_zsh_initialized-} ]]; then
   if (( IS_MAC )); then
@@ -74,7 +77,6 @@ source "$ZDOTDIR/integrations/init.zsh" || return
 # Mac integrations
 if (( IS_MAC )); then
   source "$ZDOTDIR/integrations/neomutt.zsh" || return
-  unset GIT_PAGER
 fi
 
 # Initialize the prompt once per shell.

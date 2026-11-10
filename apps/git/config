@@ -14,12 +14,15 @@
 	editor = nvim
 	whitespace = error
 	preloadindex = true
+[pager]
+	log = less -R
 [interactive]
 	diffFilter = delta --color-only
 [include]
 	path = ~/.config/delta/themes.gitconfig
 	path = ~/.config/delta/catppuccin.gitconfig
 [delta]
+	pager = less -R
 	navigate = true
 	dark = true
 	features = catppuccin-mocha
