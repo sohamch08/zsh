@@ -36,6 +36,8 @@ _zsh_fzf_bindings() {
     bindkey -M "$keymap" '^L' autosuggest-accept
     bindkey -M "$keymap" -r '\ec'
     bindkey -M "$keymap" -r '^G'
+    bindkey -M viins '^?' backward-delete-char
+    bindkey -M viins '^H' backward-delete-char
   done
 }
 
