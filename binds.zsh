@@ -6,7 +6,7 @@ _zsh_custom_bindings() {
   local keymap
   for keymap in emacs viins vicmd; do
     bindkey -M "$keymap" '^K' up-line-or-history
-    bindkey -M "$keymap" '^J' down-line-or-history
+    bindkey -M "$keymap" '^J' accept-line
     bindkey -M "$keymap" '^F' fzf-file-widget
     bindkey -M "$keymap" '^R' fzf-history-widget
     bindkey -M "$keymap" '^O' fzf-cd-widget
