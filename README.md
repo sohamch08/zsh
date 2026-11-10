@@ -1,7 +1,21 @@
-# ZSH Config
+# Zsh Config
 
-Zsh configuration stored in `~/.config/zsh`, with `.zshrc` as the main
-interactive-shell loader.
+A modular Zsh setup for daily terminal work, stored in `~/.config/zsh`.
+Powerlevel10k handles the prompt; a small Git-based loader manages plugins.
+
+## Features
+
+- Catppuccin Mocha prompt with Git status, command duration, and vi-mode state.
+- Asynchronous Starship project metadata, cached for two seconds and rendered
+  as one coding segment.
+- Built-in vi editing: block cursor in normal mode, bar cursor in insert mode,
+  and a 0.1-second Escape timeout.
+- FZF file, history, and directory search; searchable Tab completion;
+  history-based autosuggestions; Patina syntax highlighting.
+- Zoxide navigation, direnv integration, and discovery of existing Python
+  `.venv` environments.
+- Cached completion and initialization scripts, deferred optional plugins,
+  and explicit plugin updates.
 
 ## Set the configuration directory through `/etc/zshenv`
 
@@ -52,96 +66,42 @@ See the [Zsh startup-file documentation](https://zsh.sourceforge.io/Doc/Release/
 
 ```text
 ~/.config/zsh/
-├── .gitignore
-├── .zshenv                         # Environment setup for Zsh sessions
-├── .zshrc                          # Interactive startup and loading order
-├── env.zsh                         # Application variables and personal paths
-├── bookmarks.zsh                   # Named directory bookmarks
-├── binds.zsh                       # Built-in vi mode and custom bindings
-├── README.md
-├── LICENSE
-│
-├── aliases/
-│   ├── init.zsh                    # Loads the selected alias modules
-│   ├── shell-shortcuts.zsh
-│   ├── filesystem-helpers.zsh
-│   ├── system-helpers.zsh
-│   ├── application-shortcuts.zsh
-│   ├── rcaliases.zsh               # Alternative rclone implementation
-│   └── rcaliases-pretty.zsh        # Selected rclone implementation
-│
+├── .zshenv                 # XDG directories, editor, PATH, and env.zsh
+├── .zshrc                  # History, startup order, and named directories
+├── env.zsh                 # Personal variables and application paths
+├── binds.zsh               # Native vi mode, cursor shapes, and shortcuts
+├── aliases/                # Shell, file, system, package, and app shortcuts
 ├── plugins/
-│   ├── manual.zsh                  # Selected plugin loader
-│   └── zinit.zsh                   # Alternative plugin loader
-│
-├── integrations/
-│   ├── init.zsh                    # Reloadable settings and one-time hooks
-│   ├── fzf.zsh
-│   ├── direnv.zsh
-│   └── tifr-vpn.zsh
-│
-├── prompt/
-│   ├── init.zsh                    # Loads personal prompt settings
-│   ├── p10k.zsh                    # Powerlevel10k configuration
-│   ├── prompt-code.zsh             # Project metadata rendered by Powerlevel10k
-│   └── p10k-code.toml              # Starship project-metadata configuration
-│
-├── apps/
-│   ├── eza/
-│   │   └── ignore
-│   └── git/
-│       ├── config
-│       └── ignore
-│
-├── tools/
-│   ├── rclone/
-│   │   └── rclone-format.py        # Formats rclone JSON listings
-│   └── tlconf/
-│       ├── tlconf.awk
-│       ├── tlconf-simple.awk
-│       ├── tlconf-theme.awk
-│       ├── tlconf-view.awk
-│       └── tlconf-view.zsh         # Standalone interactive viewer
-│
-└── docs/
-    └── rclone/
-        ├── index.txt
-        ├── general.txt
-        ├── listings.txt
-        ├── storage.txt
-        ├── mounts.txt
-        ├── transfers.txt
-        └── comparisons.txt
+│   ├── manual.zsh          # Active loader, completions, and Powerlevel10k
+│   ├── deferred.zsh        # Optional plugins loaded when ZLE is idle
+│   └── zinit.zsh           # Alternative loader; inactive by default
+├── integrations/           # FZF, direnv, SSH banner, and VPN helpers
+├── prompt/                 # Powerlevel10k theme and async Starship bridge
+├── apps/                   # Companion application configs
+├── tools/                  # Standalone rclone and TeX Live helpers
+└── docs/rclone/            # Rclone reference notes
 ```
 
-## Loading order
+Startup order: environment → instant prompt and history → aliases and functions
+→ core plugins → integrations → prompt settings → keybindings → deferred plugins.
+Named directories such as `~hl` and `~res` are defined in `.zshrc`.
 
-`.zshenv` sets platform flags, XDG directories, editor and pager settings, and
-PATH, then sources `env.zsh`.
+## Plugins
 
-For interactive shells, `.zshrc` handles GPG, pfetch, the initial direnv
-environment, Powerlevel10k instant prompt, history, and shell options. It then
-loads:
+| Component | Purpose |
+| --- | --- |
+| [Powerlevel10k](https://github.com/romkatv/powerlevel10k) | Prompt, instant prompt, and Git status |
+| [ez-compinit](https://github.com/mattmc3/ez-compinit) | Cached completion initialization |
+| [zsh-completions](https://github.com/zsh-users/zsh-completions) | Additional completion definitions |
+| [zsh-defer](https://github.com/romkatv/zsh-defer) | Deferred plugin initialization |
+| [fzf-tab](https://github.com/Aloxaf/fzf-tab) | Searchable Tab completion |
+| [fzf-git](https://github.com/junegunn/fzf-git.sh) | Git search widgets |
+| [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) | Suggestions from history |
+| [colored-man-pages](https://github.com/houssamouhra/colored-man-pages) | Man-page colors |
+| [zsh-patina](https://github.com/michel-kraemer/zsh-patina) | Syntax highlighting; installed separately |
 
-1. `aliases/init.zsh` and `bookmarks.zsh`.
-2. `plugins/manual.zsh`, once per shell. This loads completions, the Powerlevel10k
-   theme, and the deferred plugin loader.
-3. `integrations/init.zsh`. FZF settings and VPN aliases refresh on reload;
-   zoxide, FZF widgets, mise, direnv, and opam initialize once per shell when
-   available.
-4. `prompt/init.zsh` on initial startup. This loads `p10k.zsh`, which sources
-   `prompt-code.zsh` and uses the neighboring `p10k-code.toml` for project metadata.
-5. The bookmark-aware `cd` function and `binds.zsh`, which enables Zsh's built-in
-   vi mode with `bindkey -v` and a 0.1-second Escape timeout (`KEYTIMEOUT=10`).
-   The cursor is a block in normal mode and a vertical bar in insert mode;
-   the terminal's default cursor is restored when running a command.
-6. `plugins/deferred.zsh` once the shell is waiting for input. This loads FZF-tab,
-   FZF-git, autosuggestions, colored man pages, and syntax highlighting.
-
-The directory entry points are `aliases/init.zsh`, `integrations/init.zsh`, and
-`prompt/init.zsh`. Plugin selection is controlled directly in `.zshrc`.
-Only one plugin loader and one rclone implementation should be active at a time.
-Scripts under `tools/` run when requested; they are not sourced during startup.
+The active loader clones missing plugins into `~/.local/share/zsh/plugins` on
+first use. `plugins/zinit.zsh` is an alternative, not part of normal startup.
 
 ## Benchmark
 
