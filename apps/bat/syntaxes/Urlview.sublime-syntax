@@ -1,0 +1,35 @@
+name: Urlview
+scope: source.urlview
+file_extensions: [urlview]
+
+contexts:
+  main:
+    - match: '^\s*#.*$'
+      scope: comment.line.number-sign.urlview
+    - match: '^\s*(REGEXP)\b'
+      captures:
+        1: keyword.control.urlview
+      push: regexp
+    - match: '^\s*(COMMAND)\b'
+      captures:
+        1: keyword.control.urlview
+      push: command
+
+  regexp:
+    - meta_scope: string.regexp.urlview
+    - match: '$'
+      pop: true
+    - match: '\\.'
+      scope: constant.character.escape.urlview
+    - match: '[|*+?^$()]'
+      scope: keyword.operator.regexp.urlview
+
+  command:
+    - meta_scope: string.unquoted.command.urlview
+    - match: '$'
+      pop: true
+    - match: '%s'
+      scope: constant.character.escape.urlview
+    - match: '\$\{?[A-Za-z_][A-Za-z0-9_]*\}?'
+      scope: variable.other.urlview
+

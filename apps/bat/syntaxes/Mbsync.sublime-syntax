@@ -1,0 +1,36 @@
+name: Mbsync
+scope: source.mbsync
+file_extensions: [mbsyncrc, isyncrc]
+
+contexts:
+  main:
+    - match: '^\s*#.*$'
+      scope: comment.line.number-sign.mbsync
+    - match: '^\s*((?i:IMAPAccount|IMAPStore|MaildirStore|Channel|Group))\s+("(?:\\.|[^"\\])*"|\S+)'
+      captures:
+        1: keyword.control.mbsync
+        2: string.unquoted.object.mbsync
+    - match: '^\s*([A-Za-z][A-Za-z0-9]*)\b'
+      captures:
+        1: keyword.control.mbsync
+    - match: '"'
+      push: quoted
+    - include: values
+
+  values:
+    - match: '\\.'
+      scope: constant.character.escape.mbsync
+    - match: '\$\{?[A-Za-z_][A-Za-z0-9_]*\}?'
+      scope: variable.other.mbsync
+    - match: '\b(?i:yes|no|true|false|none|both|all)\b'
+      scope: constant.language.mbsync
+    - match: '\b\d+\b'
+      scope: constant.numeric.mbsync
+
+  quoted:
+    - meta_scope: string.quoted.double.mbsync
+    - match: '\\.'
+      scope: constant.character.escape.mbsync
+    - match: '"'
+      pop: true
+

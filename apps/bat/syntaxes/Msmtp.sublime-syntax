@@ -1,0 +1,37 @@
+name: Msmtp
+scope: source.msmtp
+file_extensions: [msmtprc]
+
+contexts:
+  main:
+    - match: '^\s*#.*$'
+      scope: comment.line.number-sign.msmtp
+    - match: '^\s*(account)\s+([^\s:]+)'
+      captures:
+        1: keyword.control.msmtp
+        2: string.unquoted.account.msmtp
+    - match: '^\s*([a-z][a-z0-9_]*)\b'
+      captures:
+        1: keyword.control.msmtp
+    - match: '"'
+      push: quoted
+    - include: substitutions
+    - match: '\b(on|off|auto)\b'
+      scope: constant.language.msmtp
+    - match: '\b\d+\b'
+      scope: constant.numeric.msmtp
+
+  substitutions:
+    - match: '%[A-Za-z%]'
+      scope: constant.character.escape.msmtp
+    - match: '\$\{?[A-Za-z_][A-Za-z0-9_]*\}?'
+      scope: variable.other.msmtp
+
+  quoted:
+    - meta_scope: string.quoted.double.msmtp
+    - match: '\\.'
+      scope: constant.character.escape.msmtp
+    - include: substitutions
+    - match: '"'
+      pop: true
+

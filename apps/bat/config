@@ -28,3 +28,20 @@
 --map-syntax="[Jj]ustfile:Makefile"
 --map-syntax=".justfile:Makefile"
 --map-syntax="*muttrc:NeoMutt"
+
+# Mail configuration files.
+--map-syntax="*mbsyncrc:Mbsync"
+--map-syntax="*isyncrc:Mbsync"
+--map-syntax="**/mbsync/config:Mbsync"
+--map-syntax="*msmtprc:Msmtp"
+--map-syntax="**/msmtp/config:Msmtp"
+--map-syntax="*notmuch-config:INI"
+--map-syntax="**/notmuch/*/config:INI"
+--map-syntax="**/notmuch/config:INI"
+--map-syntax="*urlview:Urlview"
+--map-syntax="urlview.conf:Urlview"
+--map-syntax="**/urlview/config:Urlview"
+
+# Systemd unit files.
+--map-syntax="*.service:INI"
+--map-syntax="*.timer:INI"
