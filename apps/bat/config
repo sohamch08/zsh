@@ -27,3 +27,4 @@
 # Highlight Justfiles using Makefile syntax.
 --map-syntax="[Jj]ustfile:Makefile"
 --map-syntax=".justfile:Makefile"
+--map-syntax="*muttrc:NeoMutt"

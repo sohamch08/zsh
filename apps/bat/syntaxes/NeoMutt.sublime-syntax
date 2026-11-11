@@ -1,0 +1,50 @@
+name: NeoMutt
+scope: source.neomutt
+file_extensions: [neomuttrc, muttrc]
+
+contexts:
+  main:
+    - match: '^\s*(alias)\s+(\S+)'
+      captures:
+        1: keyword.control.neomutt
+        2: string.unquoted.alias.neomutt
+    - match: '^\s*(set|unset|reset|toggle)\b'
+      scope: keyword.control.neomutt
+    - match: '^\s*[\w-]*hook\b'
+      scope: keyword.control.neomutt
+    - match: '^\s*(bind|macro|color|uncolor|mono|source|alias|unalias|mailboxes|unmailboxes|folder-hook|account-hook|alternates|subscribe|unsubscribe|ignore|unignore|auto_view|alternative_order|push|exec|finish|echo)\b'
+      scope: keyword.control.neomutt
+    - match: '#'
+      scope: punctuation.definition.comment.neomutt
+      push:
+        - meta_scope: comment.line.number-sign.neomutt
+        - match: $
+          pop: true
+    - match: '"'
+      push: double-quoted
+    - match: "'"
+      push: single-quoted
+    - include: variables
+    - match: '\b(yes|no|ask-yes|ask-no)\b'
+      scope: constant.language.neomutt
+    - match: '\b\d+\b'
+      scope: constant.numeric.neomutt
+    - match: '<[^>\s]+>'
+      scope: constant.character.neomutt
+
+  variables:
+    - match: '\$\{?[A-Za-z_][A-Za-z0-9_]*\}?'
+      scope: variable.other.neomutt
+
+  double-quoted:
+    - meta_scope: string.quoted.double.neomutt
+    - match: '\\.'
+      scope: constant.character.escape.neomutt
+    - include: variables
+    - match: '"'
+      pop: true
+
+  single-quoted:
+    - meta_scope: string.quoted.single.neomutt
+    - match: "'"
+      pop: true
