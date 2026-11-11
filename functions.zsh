@@ -12,6 +12,22 @@ has() {
   command -v "$1" >/dev/null 2>&1
 }
 
+# Support changing to the repository root with git up.
+git() {
+  emulate -L zsh
+  if [[ ${1-} == up ]]; then
+    if (($# != 1)); then
+      print -u2 -- 'Usage: git up'
+      return 2
+    fi
+    local dir
+    dir=$(command git rev-parse --show-toplevel) || return
+    builtin cd -- "$dir"
+  else
+    command git "$@"
+  fi
+}
+
 # ----- Command help -----
 help() {
   "$@" --help 2>&1 | bathelp

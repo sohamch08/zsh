@@ -82,6 +82,7 @@
 	undo = reset --soft HEAD^
 	load-aliases = !git config --local include.path \"$(git rev-parse --show-toplevel)/.gitaliases\"
 	license = 
+	root = rev-parse --show-toplevel
 
 [lfs "customtransfer.xet"]
 	path = git-xet
