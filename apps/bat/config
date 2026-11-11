@@ -43,5 +43,5 @@
 --map-syntax="**/urlview/config:Urlview"
 
 # Systemd unit files.
---map-syntax="*.service:INI"
---map-syntax="*.timer:INI"
+--map-syntax="*.service:Systemd"
+--map-syntax="*.timer:Systemd"
