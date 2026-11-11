@@ -1,0 +1,53 @@
+%YAML 1.2
+---
+# See https://www.sublimetext.com/docs/syntax.html
+name: Systemd
+file_extensions:
+  - service
+  - socket
+  - device
+  - mount
+  - automount
+  - swap
+  - target
+  - path
+  - timer
+  - slice
+  - scope
+  - network
+  - netdev
+  - link
+  # Quadlet (podman) unit files
+  - container
+  - volume
+  - kube
+  - pod
+  - image
+  - build
+scope: source.systemd
+version: 2
+
+contexts:
+  main:
+    - match: '^\s*[;#].*$'
+      scope: comment.line.systemd
+
+    - match: '^(\s*)(\[)([A-Za-z]+)(\])'
+      captures:
+        2: punctuation.section.brackets.begin.systemd
+        3: entity.name.section.systemd
+        4: punctuation.section.brackets.end.systemd
+
+    - match: '^\s*([A-Za-z][A-Za-z0-9]*)(=)'
+      captures:
+        1: support.type.property-name.systemd
+        2: punctuation.separator.key-value.systemd
+      push: value
+
+  value:
+    - match: '$'
+      pop: true
+    - match: '%[A-Za-z%]'
+      scope: constant.character.escape.specifier.systemd
+    - match: '\S+'
+      scope: string.unquoted.value.systemd

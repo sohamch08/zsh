@@ -1,6 +1,0 @@
-[submodule "apps/bat/syntaxes/sublime-systemd"]
-	path = apps/bat/syntaxes/sublime-systemd
-	url = https://github.com/macowie/sublime-systemd.git
-[submodule "apps/bat/syntaxes/tmux-sublime"]
-	path = apps/bat/syntaxes/tmux-sublime
-	url = https://github.com/Edditoria/tmux-sublime.git

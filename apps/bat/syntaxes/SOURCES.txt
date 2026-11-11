@@ -1,0 +1,9 @@
+Systemd.sublime-syntax
+Source: https://github.com/macowie/sublime-systemd
+Revision: 42d500e89788444a0667e421740a268998a143b3
+License: licenses/Systemd.LICENSE.txt
+
+Tmux.sublime-syntax
+Source: https://github.com/Edditoria/tmux-sublime
+Revision: 273258e1f80ea1e9f1bbd3d699afbd5196a0caf1
+License: licenses/Tmux.LICENSE.txt
