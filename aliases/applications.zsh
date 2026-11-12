@@ -2,6 +2,7 @@
 alias e='nvim'
 alias nvimb="nvim -c 'set backup backupdir=. backupext=~ backupskip='"
 alias lg='lazygit'
+alias j='just'
 alias m='neomutt'
 alias y='yazi'
 alias o='xdg-open'
