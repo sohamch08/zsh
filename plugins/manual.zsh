@@ -63,6 +63,11 @@ _zplugin_load zsh-users zsh-completions || return
 run-compinit
 _comp_options+=(globdots)
 
+# Load NVM completions after compinit so they reuse its configured cache.
+if [[ -s "$NVM_DIR/bash_completion" ]]; then
+  source "$NVM_DIR/bash_completion"
+fi
+
 # =========================================================
 # Prompt
 # =========================================================

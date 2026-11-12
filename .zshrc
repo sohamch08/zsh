@@ -63,7 +63,7 @@ source "$ZDOTDIR/functions.zsh" || return
 
 # Named directories
 hash -d hl="$HOME/projects/HyprLife"
-hash -d res="$HOME/projects/Research"
+hash -d res="$SOHAM_VAULTS_DIR"
 
 # Initialize plugins once per shell.
 if [[ -z ${_zsh_plugins_initialized-} ]]; then
