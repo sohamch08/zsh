@@ -16,6 +16,7 @@
 	preloadindex = true
 [pager]
 	log = less -R
+	ds = false
 [interactive]
 	diffFilter = delta --color-only
 [include]
@@ -83,6 +84,7 @@
 	load-aliases = !git config --local include.path \"$(git rev-parse --show-toplevel)/.gitaliases\"
 	license = 
 	root = rev-parse --show-toplevel
+	ds = diff --stat
 
 [lfs "customtransfer.xet"]
 	path = git-xet
