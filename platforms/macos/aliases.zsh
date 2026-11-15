@@ -1,4 +1,4 @@
-alias glow="$HOME/.local/bin/glow"
+alias glow="PAGER='less -R' $HOME/.local/bin/glow"
 alias mdread="$HOME/.local/bin/mdread"
 alias mdfried="$HOME/.local/bin/mdfried"
 
