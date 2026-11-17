@@ -2,3 +2,4 @@
 .codex
 .agents
 .DS_Store
+.secrets.zsh

@@ -59,6 +59,7 @@ setopt CORRECT
 
 # Refresh aliases and functions on reload.
 source "$ZDOTDIR/aliases/init.zsh" || return
+[[ -r "$ZDOTDIR/.secrets.zsh" ]] && source "$ZDOTDIR/.secrets.zsh"
 source "$ZDOTDIR/functions.zsh" || return
 
 # Named directories
