@@ -4,7 +4,7 @@ if [[ -t 0 ]]; then
 fi
 
 # Preserve colors on macOS.
-if (( IS_MAC )); then
+if ((IS_MAC)); then
   unset NO_COLOR
 fi
 
@@ -13,9 +13,9 @@ unset GIT_PAGER
 
 # Print intentional output before instant prompt.
 if [[ -z ${_my_zsh_initialized-} ]]; then
-  if (( IS_MAC )); then
-    if (( $+commands[fastfetch] )); then
-      command fastfetch
+  if ((IS_MAC)); then
+    if (($+commands[fastfetch])); then
+      command pfetch
     fi
   elif [[ -n ${SSH_CONNECTION-} ]]; then
     source "$ZDOTDIR/integrations/pfetch.zsh" || return
@@ -25,7 +25,7 @@ fi
 
 # Apply the initial project environment and show instant prompt.
 if [[ -z ${_my_zsh_initialized-} ]]; then
-  if (( $+commands[direnv] )); then
+  if (($+commands[direnv])); then
     emulate zsh -c "$(direnv export zsh)"
   fi
 
@@ -75,7 +75,7 @@ fi
 source "$ZDOTDIR/integrations/init.zsh" || return
 
 # Mac integrations
-if (( IS_MAC )); then
+if ((IS_MAC)); then
   source "$ZDOTDIR/integrations/neomutt.zsh" || return
 fi
 
@@ -86,7 +86,7 @@ fi
 
 # Use zoxide when available.
 cd() {
-  if (( $+functions[__zoxide_z] )); then
+  if (($+functions[__zoxide_z])); then
     __zoxide_z "$@"
   else
     builtin cd -- "$@"
