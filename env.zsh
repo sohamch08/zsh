@@ -1,5 +1,5 @@
 export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 export EZA_CONFIG_DIR=$HOME/.config/eza
 export EZA_ICON_SPACING=2
@@ -12,6 +12,8 @@ export SOULSEEK_PASSWORD_CMD="pass show soulseek"
 
 export CMUS_HOME="${XDG_CONFIG_HOME:-$HOME/.local/state}/cmus"
 export PF_INFO="ascii title os host kernel memory wm de shell editor"
+
+export RCLONE_EXCLUDE='.DS_Store'
 
 # --------- My Personal Variables ---------------
 export SOHAM_PAPERS_DIR="${SOHAM_PAPERS_DIR:-$HOME/My Papers}"
